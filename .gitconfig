@@ -1,0 +1,7 @@
+[user]
+	name = malleroid
+	email = veldiata.mig@gmail.com
+[core]
+	editor = code --wait
+[commit]
+	template = /home/malleus/.commit_template
