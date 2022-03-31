@@ -49,7 +49,6 @@ abbr -a gp 'git pull'
 abbr -a gpff 'git pull --ff-only'
 abbr -a gpick 'git cherry-pick'
 abbr -a gps 'git push'
-abbr -a gr 'grep --color=auto'
 abbr -a graph 'git log --graph --date=short --decorate=short --pretty="format:%C(green)%h %C(reset)%cd %C(blue)%cn %C(red)%d %C(reset)%s"'
 abbr -a grb 'git rebase'
 abbr -a grbd 'git rebase HEAD~1 --committer-date-is-author-date'
@@ -67,11 +66,12 @@ abbr -a ls 'exa'
 abbr -a ll 'exa --icons -alhig'
 abbr -a llt 'exa --icons -alhigTL='
 
+# shell
+abbr -a c 'clear'
+abbr -a gr 'grep --color=auto'
+abbr -a reload 'exec /usr/bin/fish -l'
+
 # secure
 abbr -a mv 'mv -i'
 abbr -a rm 'rm -i'
 abbr -a cp 'cp -i'
-
-# shell
-abbr -a c 'clear'
-abbr -a reload 'exec /usr/bin/fish -l'
