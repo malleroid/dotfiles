@@ -21,4 +21,24 @@ end
 fish_default_key_bindings
 
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
+
+# fonts
 powerline-setup
+
+# date
+set -g theme_display_date yes
+set -g theme_date_format "+%F %H:%M"
+
+# time
+set -g theme_display_cmd_duration yes
+
+# git
+set -g theme_display_git_master_branch yes
+
+# header
+set -g theme_title_display_user no
+set -g theme_title_display_process yes
+set -g theme_title_display_path no
+
+# color
+set -g theme_color_scheme dracula
