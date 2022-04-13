@@ -4,7 +4,7 @@ abbr -a abe 'abbr -e'
 abbr -a abs 'abbr -s'
 
 # bundler
-abbr -a be 'bundle exec'
+abbr -a be 'TZ="JST-9" bundle exec'
 abbr -a bi 'bundle install'
 
 # yarn
