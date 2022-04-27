@@ -4,4 +4,4 @@
 [core]
 	editor = code --wait
 [commit]
-	template = /home/malleus/.commit_template
+	template = ~/.commit_template
