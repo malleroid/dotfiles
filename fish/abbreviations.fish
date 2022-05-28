@@ -74,6 +74,9 @@ abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
 abbr -a reload 'exec /usr/bin/fish -l'
 
+# terraform
+abbr -a tf 'terraform'
+
 # secure
 abbr -a mv 'mv -i'
 abbr -a rm 'rm -i'
