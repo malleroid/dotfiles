@@ -42,3 +42,6 @@ set -g theme_title_display_path no
 
 # color
 set -g theme_color_scheme dracula
+
+# Starship
+starship init fish | source
