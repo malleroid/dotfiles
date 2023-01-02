@@ -13,7 +13,6 @@ brew "gh"
 brew "git"
 brew "htop"
 brew "jq"
-brew "libxml2"
 brew "neovim", args: ["HEAD"]
 brew "nghttp2"
 brew "node"
