@@ -14,7 +14,6 @@ brew "git"
 brew "htop"
 brew "jq"
 brew "neovim", args: ["HEAD"]
-brew "nghttp2"
 brew "node"
 brew "node-build"
 brew "nodenv"
