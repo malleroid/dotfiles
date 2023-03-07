@@ -45,3 +45,6 @@ set -g theme_color_scheme dracula
 
 # Starship
 starship init fish | source
+
+# zoxide
+zoxide init fish --cmd j | source
