@@ -13,17 +13,10 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-function fish_user_key_bindings
-  bind \cr 'peco_select_history (commandline -b)'
-end
-
 # fish_vi_key_bindings
 fish_default_key_bindings
 
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
-
-# fonts
-powerline-setup
 
 # date
 set -g theme_display_date yes
