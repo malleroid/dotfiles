@@ -20,7 +20,6 @@ brew "neovim", args: ["HEAD"]
 brew "node"
 brew "node-build"
 brew "nodenv"
-brew "peco"
 brew "ruby-build"
 brew "rbenv"
 brew "starship"
