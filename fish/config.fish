@@ -41,3 +41,6 @@ starship init fish | source
 
 # z
 set -U Z_CMD j
+
+# the fuck
+thefuck --alias | source
