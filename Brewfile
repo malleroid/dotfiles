@@ -16,6 +16,7 @@ brew "git"
 brew "gnu-sed"
 brew "grep"
 brew "htop"
+brew "hyperfine"
 brew "jq"
 brew "neovim", args: ["HEAD"]
 brew "node"
