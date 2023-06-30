@@ -71,6 +71,9 @@ abbr -a ls 'exa'
 abbr -a ll 'exa --icons -alhig'
 abbr -a llt 'exa --icons -alhigTL='
 
+# duf
+abbr -a df 'duf'
+
 # shell
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
