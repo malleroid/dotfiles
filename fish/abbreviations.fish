@@ -77,6 +77,9 @@ abbr -a df 'duf'
 # glances
 abbr -a top 'glances'
 
+# gping
+abbr -a ping 'gping'
+
 # shell
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
