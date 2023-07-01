@@ -1,7 +1,26 @@
 [user]
 	name = malleroid
 	email = malleus@malleus.me
+
 [core]
 	editor = code --wait
+	pager = delta
+
 [commit]
 	template = ~/.commit_template
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+	line-numbers = true
+	side-by-side = true
+	navigate = true
+	light = false
+	syntax-theme = Dracula
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  colorMoved = default
