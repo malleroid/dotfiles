@@ -44,3 +44,9 @@ set -U Z_CMD j
 
 # the fuck
 thefuck --alias | source
+
+# abbreviations import
+source ~/.config/fish/abbreviations.fish
+if test (uname) = "Darwin"
+  source ~/.config/fish/abbreviations_macos.fish
+end
