@@ -3,7 +3,6 @@
 	email = malleus@malleus.me
 
 [core]
-	editor = code --wait
 	pager = delta
 
 [commit]
