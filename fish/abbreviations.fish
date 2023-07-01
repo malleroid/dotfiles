@@ -74,6 +74,9 @@ abbr -a llt 'exa --icons -alhigTL='
 # duf
 abbr -a df 'duf'
 
+# glances
+abbr -a top 'glances'
+
 # shell
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
