@@ -69,6 +69,9 @@ abbr -a gstp 'git stash pop'
 abbr -a gsts 'git stash save'
 abbr -a gstu 'git stash save -u'
 
+# gitui
+abbr -a tig 'gitui'
+
 # exa
 abbr -a ls 'exa'
 abbr -a ll 'exa --icons -alhig'
