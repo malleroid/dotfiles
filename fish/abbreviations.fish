@@ -24,6 +24,9 @@ abbr -a dia 'docker image -a'
 abbr -a dl 'docker logs'
 abbr -a dv 'docker volume'
 
+# lazydocker
+abbr -a lad 'lazydocker'
+
 # git
 abbr -a g 'git'
 abbr -a gad 'git add'

@@ -23,6 +23,7 @@ brew "grep"
 brew "htop"
 brew "hyperfine"
 brew "jq"
+brew "lazydocker"
 brew "neovim", args: ["HEAD"]
 brew "node"
 brew "node-build"
