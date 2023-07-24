@@ -20,6 +20,9 @@ fish_default_key_bindings
 
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
 
+# ruby
+set -Ux RUBYOPT '-W:deprecated'
+
 # date
 set -g theme_display_date yes
 set -g theme_date_format "+%F %H:%M"
