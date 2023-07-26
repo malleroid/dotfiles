@@ -18,6 +18,9 @@ end
 # fish_vi_key_bindings
 fish_default_key_bindings
 
+# add homebrew path
+fish_add_path /opt/homebrew/bin
+
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
 
 # ruby
