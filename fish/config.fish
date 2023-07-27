@@ -6,7 +6,6 @@ if not ssh-add -l > /dev/null 2>&1
     ssh-agent -c > $SSH_AGENT_FILE 2>&1
   end
   source $SSH_AGENT_FILE > /dev/null 2>&1
-  find $HOME/.ssh -name id_rsa | xargs ssh-add
 end
 
 if status is-interactive
@@ -56,5 +55,8 @@ thefuck --alias | source
 # abbreviations import
 source ~/.config/fish/abbreviations.fish
 if test (uname) = "Darwin"
+  # ssh key load from apple key chain
+  ssh-add --apple-load-keychain
+
   source ~/.config/fish/abbreviations_macos.fish
 end
