@@ -17,9 +17,6 @@ end
 # fish_vi_key_bindings
 fish_default_key_bindings
 
-# add homebrew path
-fish_add_path /opt/homebrew/bin
-
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
 
 # ruby
@@ -55,6 +52,9 @@ thefuck --alias | source
 # abbreviations import
 source ~/.config/fish/abbreviations.fish
 if test (uname) = "Darwin"
+  # add homebrew path
+  fish_add_path /opt/homebrew/bin
+
   # ssh key load from apple key chain
   ssh-add --apple-load-keychain
 
