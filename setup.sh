@@ -12,3 +12,6 @@ brew bundle
 # change shell
 sudo sh -c "echo '/opt/homebrew/bin/fish' >> /etc/shells"
 chsh -s /opt/homebrew/bin/fish
+
+# fish setup
+fish -c "curl -sL git.io/fisher | source && fisher update"
