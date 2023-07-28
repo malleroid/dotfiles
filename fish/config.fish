@@ -3,16 +3,6 @@ for file in ~/.config/fish/custom_conf.d/*.fish
     source $file
 end
 
-# ssh agent
-set SSH_AGENT_FILE "$HOME/.ssh/ssh_agent"
-test -f $SSH_AGENT_FILE; and source $SSH_AGENT_FILE > /dev/null 2>&1
-if not ssh-add -l > /dev/null 2>&1
-  if not ps -ef | grep -v grep | grep ssh-agent
-    ssh-agent -c > $SSH_AGENT_FILE 2>&1
-  end
-  source $SSH_AGENT_FILE > /dev/null 2>&1
-end
-
 if status is-interactive
     # Commands to run in interactive sessions can go here
     source (nodenv init -|psub)
@@ -57,7 +47,4 @@ thefuck --alias | source
 if test (uname) = "Darwin"
   # add homebrew path
   fish_add_path /opt/homebrew/bin
-
-  # ssh key load from apple key chain
-  ssh-add --apple-load-keychain
 end
