@@ -1,3 +1,8 @@
+# custom config import
+for file in ~/.config/fish/custom_conf.d/*.fish
+    source $file
+end
+
 # ssh agent
 set SSH_AGENT_FILE "$HOME/.ssh/ssh_agent"
 test -f $SSH_AGENT_FILE; and source $SSH_AGENT_FILE > /dev/null 2>&1
@@ -49,8 +54,6 @@ set -U Z_CMD j
 # the fuck
 thefuck --alias | source
 
-# abbreviations import
-source ~/.config/fish/abbreviations.fish
 if test (uname) = "Darwin"
   # add homebrew path
   fish_add_path /opt/homebrew/bin
