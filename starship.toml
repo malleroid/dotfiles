@@ -1,0 +1,147 @@
+format = """
+$battery\
+$time\
+[░▒▓](#a3aed2)\
+[ $os](bg:#a3aed2 fg:#090c0c)\
+[](bg:#769ff0 fg:#a3aed2)\
+$directory\
+[](fg:#769ff0 bg:#394260)\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+[](fg:#394260 bg:#212736)\
+$aws\
+$docker_context\
+$package\
+$python\
+$ruby\
+$nodejs\
+$rust\
+$golang\
+$lua\
+$terraform\
+$container\
+[](fg:#212736 bg:#1d2230)\
+$memory_usage\
+$cmd_duration\
+[ ](fg:#1d2230)\
+$line_break\
+$character"""
+
+[battery]
+full_symbol = "🔋"
+charging_symbol = "🔌"
+discharging_symbol = "⚡"
+
+[[battery.display]]
+threshold = 30
+style = "bold red"
+
+[character]
+error_symbol = "[✖](bold red) "
+
+[cmd_duration]
+min_time = 1
+format = "[[ ⏱ $duration](fg:#a0a9cb bg:#1d2230)]($style)"
+style = "bg:#1d2230"
+
+[directory]
+truncation_length = 5
+style = "fg:#e3e5e5 bg:#769ff0"
+format = "[$path ]($style)[$lock_symbol]($lock_style)"
+
+[docker_context]
+format = '[[ 🐋 $context ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+detect_files = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml"]
+
+[git_branch]
+format = "[[ $symbol$branch ](fg:#769ff0 bg:#394260)]($style)"
+style = "bold yellow bg:#394260"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white bg:#394260"
+
+[git_state]
+format = '[[\($state( $progress_current of $progress_total)\)](fg:#769ff0 bg:#394260)]($style) '
+style = "bg:#394260"
+
+[git_metrics]
+format = '([+$added ]($added_style))([-$deleted ]($deleted_style))'
+added_style = 'bold green bg:#394260'
+deleted_style = 'bold red bg:#394260'
+disabled = false
+
+[git_status]
+conflicted = "⚔️ "
+ahead = "🏎️ ×${count} "
+behind = "🐢 ×${count} "
+diverged = "🔱 🏎️ ×${ahead_count} 🐢×${behind_count} "
+untracked = "🛤️ ×${count} "
+stashed = "📦 "
+modified = "📝×${count} "
+staged = "🗃️ ×${count} "
+renamed = "📛 ×${count} "
+deleted = "🗑️ ×${count} "
+style = "bright-white bg:#394260"
+format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+
+[golang]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[hostname]
+ssh_only = true
+format = "<[$hostname]($style)>"
+trim_at = "-"
+style = "bold dimmed white"
+
+[lua]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[memory_usage]
+format = "[$symbol[${ram}( | ${swap}) ](fg:#a0a9cb bg:#1d2230)]($style)"
+threshold = 70
+style = "bold dimmed white bg:#1d2230"
+disabled = false
+
+[nodejs]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[os]
+style = "bg:#a3aed2 fg:#090c0c"
+disabled = false
+
+[os.symbols]
+Macos = ""
+
+[package]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[python]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[ruby]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[rust]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[terraform]
+format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
+style = "bg:#212736"
+
+[time]
+time_format = "%T"
+style = "bg:#1d2230"
+format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+disabled = false
