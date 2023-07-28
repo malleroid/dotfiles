@@ -90,7 +90,12 @@ abbr -a ping 'gping'
 # shell
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
-abbr -a reload 'exec /usr/bin/fish -l'
+
+if test (uname) = 'Darwin'
+  abbr -a reload 'exec /opt/homebrew/bin/fish -l'
+else
+  abbr -a reload 'exec /usr/bin/fish -l'
+end
 
 # terraform
 abbr -a tf 'terraform'

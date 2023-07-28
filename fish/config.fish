@@ -60,6 +60,4 @@ if test (uname) = "Darwin"
 
   # ssh key load from apple key chain
   ssh-add --apple-load-keychain
-
-  source ~/.config/fish/abbreviations_macos.fish
 end
