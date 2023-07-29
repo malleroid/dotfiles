@@ -27,6 +27,7 @@ brew "htop"
 brew "hyperfine"
 brew "jq"
 brew "lazydocker"
+brew "neofetch"
 brew "neovim", args: ["HEAD"]
 brew "node"
 brew "node-build"
