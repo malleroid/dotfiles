@@ -24,6 +24,10 @@ set -g theme_date_format "+%F %H:%M"
 # time
 set -g theme_display_cmd_duration yes
 
+# editor
+set -x VISUAL nvim
+set -x EDITOR nvim
+
 # git
 set -g theme_display_git_master_branch yes
 
