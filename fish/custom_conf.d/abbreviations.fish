@@ -85,6 +85,9 @@ abbr -a df 'duf'
 # glances
 abbr -a top 'glances'
 
+# httpie
+abbr -a curl 'http'
+
 # gping
 abbr -a ping 'gping'
 
