@@ -51,4 +51,12 @@ thefuck --alias | source
 if test (uname) = "Darwin"
   # add homebrew path
   fish_add_path /opt/homebrew/bin
+
+  # mysql client path
+  # fish_add_path /opt/homebrew/opt/mysql-client/bin
+
+  # set -gx LDFLAGS "-L/opt/homebrew/opt/mysql-client/lib"
+  # set -gx CPPFLAGS "-I/opt/homebrew/opt/mysql-client/include"
+
+  # set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 end
