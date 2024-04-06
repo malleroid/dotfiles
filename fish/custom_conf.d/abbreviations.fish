@@ -81,10 +81,10 @@ abbr -a gstu 'git stash save -u'
 # gitui
 abbr -a tig 'gitui'
 
-# exa
-abbr -a ls 'exa'
-abbr -a ll 'exa --icons -alhig'
-abbr -a llt 'exa --icons -alhigTL='
+# eza
+abbr -a ls 'eza'
+abbr -a ll 'eza --icons -alhig'
+abbr -a llt 'eza --icons -alhigTL='
 
 # duf
 abbr -a df 'duf'
