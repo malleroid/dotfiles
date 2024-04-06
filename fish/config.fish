@@ -14,6 +14,9 @@ fish_default_key_bindings
 
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
 
+# path
+set -U fish_user_paths $HOME/.cargo/bin $fish_user_paths
+
 # ruby
 set -Ux RUBYOPT '-W:deprecated'
 
