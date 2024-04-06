@@ -31,7 +31,7 @@ brew "hyperfine"
 brew "jq"
 brew "lazydocker"
 brew "neofetch"
-brew "neovim", args: ["HEAD"]
+brew "neovim"
 brew "node"
 brew "node-build"
 brew "nodenv"
