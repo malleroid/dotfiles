@@ -1,7 +1,6 @@
 tap "aws/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
-tap "homebrew/core"
 brew "python@3.11"
 brew "docutils"
 brew "act"
