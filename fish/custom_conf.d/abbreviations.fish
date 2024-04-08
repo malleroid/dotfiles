@@ -98,6 +98,11 @@ abbr -a curl 'http'
 # gping
 abbr -a ping 'gping'
 
+# oath-toolkit
+if test (uname) = 'Darwin'
+  abbr -a awsmfa 'oathtool --totp --base32 $(security find-generic-password -a $USER -s oath-toolkit-aws-mfa -w) | pbcopy'
+end
+
 # shell
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
