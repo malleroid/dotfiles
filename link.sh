@@ -6,6 +6,7 @@ ln -snfv "$DOTFILES_DIR"/gitui ~/.config
 ln -snfv "$DOTFILES_DIR"/fish ~/.config
 ln -snfv "$DOTFILES_DIR"/nvim ~/.config
 ln -snfv "$DOTFILES_DIR"/starship.toml ~/.config
+ln -snfv "$DOTFILES_DIR"/wezterm ~/.config
 ln -snfv "$DOTFILES_DIR"/.gitconfig ~/.gitconfig
 ln -snfv "$DOTFILES_DIR"/.gitignore ~/.gitignore
 ln -snfv "$DOTFILES_DIR"/.commit_template ~/.commit_template
