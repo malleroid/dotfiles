@@ -4,6 +4,6 @@ local config = {};
 
 config.color_scheme = "iceberg-dark";
 config.window_background_opacity = 0.80;
-config.scrollback_lines = 10000;
+config.scrollback_lines = 35000;
 
 return config;
