@@ -45,8 +45,8 @@ set -g theme_color_scheme dracula
 # Starship
 starship init fish | source
 
-# z
-set -U Z_CMD j
+# zoxide
+zoxide init fish | source
 
 # the fuck
 thefuck --alias | source
