@@ -54,6 +54,7 @@ thefuck --alias | source
 if test (uname) = "Darwin"
   # add homebrew path
   fish_add_path /opt/homebrew/bin
+  fish_add_path /opt/homebrew/sbin
 
   # mysql client path
   # fish_add_path /opt/homebrew/opt/mysql-client/bin
