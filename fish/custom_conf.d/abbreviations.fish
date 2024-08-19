@@ -88,6 +88,8 @@ abbr -a llt 'eza --icons -alhigTL='
 
 # duf
 abbr -a df 'duf'
+# du
+abbr -a du 'dust'
 
 # glances
 abbr -a top 'glances'
