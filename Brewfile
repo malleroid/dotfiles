@@ -1,7 +1,5 @@
 tap "aws/tap"
 tap "homebrew/bundle"
-brew "python@3.11"
-brew "docutils"
 brew "act"
 brew "aria2"
 brew "awscli"
