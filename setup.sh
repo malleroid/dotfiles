@@ -20,4 +20,4 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fish -c "curl -sL git.io/fisher | source && fisher update"
 
 # gh extension
-fish -c "gh extension install dlvhdr/gh-dash"
+fish -c "gh extension install dlvhdr/gh-dash && gh extension install seachicken/gh-poi"
