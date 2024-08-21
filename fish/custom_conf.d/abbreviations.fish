@@ -91,6 +91,9 @@ abbr -a du 'dust'
 # glances
 abbr -a top 'glances'
 
+# gnu-sed
+abbr -a sed 'gsed'
+
 # httpie
 abbr -a curl 'http'
 
