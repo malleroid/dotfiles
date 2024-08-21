@@ -7,9 +7,6 @@ abbr -a abs 'abbr -s'
 abbr -a be 'TZ="JST-9" bundle exec'
 abbr -a bi 'bundle install'
 
-# yarn
-abbr -a y 'yarn'
-
 # docker
 abbr -a d 'docker'
 abbr -a da 'docker attach'
