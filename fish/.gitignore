@@ -1,4 +1,5 @@
 /completions
 /conf.d
+/custom_conf.d/init_*
 /functions
 fish_variables
