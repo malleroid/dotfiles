@@ -1,5 +1,5 @@
 # custom config import
-for file in ~/.config/fish/custom_conf.d/*.fish
+for file in $HOME/.config/fish/custom_conf.d/*.fish
     source $file
 end
 
