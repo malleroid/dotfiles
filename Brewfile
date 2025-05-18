@@ -1,5 +1,3 @@
-tap "aws/tap"
-tap "homebrew/bundle"
 brew "act"
 brew "aichat" # https://aistudio.google.com/app/apikey
 brew "aria2"
