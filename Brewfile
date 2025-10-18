@@ -48,6 +48,7 @@ brew "tflint"                     # Linter for Terraform files
 
 ## Doc
 brew "glow"                       # Render markdown on the CLI
+brew "qman"                       # Modern man page viewer
 brew "slides"                     # Terminal based presentation tool
 brew "tlrc"                       # Official tldr client written in Rust
 
