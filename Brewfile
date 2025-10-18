@@ -1,113 +1,113 @@
-brew "act"
-brew "aichat" # https://aistudio.google.com/app/apikey
-brew "aria2"
-brew "awscli"
-brew "bandwhich"
-brew "bat"
-brew "code2prompt"
-brew "codex"
-brew "dblab"
-brew "dive"
-brew "duf"
-brew "dust"
-brew "e2b"
-brew "eza"
-brew "fastfetch"
-brew "fd"
-brew "fish"
-brew "fzf"
-brew "gh"
-brew "ghq"
-brew "git"
-brew "gitui"
-brew "git-delta"
-brew "glances"
-brew "glow"
-brew "gnu-sed"
-brew "gping"
-brew "grep"
-brew "harlequin"
-brew "htop"
-brew "httpie"
-brew "hwatch"
-brew "hyperfine"
-brew "jless"
-brew "jq"
-brew "lazydocker"
-brew "lazysql"
-brew "mcpm"
-brew "neovim"
-brew "node"
-brew "node-build"
-brew "nodenv"
-brew "nvtop"
-brew "oath-toolkit"
-brew "openapi-tui"
-brew "pieces-cli"
-brew "posting"
-brew "procs"
-brew "progressline"
-brew "pug"
-brew "radare2"
-brew "ripgrep"
-brew "ruby-build"
-brew "rbenv"
-brew "scc"
-brew "serpl"
-brew "slides"
-brew "spotify_player"
-brew "starship"
-brew "tabiew"
-brew "tailspin"
-brew "terraformer"
-brew "tfenv"
-brew "tflint"
-brew "tgpt"
-brew "thefuck"
-brew "tlrc"
-brew "tut"
-brew "x-cmd"
-brew "yazi"
-brew "zellij"
-brew "zoxide"
-cask "aqua-voice"
-cask "balenaetcher"
-cask "blankie"
-cask "block-goose"
-cask "chatgpt"
-cask "claude"
-cask "claude-code"
-cask "cursor"
-cask "cyberduck"
-cask "deepchat"
-cask "deepl"
-cask "discord"
-cask "docker"
-cask "figma"
-cask "firefox"
-cask "font-hackgen-nerd"
-cask "google-chrome"
-cask "lm-studio"
-cask "MonitorControl"
-cask "nao"
-cask "notion"
-cask "obs"
-cask "obsidian"
-cask "raycast"
-cask "session-manager-plugin"
-cask "slack"
-cask "stability-matrix"
-cask "stats"
-cask "tableplus"
-cask "trae"
-cask "ui-tars"
-cask "via"
-cask "visual-studio-code"
-cask "vivaldi"
-cask "void"
-cask "warp"
-cask "wezterm"
-cask "windsurf"
-cask "witsy"
-cask "zoom"
-cask "zulip"
+brew "act"                        # Run your GitHub Actions locally
+brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
+brew "aria2"                      # Download with resuming and segmented downloading
+brew "awscli"                     # Official Amazon AWS command-line interface
+brew "bandwhich"                  # Terminal bandwidth utilization tool
+brew "bat"                        # Clone of cat(1) with syntax highlighting and Git integration
+brew "code2prompt"                # CLI tool to convert your codebase into a single LLM prompt
+brew "codex"                      # OpenAI's coding agent that runs in your terminal
+brew "dblab"                      # Database client every command-line junkie deserves
+brew "dive"                       # Tool for exploring each layer in a docker image
+brew "duf"                        # Disk Usage/Free Utility - a better 'df' alternative
+brew "dust"                       # More intuitive version of du in rust
+brew "e2b"                        # CLI to manage E2B sandboxes and templates
+brew "eza"                        # Modern, maintained replacement for ls
+brew "fastfetch"                  # Like neofetch, but much faster because written mostly in C
+brew "fd"                         # Simple, fast and user-friendly alternative to find
+brew "fish"                       # User-friendly command-line shell for UNIX-like operating systems
+brew "fzf"                        # Command-line fuzzy finder written in Go
+brew "gh"                         # GitHub command-line tool
+brew "ghq"                        # Remote repository management made easy
+brew "git"                        # Distributed revision control system
+brew "gitui"                      # Blazing fast terminal-ui for git written in rust
+brew "git-delta"                  # Syntax-highlighting pager for git and diff output
+brew "glances"                    # Alternative to top/htop
+brew "glow"                       # Render markdown on the CLI
+brew "gnu-sed"                    # GNU implementation of the famous stream editor
+brew "gping"                      # Ping, but with a graph
+brew "grep"                       # GNU grep, egrep and fgrep
+brew "harlequin"                  # Easy, fast, and beautiful database client for the terminal
+brew "htop"                       # Improved top (interactive process viewer)
+brew "httpie"                     # User-friendly cURL replacement (command-line HTTP client)
+brew "hwatch"                     # Modern alternative to the watch command
+brew "hyperfine"                  # Command-line benchmarking tool
+brew "jless"                      # Command-line pager for JSON data
+brew "jq"                         # Lightweight and flexible command-line JSON processor
+brew "lazydocker"                 # Lazier way to manage everything docker
+brew "lazysql"                    # Cross-platform TUI database management tool
+brew "mcpm"                       # Open source, community-driven MCP server and client manager
+brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
+brew "node"                       # Platform built on V8 to build network applications
+brew "node-build"                 # Install NodeJS versions
+brew "nodenv"                     # Node.js version manager
+brew "nvtop"                      # Interactive GPU process monitor
+brew "oath-toolkit"               # Tools for one-time password authentication systems
+brew "openapi-tui"                # TUI to list, browse and run APIs defined with openapi spec
+brew "pieces-cli"                 # Command-line tool for Pieces.app
+brew "posting"                    # Modern API client that lives in your terminal
+brew "procs"                      # Modern replacement for ps written in Rust
+brew "progressline"               # Track commands progress in a compact one-line format
+brew "pug"                        # Drive terraform at terminal velocity
+brew "radare2"                    # Reverse engineering framework
+brew "ripgrep"                    # Search tool like grep and The Silver Searcher
+brew "ruby-build"                 # Install various Ruby versions and implementations
+brew "rbenv"                      # Ruby version manager
+brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
+brew "serpl"                      # Simple terminal UI for search and replace
+brew "slides"                     # Terminal based presentation tool
+brew "spotify_player"             # Command driven spotify player
+brew "starship"                   # Cross-shell prompt for astronauts
+brew "tabiew"                     # TUI to view and query tabular files (CSV,TSV, Parquet, etc.)
+brew "tailspin"                   # Log file highlighter
+brew "terraformer"                # CLI tool to generate terraform files from existing infrastructure
+brew "tfenv"                      # Terraform version manager inspired by rbenv
+brew "tflint"                     # Linter for Terraform files
+brew "tgpt"                       # AI Chatbots in terminal without needing API keys
+brew "thefuck"                    # Programmatically correct mistyped console commands
+brew "tlrc"                       # Official tldr client written in Rust
+brew "tut"                        # TUI for Mastodon with vim inspired keys
+brew "x-cmd"                      # Bootstrap 1000+ command-line tools in seconds
+brew "yazi"                       # Blazing fast terminal file manager written in Rust, based on async I/O
+brew "zellij"                     # Pluggable terminal workspace, with terminal multiplexer as the base feature
+brew "zoxide"                     # Shell extension to navigate your filesystem faster
+cask "aqua-voice"                 # Voice AI interface
+cask "balenaetcher"               # Flash OS images to SD cards & USB drives
+cask "blankie"                    # Menu bar utility that hides your desktop icons
+cask "block-goose"                # Lightweight ad blocker
+cask "chatgpt"                    # OpenAI's ChatGPT desktop app
+cask "claude"                     # Anthropic's Claude AI desktop app
+cask "claude-code"                # Claude Code CLI tool
+cask "cursor"                     # AI-first code editor
+cask "cyberduck"                  # Server and cloud storage browser
+cask "deepchat"                   # AI-powered chat application
+cask "deepl"                      # Translation app
+cask "discord"                    # Voice and text chat software
+cask "docker"                     # Pack, ship and run any application as a lightweight container
+cask "figma"                      # Collaborative interface design tool
+cask "firefox"                    # Web browser
+cask "font-hackgen-nerd"          # HackGen Nerd Font
+cask "google-chrome"              # Web browser
+cask "lm-studio"                  # Run local LLMs on your computer
+cask "MonitorControl"             # Control external display brightness & volume
+cask "nao"                        # AI assistant
+cask "notion"                     # App to write, plan, collaborate, and get organized
+cask "obs"                        # Open-source software for live streaming and screen recording
+cask "obsidian"                   # Knowledge base that works on top of a local folder of plain text Markdown files
+cask "raycast"                    # Control your tools with a few keystrokes
+cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
+cask "slack"                      # Team communication and collaboration software
+cask "stability-matrix"           # Multi-platform package manager for Stable Diffusion
+cask "stats"                      # System monitor for the menu bar
+cask "tableplus"                  # Native GUI tool for relational databases
+cask "trae"                       # Menu bar app for Traefik reverse proxy
+cask "ui-tars"                    # UI automation tool
+cask "via"                        # Keyboard configurator
+cask "visual-studio-code"         # Open-source code editor
+cask "vivaldi"                    # Web browser focusing on customization and control
+cask "void"                       # Menu bar utility that hides icons
+cask "warp"                       # Rust-based terminal
+cask "wezterm"                    # GPU-accelerated cross-platform terminal emulator
+cask "windsurf"                   # Code editor with AI capabilities
+cask "witsy"                      # AI assistant for macOS
+cask "zoom"                       # Video communication and virtual meeting platform
+cask "zulip"                      # Team chat application
