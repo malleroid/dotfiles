@@ -41,8 +41,10 @@ brew "nodenv"                     # Node.js version manager
 brew "pieces-cli"                 # Command-line tool for Pieces.app
 brew "rbenv"                      # Ruby version manager
 brew "ruby-build"                 # Install various Ruby versions and implementations
+brew "rv"                         # Ruby version manager
 brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
 brew "specify"                    # Toolkit to help you get started with Spec-Driven Development
+brew "tdd-guard"                  # Automated TDD enforcement for Claude Code
 brew "tweakcc"                    # Customize your Claude Code themes, thinking verbs, and more
 
 ## DevOps
