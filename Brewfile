@@ -187,6 +187,7 @@ cask "notion"                     # App to write, plan, collaborate, and get org
 cask "obsidian"                   # Knowledge base that works on top of a local folder of plain text Markdown files
 
 ## Productivity
+cask "blankie"                    # Ambient sound mixer for creating custom soundscapes
 cask "clariti"                    # Focus and relaxation soundscapes
 cask "deepl"                      # Translation app
 cask "raycast"                    # Control your tools with a few keystrokes
@@ -196,7 +197,6 @@ cask "cyberduck"                  # Server and cloud storage browser
 
 ## System
 cask "balenaetcher"               # Flash OS images to SD cards & USB drives
-cask "blankie"                    # Menu bar utility that hides your desktop icons
 cask "block-goose"                # Lightweight ad blocker
 cask "font-hackgen-nerd"          # HackGen Nerd Font
 cask "MonitorControl"             # Control external display brightness & volume
