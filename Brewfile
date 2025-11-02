@@ -40,6 +40,8 @@ brew "pieces-cli"                 # Command-line tool for Pieces.app
 brew "rbenv"                      # Ruby version manager
 brew "ruby-build"                 # Install various Ruby versions and implementations
 brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
+brew "specify"                    # Toolkit to help you get started with Spec-Driven Development
+brew "tweakcc"                    # Customize your Claude Code themes, thinking verbs, and more
 
 ## DevOps
 brew "dive"                       # Tool for exploring each layer in a docker image
@@ -126,6 +128,7 @@ brew "x-cmd"                      # Bootstrap 1000+ command-line tools in second
 # ==========================================
 
 ## AI
+cask "aionui"                     # GUI for Gemini CLI
 cask "aqua-voice"                 # Voice AI interface
 cask "chatgpt"                    # OpenAI's ChatGPT desktop app
 cask "claude"                     # Anthropic's Claude AI desktop app
@@ -138,6 +141,7 @@ cask "windsurf"                   # Code editor with AI capabilities
 cask "witsy"                      # AI assistant for macOS
 
 ## Browser
+cask "browseros"                  # Open-source agentic browser
 cask "firefox"                    # Web browser
 cask "google-chrome"              # Web browser
 cask "vivaldi"                    # Web browser focusing on customization and control
