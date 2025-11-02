@@ -4,6 +4,7 @@
 
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
+brew "aicommit2"                  # Reactive CLI that generates commit messages for Git and Jujutsu with AI
 brew "codex"                      # OpenAI's coding agent that runs in your terminal
 brew "omnara"                     # Talk to Your AI Agents from Anywhere
 brew "opencode"                   # AI coding agent, built for the terminal
@@ -11,6 +12,7 @@ brew "tgpt"                       # AI Chatbots in terminal without needing API 
 
 ## API
 brew "httpie"                     # User-friendly cURL replacement (command-line HTTP client)
+brew "httptap"                    # HTTP request visualizer with phase-by-phase timing breakdown
 brew "openapi-tui"                # TUI to list, browse and run APIs defined with openapi spec
 brew "posting"                    # Modern API client that lives in your terminal
 
@@ -43,6 +45,7 @@ brew "rbenv"                      # Ruby version manager
 brew "ruby-build"                 # Install various Ruby versions and implementations
 brew "rv"                         # Ruby version manager
 brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
+brew "shortest"                   # AI-powered natural language end-to-end testing framework
 brew "specify"                    # Toolkit to help you get started with Spec-Driven Development
 brew "tdd-guard"                  # Automated TDD enforcement for Claude Code
 brew "tweakcc"                    # Customize your Claude Code themes, thinking verbs, and more
