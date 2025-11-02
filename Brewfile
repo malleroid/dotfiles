@@ -72,6 +72,7 @@ brew "spotify_player"             # Command driven spotify player
 brew "tut"                        # TUI for Mastodon with vim inspired keys
 
 ## MCP
+brew "chrome-devtools-mcp"        # MCP server for Chrome DevTools Protocol
 brew "mcpm"                       # Open source, community-driven MCP server and client manager
 
 ## Monitor
