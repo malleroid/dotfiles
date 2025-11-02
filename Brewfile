@@ -5,6 +5,7 @@
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
 brew "codex"                      # OpenAI's coding agent that runs in your terminal
+brew "opencode"                   # AI coding agent, built for the terminal
 brew "tgpt"                       # AI Chatbots in terminal without needing API keys
 
 ## API
@@ -17,6 +18,7 @@ brew "hyperfine"                  # Command-line benchmarking tool
 
 ## Cloud
 brew "awscli"                     # Official Amazon AWS command-line interface
+brew "granted"                    # Easiest way to access your cloud
 
 ## Database
 brew "dblab"                      # Database client every command-line junkie deserves
@@ -29,6 +31,7 @@ brew "act"                        # Run your GitHub Actions locally
 brew "code2prompt"                # CLI tool to convert your codebase into a single LLM prompt
 brew "e2b"                        # CLI to manage E2B sandboxes and templates
 brew "fjira"                      # Fuzzy-find cli jira interface
+brew "jiratui"                    # Textual User Interface for interacting with Atlassian Jira from your shell
 brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
 brew "node"                       # Platform built on V8 to build network applications
 brew "node-build"                 # Install NodeJS versions
@@ -41,6 +44,7 @@ brew "scc"                        # Fast and accurate code counter with complexi
 ## DevOps
 brew "dive"                       # Tool for exploring each layer in a docker image
 brew "lazydocker"                 # Lazier way to manage everything docker
+brew "lazyssh"                    # Terminal-based SSH manager
 brew "pug"                        # Drive terraform at terminal velocity
 brew "terraformer"                # CLI tool to generate terraform files from existing infrastructure
 brew "tfenv"                      # Terraform version manager inspired by rbenv
@@ -96,8 +100,10 @@ brew "gping"                      # Ping, but with a graph
 
 ## Search
 brew "grep"                       # GNU grep, egrep and fgrep
+brew "igrep"                      # Interactive grep
 brew "jless"                      # Command-line pager for JSON data
 brew "jq"                         # Lightweight and flexible command-line JSON processor
+brew "jqp"                        # TUI playground to experiment and play with jq
 brew "ripgrep"                    # Search tool like grep and The Silver Searcher
 brew "serpl"                      # Simple terminal UI for search and replace
 
