@@ -135,6 +135,10 @@ cask "claude"                     # Anthropic's Claude AI desktop app
 cask "claude-code"                # Claude Code CLI tool
 cask "cursor"                     # AI-first code editor
 cask "deepchat"                   # AI-powered chat application
+cask "emdash"                     # UI for running multiple coding agents in parallel
+cask "epicenter-whispering"       # Audio transcription that works with local and cloud models
+cask "handy"                      # Speech to text application
+cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
 cask "lm-studio"                  # Run local LLMs on your computer
 cask "nao"                        # AI assistant
 cask "windsurf"                   # Code editor with AI capabilities
@@ -144,6 +148,7 @@ cask "witsy"                      # AI assistant for macOS
 cask "browseros"                  # Open-source agentic browser
 cask "firefox"                    # Web browser
 cask "google-chrome"              # Web browser
+cask "strawberry"                 # AI-powered web browser
 cask "vivaldi"                    # Web browser focusing on customization and control
 
 ## Chat
@@ -156,6 +161,7 @@ cask "zulip"                      # Team chat application
 cask "figma"                      # Collaborative interface design tool
 
 ## Dev
+cask "devknife"                   # Collection of handy developer tools
 cask "docker"                     # Pack, ship and run any application as a lightweight container
 cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
 cask "tableplus"                  # Native GUI tool for relational databases
