@@ -5,6 +5,7 @@
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
 brew "codex"                      # OpenAI's coding agent that runs in your terminal
+brew "omnara"                     # Talk to Your AI Agents from Anywhere
 brew "opencode"                   # AI coding agent, built for the terminal
 brew "tgpt"                       # AI Chatbots in terminal without needing API keys
 
@@ -80,9 +81,12 @@ brew "tut"                        # TUI for Mastodon with vim inspired keys
 
 ## MCP
 brew "chrome-devtools-mcp"        # MCP server for Chrome DevTools Protocol
+brew "mcp-get"                    # CLI for discovering, installing, and managing MCP servers
 brew "mcp-grafana"                # MCP server for Grafana
 brew "mcpm"                       # Open source, community-driven MCP server and client manager
+brew "notion-mcp-server"          # MCP Server for Notion
 brew "playwright-mcp"             # MCP server for Playwright
+brew "terraform-mcp-server"       # MCP server for Terraform
 
 ## Monitor
 brew "bandwhich"                  # Terminal bandwidth utilization tool
