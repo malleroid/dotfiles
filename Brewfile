@@ -29,6 +29,7 @@ brew "tabiew"                     # TUI to view and query tabular files (CSV,TSV
 
 ## Dev
 brew "act"                        # Run your GitHub Actions locally
+brew "claudekit"                  # Intelligent guardrails and workflow automation for Claude Code
 brew "code2prompt"                # CLI tool to convert your codebase into a single LLM prompt
 brew "e2b"                        # CLI to manage E2B sandboxes and templates
 brew "fjira"                      # Fuzzy-find cli jira interface
@@ -167,7 +168,9 @@ cask "figma"                      # Collaborative interface design tool
 ## Dev
 cask "devknife"                   # Collection of handy developer tools
 cask "docker"                     # Pack, ship and run any application as a lightweight container
+cask "opcode"                     # GUI app and toolkit for Claude Code
 cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
+cask "stravu-crystal"             # Run multiple Claude Code instances simultaneously using git worktrees
 cask "tableplus"                  # Native GUI tool for relational databases
 cask "trae"                       # Menu bar app for Traefik reverse proxy
 cask "via"                        # Keyboard configurator
@@ -184,6 +187,7 @@ cask "notion"                     # App to write, plan, collaborate, and get org
 cask "obsidian"                   # Knowledge base that works on top of a local folder of plain text Markdown files
 
 ## Productivity
+cask "clariti"                    # Focus and relaxation soundscapes
 cask "deepl"                      # Translation app
 cask "raycast"                    # Control your tools with a few keystrokes
 
