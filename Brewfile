@@ -28,7 +28,6 @@ brew "tabiew"                     # TUI to view and query tabular files (CSV,TSV
 brew "act"                        # Run your GitHub Actions locally
 brew "code2prompt"                # CLI tool to convert your codebase into a single LLM prompt
 brew "e2b"                        # CLI to manage E2B sandboxes and templates
-brew "mcpm"                       # Open source, community-driven MCP server and client manager
 brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
 brew "node"                       # Platform built on V8 to build network applications
 brew "node-build"                 # Install NodeJS versions
@@ -71,6 +70,9 @@ brew "gitui"                      # Blazing fast terminal-ui for git written in 
 ## Media
 brew "spotify_player"             # Command driven spotify player
 brew "tut"                        # TUI for Mastodon with vim inspired keys
+
+## MCP
+brew "mcpm"                       # Open source, community-driven MCP server and client manager
 
 ## Monitor
 brew "bandwhich"                  # Terminal bandwidth utilization tool
