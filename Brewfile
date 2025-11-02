@@ -156,6 +156,7 @@ cask "witsy"                      # AI assistant for macOS
 
 ## Browser
 cask "browseros"                  # Open-source agentic browser
+cask "chatgpt-atlas"              # OpenAI's official browser with ChatGPT built in
 cask "firefox"                    # Web browser
 cask "google-chrome"              # Web browser
 cask "strawberry"                 # AI-powered web browser
@@ -174,6 +175,7 @@ cask "figma"                      # Collaborative interface design tool
 cask "devknife"                   # Collection of handy developer tools
 cask "docker"                     # Pack, ship and run any application as a lightweight container
 cask "opcode"                     # GUI app and toolkit for Claude Code
+cask "sculptor"                   # GUI for Claude Code
 cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
 cask "stravu-crystal"             # Run multiple Claude Code instances simultaneously using git worktrees
 cask "tableplus"                  # Native GUI tool for relational databases
