@@ -61,6 +61,7 @@ brew "tflint"                     # Linter for Terraform files
 
 ## Doc
 brew "glow"                       # Render markdown on the CLI
+brew "gocheat"                    # TUI Cheatsheet for keybindings, hotkeys and more
 brew "qman"                       # Modern man page viewer
 brew "slides"                     # Terminal based presentation tool
 brew "tlrc"                       # Official tldr client written in Rust
@@ -70,6 +71,7 @@ brew "aria2"                      # Download with resuming and segmented downloa
 brew "bat"                        # Clone of cat(1) with syntax highlighting and Git integration
 brew "eza"                        # Modern, maintained replacement for ls
 brew "fd"                         # Simple, fast and user-friendly alternative to find
+brew "filebrowser"                # Web File Browser
 brew "fzf"                        # Command-line fuzzy finder written in Go
 brew "yazi"                       # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "zoxide"                     # Shell extension to navigate your filesystem faster
