@@ -5,7 +5,6 @@
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
 brew "aicommit2"                  # Reactive CLI that generates commit messages for Git and Jujutsu with AI
-brew "codex"                      # OpenAI's coding agent that runs in your terminal
 brew "omnara"                     # Talk to Your AI Agents from Anywhere
 brew "opencode"                   # AI coding agent, built for the terminal
 brew "tgpt"                       # AI Chatbots in terminal without needing API keys
@@ -145,6 +144,7 @@ cask "aqua-voice"                 # Voice AI interface
 cask "chatgpt"                    # OpenAI's ChatGPT desktop app
 cask "claude"                     # Anthropic's Claude AI desktop app
 cask "claude-code"                # Claude Code CLI tool
+cask "codex"                      # OpenAI's coding agent that runs in your terminal
 cask "cursor"                     # AI-first code editor
 cask "deepchat"                   # AI-powered chat application
 cask "emdash"                     # UI for running multiple coding agents in parallel
