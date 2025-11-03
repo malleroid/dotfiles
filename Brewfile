@@ -153,7 +153,6 @@ cask "handy"                      # Speech to text application
 cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
 cask "lm-studio"                  # Run local LLMs on your computer
 cask "nao"                        # AI assistant
-cask "windsurf"                   # Code editor with AI capabilities
 cask "witsy"                      # AI assistant for macOS
 
 ## Browser
