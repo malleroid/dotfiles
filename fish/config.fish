@@ -6,8 +6,7 @@ end
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
-    source (nodenv init -|psub)
-    source (rbenv init -|psub)
+    mise activate fish | source
 end
 
 # fish_vi_key_bindings
