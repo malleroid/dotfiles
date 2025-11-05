@@ -1,0 +1,18 @@
+# mise global configuration
+# https://mise.jdx.dev/configuration.html
+
+[settings]
+# Enable support for legacy version files (.node-version, .ruby-version, etc.)
+legacy_version_file = true
+
+# Disable experimental features for stability
+experimental = false
+
+# Use shorter paths for better readability
+verbose = false
+
+[tools]
+# Add global tool versions here if needed
+# Example:
+# "node" = "latest"
+# "ruby" = "latest"
