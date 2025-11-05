@@ -37,13 +37,7 @@ brew "fjira"                      # Fuzzy-find cli jira interface
 brew "jiratui"                    # Textual User Interface for interacting with Atlassian Jira from your shell
 brew "mise"                       # Polyglot runtime manager (asdf rust clone)
 brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
-brew "node"                       # Platform built on V8 to build network applications
-brew "node-build"                 # Install NodeJS versions
-brew "nodenv"                     # Node.js version manager
 brew "pieces-cli"                 # Command-line tool for Pieces.app
-brew "rbenv"                      # Ruby version manager
-brew "ruby-build"                 # Install various Ruby versions and implementations
-brew "rv"                         # Ruby version manager
 brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
 brew "shortest"                   # AI-powered natural language end-to-end testing framework
 brew "specify"                    # Toolkit to help you get started with Spec-Driven Development
