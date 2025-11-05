@@ -35,6 +35,7 @@ brew "code2prompt"                # CLI tool to convert your codebase into a sin
 brew "e2b"                        # CLI to manage E2B sandboxes and templates
 brew "fjira"                      # Fuzzy-find cli jira interface
 brew "jiratui"                    # Textual User Interface for interacting with Atlassian Jira from your shell
+brew "mise"                       # Polyglot runtime manager (asdf rust clone)
 brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
 brew "node"                       # Platform built on V8 to build network applications
 brew "node-build"                 # Install NodeJS versions
