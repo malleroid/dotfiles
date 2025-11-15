@@ -17,6 +17,7 @@ verbose = false
 "python" = "3.14"
 "ruby" = "3.4"
 "terraform" = "1.9"
+"uv" = "0.9"
 
 # MCP Servers
 "npm:chrome-devtools-mcp" = "latest"
