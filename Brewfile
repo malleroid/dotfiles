@@ -50,7 +50,6 @@ brew "lazydocker"                 # Lazier way to manage everything docker
 brew "lazyssh"                    # Terminal-based SSH manager
 brew "pug"                        # Drive terraform at terminal velocity
 brew "terraformer"                # CLI tool to generate terraform files from existing infrastructure
-brew "tfenv"                      # Terraform version manager inspired by rbenv
 brew "tflint"                     # Linter for Terraform files
 
 ## Doc
