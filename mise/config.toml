@@ -12,7 +12,9 @@ experimental = false
 verbose = false
 
 [tools]
-# Add global tool versions here if needed
+# Global tool versions
+"node" = "lts"
+
+# Add more tools as needed
 # Example:
-# "node" = "latest"
 # "ruby" = "latest"
