@@ -4,11 +4,6 @@ for file in $HOME/.config/fish/custom_conf.d/*.fish
     source $file
 end
 
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-    mise activate fish | source
-end
-
 # fish_vi_key_bindings
 fish_default_key_bindings
 
@@ -52,9 +47,9 @@ zoxide init fish --cmd j | source
 thefuck --alias | source
 
 if test (uname) = "Darwin"
-  # add homebrew path
-  fish_add_path /opt/homebrew/bin
-  fish_add_path /opt/homebrew/sbin
+  # add homebrew path (append to avoid overriding mise)
+  fish_add_path --append /opt/homebrew/bin
+  fish_add_path --append /opt/homebrew/sbin
 
   # mysql client path
   # fish_add_path /opt/homebrew/opt/mysql-client/bin
@@ -63,4 +58,9 @@ if test (uname) = "Darwin"
   # set -gx CPPFLAGS "-I/opt/homebrew/opt/mysql-client/include"
 
   # set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/mysql-client/lib/pkgconfig"
+end
+
+# mise activation (must be at the end to override other PATH settings)
+if status is-interactive
+    mise activate fish | source
 end
