@@ -14,8 +14,7 @@ verbose = false
 [tools]
 # Global tool versions
 "node" = "lts"
+"ruby" = "3.4"
 "terraform" = "1.9"
 
 # Add more tools as needed
-# Example:
-# "ruby" = "latest"
