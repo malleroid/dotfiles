@@ -17,4 +17,15 @@ verbose = false
 "ruby" = "3.4"
 "terraform" = "1.9"
 
-# Add more tools as needed
+# MCP Servers
+"npm:chrome-devtools-mcp" = "latest"
+"npm:notion-mcp-server" = "latest"
+"npm:playwright-mcp" = "latest"
+
+# Claude Code Extensions
+"npm:claudekit" = "latest"
+"npm:tdd-guard" = "latest"
+"npm:tweakcc" = "latest"
+
+# Development Tools
+"npm:@e2b/cli" = "latest"
