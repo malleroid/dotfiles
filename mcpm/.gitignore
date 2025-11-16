@@ -1,0 +1,20 @@
+# MCPM Cache and Database Files
+# These files are auto-generated and should not be version controlled
+
+# Server cache (can be large, auto-regenerated)
+servers_cache.json
+
+# Monitoring database
+monitor.duckdb
+*.duckdb
+*.db
+
+# Authentication credentials (security)
+auth.json
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
