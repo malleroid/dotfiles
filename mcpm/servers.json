@@ -10,5 +10,30 @@
       "start-mcp-server"
     ],
     "env": {}
+  },
+  "playwright-mcp": {
+    "name": "playwright-mcp",
+    "profile_tags": [],
+    "command": "npx",
+    "args": [
+      "@playwright/mcp@latest"
+    ],
+    "env": {}
+  },
+  "chrome-devtools-mcp": {
+    "name": "chrome-devtools-mcp",
+    "profile_tags": [],
+    "command": "npx",
+    "args": [
+      "chrome-devtools-mcp"
+    ],
+    "env": {}
+  },
+  "rails-mcp-server": {
+    "name": "rails-mcp-server",
+    "profile_tags": [],
+    "command": "rails-mcp-server",
+    "args": [],
+    "env": {}
   }
 }
