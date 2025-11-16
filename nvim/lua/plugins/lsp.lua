@@ -34,11 +34,19 @@ return {
         "terraformls",     -- Terraform
       })
 
-      -- LSP Keymaps
+      -- LSP Keymaps and Semantic Tokens
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
           local opts = { buffer = ev.buf }
+
+          -- Enable semantic tokens if supported
+          if client and client.server_capabilities.semanticTokensProvider then
+            vim.lsp.semantic_tokens.start(ev.buf, client.id)
+          end
+
+          -- LSP Keymaps
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
           vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
           vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
