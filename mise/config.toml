@@ -16,6 +16,7 @@ verbose = false
 "node" = "lts"
 "python" = "3.14"
 "ruby" = "3.4"
+"rust" = "latest"
 "terraform" = "1.9"
 "uv" = "0.9"
 
