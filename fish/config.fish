@@ -60,6 +60,10 @@ if test (uname) = "Darwin"
   # set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 end
 
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/malleus/.lmstudio/bin
+# End of LM Studio CLI section
+
 # mise activation (must be at the end to override other PATH settings)
 if status is-interactive
     mise activate fish | source
