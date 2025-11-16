@@ -9,12 +9,12 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # brew bundle
 brew bundle
 
+# mise install tools
+mise install
+
 # change shell
 sudo sh -c "echo '/opt/homebrew/bin/fish' >> /etc/shells"
 chsh -s /opt/homebrew/bin/fish
-
-# rust install
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # fish setup
 fish -c "curl -sL git.io/fisher | source && fisher update"
