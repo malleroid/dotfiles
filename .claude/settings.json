@@ -1,7 +1,25 @@
 {
   "permissions": {
     "allow": [
-      "Bash(brew info:*)"
+      "Bash(brew info:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(pwd:*)",
+      "Bash(which:*)",
+      "Bash(file:*)",
+      "Bash(stat:*)",
+      "Bash(wc:*)",
+      "Bash(du:*)",
+      "Bash(df:*)"
     ],
     "deny": [],
     "ask": []
