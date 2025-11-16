@@ -17,6 +17,7 @@ verbose = false
 "python" = "3.14"
 "ruby" = "3.4"
 "rust" = "latest"
+"go" = "latest"
 "terraform" = "1.9"
 "uv" = "0.9"
 
@@ -32,3 +33,29 @@ verbose = false
 
 # Development Tools
 "npm:@e2b/cli" = "latest"
+
+# Language Servers for Neovim LSP
+# TypeScript/JavaScript (using vtsls)
+"npm:@vtsls/language-server" = "latest"
+"npm:typescript" = "latest"
+
+# Python
+"pipx:pyright" = "latest"
+
+# Rust
+"ubi:rust-lang/rust-analyzer" = "latest"
+
+# Go
+"go:golang.org/x/tools/gopls" = "latest"
+
+# Lua
+"ubi:LuaLS/lua-language-server" = "latest"
+
+# Ruby
+"gem:ruby-lsp" = "latest"
+
+# HTML/CSS/JSON/ESLint
+"npm:vscode-langservers-extracted" = "latest"
+
+# Terraform
+"go:github.com/hashicorp/terraform-ls" = "latest"
