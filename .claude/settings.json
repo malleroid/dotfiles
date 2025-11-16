@@ -2,6 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(brew info:*)",
+      "Bash(brew list:*)",
+      "Bash(brew outdated:*)",
+      "Bash(brew search:*)",
       "Bash(cat:*)",
       "Bash(ls:*)",
       "Bash(head:*)",
