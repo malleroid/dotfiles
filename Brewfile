@@ -81,12 +81,9 @@ brew "spotify_player"             # Command driven spotify player
 brew "tut"                        # TUI for Mastodon with vim inspired keys
 
 ## MCP
-brew "chrome-devtools-mcp"        # MCP server for Chrome DevTools Protocol
 brew "mcp-get"                    # CLI for discovering, installing, and managing MCP servers
 brew "mcp-grafana"                # MCP server for Grafana
 brew "mcpm"                       # Open source, community-driven MCP server and client manager
-brew "notion-mcp-server"          # MCP Server for Notion
-brew "playwright-mcp"             # MCP server for Playwright
 brew "rails-mcp-server"           # MCP server for Ruby on Rails
 brew "terraform-mcp-server"       # MCP server for Terraform
 
