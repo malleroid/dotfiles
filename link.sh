@@ -5,6 +5,9 @@ DOTFILES_DIR=$(cd "$(dirname "$0")" || exit; pwd)
 ln -snfv "$DOTFILES_DIR"/gitui ~/.config
 ln -snfv "$DOTFILES_DIR"/fish ~/.config
 ln -snfv "$DOTFILES_DIR"/mise ~/.config
+mkdir -p ~/.config/mcpm
+ln -snfv "$DOTFILES_DIR"/mcpm/servers.json ~/.config/mcpm/servers.json
+ln -snfv "$DOTFILES_DIR"/mcpm/config.json ~/.config/mcpm/config.json
 ln -snfv "$DOTFILES_DIR"/nvim ~/.config
 ln -snfv "$DOTFILES_DIR"/serpl ~/.config
 ln -snfv "$DOTFILES_DIR"/starship.toml ~/.config
