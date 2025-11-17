@@ -14,18 +14,17 @@
   "playwright-mcp": {
     "name": "playwright-mcp",
     "profile_tags": [],
-    "command": "npx",
-    "args": [
-      "@playwright/mcp@latest"
-    ],
+    "command": "playwright-mcp",
+    "args": [],
     "env": {}
   },
   "chrome-devtools-mcp": {
     "name": "chrome-devtools-mcp",
     "profile_tags": [],
-    "command": "npx",
+    "command": "chrome-devtools-mcp",
     "args": [
-      "chrome-devtools-mcp"
+      "--headless=true",
+      "--isolated=true"
     ],
     "env": {}
   },
