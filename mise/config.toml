@@ -33,6 +33,7 @@ verbose = false
 
 # Development Tools
 "npm:@e2b/cli" = "latest"
+"npm:@github/copilot" = "latest"
 
 # Language Servers for Neovim LSP
 # TypeScript/JavaScript (using vtsls)
