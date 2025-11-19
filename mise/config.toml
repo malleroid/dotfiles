@@ -36,6 +36,9 @@ verbose = false
 "npm:@github/copilot" = "latest"
 
 # Language Servers for Neovim LSP
+# GitHub Copilot
+"npm:@github/copilot-language-server" = "latest"
+
 # TypeScript/JavaScript (using vtsls)
 "npm:@vtsls/language-server" = "latest"
 "npm:typescript" = "latest"
