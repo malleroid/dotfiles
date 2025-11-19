@@ -2,6 +2,26 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
+      -- Configure GitHub Copilot LSP
+      vim.lsp.config.copilot = {
+        cmd = { "copilot-language-server", "--stdio" },
+        filetypes = { "*" },
+        root_dir = function()
+          return vim.fn.getcwd()
+        end,
+        single_file_support = true,
+        settings = {
+          copilot = {
+            enable = true,
+            -- Request multiple suggestions
+            inlineSuggest = {
+              enable = true,
+              count = 3,  -- Request 3 suggestions
+            },
+          },
+        },
+      }
+
       -- Configure Lua LSP with special settings
       vim.lsp.config.lua_ls = {
         settings = {
@@ -22,6 +42,7 @@ return {
 
       -- Enable all language servers
       vim.lsp.enable({
+        "copilot",         -- GitHub Copilot
         "vtsls",           -- TypeScript/JavaScript
         "pyright",         -- Python
         "rust_analyzer",   -- Rust
