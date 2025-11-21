@@ -134,8 +134,6 @@ cask "aionui"                     # GUI for Gemini CLI
 cask "aqua-voice"                 # Voice AI interface
 cask "chatgpt"                    # OpenAI's ChatGPT desktop app
 cask "claude"                     # Anthropic's Claude AI desktop app
-cask "claude-code"                # Claude Code CLI tool
-cask "codex"                      # OpenAI's coding agent that runs in your terminal
 cask "cursor"                     # AI-first code editor
 cask "deepchat"                   # AI-powered chat application
 cask "emdash"                     # UI for running multiple coding agents in parallel
