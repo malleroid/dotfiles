@@ -32,10 +32,12 @@ verbose = false
 "npm:tweakcc" = "latest"
 
 # Development Tools
+"npm:@antiwork/shortest" = "latest"
 "npm:@e2b/cli" = "latest"
 "npm:@github/copilot" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@openai/codex" = "latest"
+"npm:aicommit2" = "latest"
 
 # Language Servers for Neovim LSP
 # GitHub Copilot

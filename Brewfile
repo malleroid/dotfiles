@@ -4,7 +4,6 @@
 
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
-brew "aicommit2"                  # Reactive CLI that generates commit messages for Git and Jujutsu with AI
 brew "opencode"                   # AI coding agent, built for the terminal
 brew "tgpt"                       # AI Chatbots in terminal without needing API keys
 
@@ -36,7 +35,6 @@ brew "mise"                       # Polyglot runtime manager (asdf rust clone)
 brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
 brew "pieces-cli"                 # Command-line tool for Pieces.app
 brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
-brew "shortest"                   # AI-powered natural language end-to-end testing framework
 brew "specify"                    # Toolkit to help you get started with Spec-Driven Development
 
 ## DevOps
