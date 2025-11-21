@@ -29,9 +29,7 @@ brew "tabiew"                     # TUI to view and query tabular files (CSV,TSV
 
 ## Dev
 brew "act"                        # Run your GitHub Actions locally
-brew "claudekit"                  # Intelligent guardrails and workflow automation for Claude Code
 brew "code2prompt"                # CLI tool to convert your codebase into a single LLM prompt
-brew "e2b"                        # CLI to manage E2B sandboxes and templates
 brew "fjira"                      # Fuzzy-find cli jira interface
 brew "jiratui"                    # Textual User Interface for interacting with Atlassian Jira from your shell
 brew "mise"                       # Polyglot runtime manager (asdf rust clone)
@@ -40,8 +38,6 @@ brew "pieces-cli"                 # Command-line tool for Pieces.app
 brew "scc"                        # Fast and accurate code counter with complexity and COCOMO estimates
 brew "shortest"                   # AI-powered natural language end-to-end testing framework
 brew "specify"                    # Toolkit to help you get started with Spec-Driven Development
-brew "tdd-guard"                  # Automated TDD enforcement for Claude Code
-brew "tweakcc"                    # Customize your Claude Code themes, thinking verbs, and more
 
 ## DevOps
 brew "dive"                       # Tool for exploring each layer in a docker image
