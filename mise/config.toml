@@ -34,6 +34,8 @@ verbose = false
 # Development Tools
 "npm:@e2b/cli" = "latest"
 "npm:@github/copilot" = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:@openai/codex" = "latest"
 
 # Language Servers for Neovim LSP
 # GitHub Copilot
