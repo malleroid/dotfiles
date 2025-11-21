@@ -5,7 +5,6 @@
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
 brew "aicommit2"                  # Reactive CLI that generates commit messages for Git and Jujutsu with AI
-brew "omnara"                     # Talk to Your AI Agents from Anywhere
 brew "opencode"                   # AI coding agent, built for the terminal
 brew "tgpt"                       # AI Chatbots in terminal without needing API keys
 
