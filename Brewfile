@@ -106,6 +106,7 @@ brew "ripgrep"                    # Search tool like grep and The Silver Searche
 brew "serpl"                      # Simple terminal UI for search and replace
 
 ## Security
+brew "mkcert"                     # Make locally-trusted development certificates
 brew "oath-toolkit"               # Tools for one-time password authentication systems
 brew "radare2"                    # Reverse engineering framework
 
