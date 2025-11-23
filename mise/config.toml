@@ -32,6 +32,7 @@ verbose = false
 "npm:tweakcc" = "latest"
 
 # Development Tools
+"aqua:supabase/cli" = "latest"
 "npm:@antiwork/shortest" = "latest"
 "npm:@e2b/cli" = "latest"
 "npm:@github/copilot" = "latest"
