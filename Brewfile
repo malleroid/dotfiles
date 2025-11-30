@@ -159,6 +159,7 @@ cask "zulip"                      # Team chat application
 cask "figma"                      # Collaborative interface design tool
 
 ## Dev
+cask "antigravity"                # AI Coding Agent IDE
 cask "devknife"                   # Collection of handy developer tools
 cask "docker"                     # Pack, ship and run any application as a lightweight container
 cask "kiro"                       # Agent-centric IDE with spec-driven development
