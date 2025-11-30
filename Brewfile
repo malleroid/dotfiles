@@ -136,6 +136,7 @@ cask "emdash"                     # UI for running multiple coding agents in par
 cask "epicenter-whispering"       # Audio transcription that works with local and cloud models
 cask "handy"                      # Speech to text application
 cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
+cask "kiro-cli"                   # AI-powered productivity tool for the command-line
 cask "lm-studio"                  # Run local LLMs on your computer
 cask "nao"                        # AI assistant
 cask "witsy"                      # AI assistant for macOS
@@ -160,6 +161,7 @@ cask "figma"                      # Collaborative interface design tool
 ## Dev
 cask "devknife"                   # Collection of handy developer tools
 cask "docker"                     # Pack, ship and run any application as a lightweight container
+cask "kiro"                       # Agent-centric IDE with spec-driven development
 cask "opcode"                     # GUI app and toolkit for Claude Code
 cask "sculptor"                   # GUI for Claude Code
 cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
