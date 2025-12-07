@@ -69,3 +69,4 @@ verbose = false
 
 # Terraform
 "go:github.com/hashicorp/terraform-ls" = "latest"
+"ubi:cloudflare/cf-terraforming" = "latest"
