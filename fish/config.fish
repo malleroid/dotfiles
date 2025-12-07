@@ -8,6 +8,7 @@ end
 fish_default_key_bindings
 
 set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
+set -g fish_function_path $fish_function_path ~/.config/fish/custom_functions
 
 # path
 set -U fish_user_paths $HOME/.cargo/bin $fish_user_paths
