@@ -145,6 +145,8 @@ return {
     { key = 'DownArrow', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize{ 'Down', 1 } },
     { key = 'Copy', mods = 'NONE', action = act.CopyTo 'Clipboard' },
     { key = 'Paste', mods = 'NONE', action = act.PasteFrom 'Clipboard' },
+    -- Claude Code: Shift+Enter for newline insertion
+    { key = 'Enter', mods = 'SHIFT', action = act.SendString '\x1b\r' },
   },
 
   key_tables = {
