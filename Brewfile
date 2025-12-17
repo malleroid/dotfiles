@@ -143,6 +143,7 @@ cask "witsy"                      # AI assistant for macOS
 
 ## Browser
 cask "browseros"                  # Open-source agentic browser
+cask "comet"                      # AI-first web browser
 cask "chatgpt-atlas"              # OpenAI's official browser with ChatGPT built in
 cask "firefox"                    # Web browser
 cask "google-chrome"              # Web browser
