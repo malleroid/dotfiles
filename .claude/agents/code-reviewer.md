@@ -18,11 +18,13 @@ model: inherit
 ## レビュープロセス
 
 起動時の手順：
-1. `gh pr diff` でPRの差分を確認（PR番号が不明な場合は `gh pr list` で確認）
-2. 必要に応じて `gh pr view` でPRの説明・コンテキストを確認
-3. 変更されたファイルを Read して文脈を理解
-4. 影響を受ける可能性のある関連ファイルをチェック
-5. 優先度別に構造化フィードバックを提供
+1. `gh pr status` で現在のブランチに関連するPRを確認
+2. `gh pr view --json baseRefName,headRefName,number` でPRのベースブランチとPR番号を特定
+3. `gh pr diff` でPRの差分を確認（または `git diff <base>...<head>` を使用）
+4. PRの説明・コンテキストも `gh pr view` で確認
+5. 変更されたファイルを Read して文脈を理解
+6. 影響を受ける可能性のある関連ファイルをチェック
+7. 優先度別に構造化フィードバックを提供
 
 ## レビュー観点
 
