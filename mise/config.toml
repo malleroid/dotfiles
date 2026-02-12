@@ -52,13 +52,13 @@ verbose = false
 "pipx:pyright" = "latest"
 
 # Rust
-"ubi:rust-lang/rust-analyzer" = "latest"
+"github:rust-lang/rust-analyzer" = "latest"
 
 # Go
 "go:golang.org/x/tools/gopls" = "latest"
 
 # Lua
-"ubi:LuaLS/lua-language-server" = "latest"
+"github:LuaLS/lua-language-server" = "latest"
 
 # Ruby
 "gem:ruby-lsp" = "latest"
@@ -68,4 +68,4 @@ verbose = false
 
 # Terraform
 "go:github.com/hashicorp/terraform-ls" = "latest"
-"ubi:cloudflare/cf-terraforming" = "latest"
+"github:cloudflare/cf-terraforming" = "latest"
