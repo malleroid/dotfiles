@@ -21,3 +21,6 @@ fish -c "curl -sL git.io/fisher | source && fisher update"
 
 # gh extension
 fish -c "gh extension install dlvhdr/gh-dash && gh extension install seachicken/gh-poi"
+
+# claude code native install
+curl -fsSL https://claude.ai/install.sh | sh

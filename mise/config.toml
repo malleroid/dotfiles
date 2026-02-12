@@ -34,7 +34,6 @@ verbose = false
 # Development Tools
 "aqua:supabase/cli" = "latest"
 "npm:@antiwork/shortest" = "latest"
-"npm:@anthropic-ai/claude-code" = "latest"
 "npm:@e2b/cli" = "latest"
 "npm:@github/copilot" = "latest"
 "npm:@google/gemini-cli" = "latest"
