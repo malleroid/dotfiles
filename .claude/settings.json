@@ -57,5 +57,6 @@
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "alwaysThinkingEnabled": true
 }
