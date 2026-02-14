@@ -69,3 +69,6 @@ set -gx PATH $PATH /Users/malleus/.lmstudio/bin
 if status is-interactive
     mise activate fish | source
 end
+
+# Added by Antigravity
+fish_add_path /Users/malleus/.antigravity/antigravity/bin
