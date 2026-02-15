@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "plugins": {
+    "commit-commands@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/malleus/.claude/plugins/cache/claude-plugins-official/commit-commands/2cd88e7947b7",
+        "version": "2cd88e7947b7",
+        "installedAt": "2026-02-15T11:56:45.542Z",
+        "lastUpdated": "2026-02-15T11:56:45.542Z",
+        "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
+      }
+    ]
+  }
+}
