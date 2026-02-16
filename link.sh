@@ -19,7 +19,4 @@ ln -snfv "$DOTFILES_DIR"/.claude/settings.json ~/.claude/settings.json
 ln -snfv "$DOTFILES_DIR"/.claude/commands ~/.claude/commands
 ln -snfv "$DOTFILES_DIR"/.claude/agents ~/.claude/agents
 ln -snfv "$DOTFILES_DIR"/.claude/hooks ~/.claude/hooks
-mkdir -p ~/.claude/plugins
-ln -snfv "$DOTFILES_DIR"/.claude/plugins/installed_plugins.json ~/.claude/plugins/installed_plugins.json
-ln -snfv "$DOTFILES_DIR"/.claude/plugins/known_marketplaces.json ~/.claude/plugins/known_marketplaces.json
 ln -snfv "$DOTFILES_DIR"/.commit_template ~/.commit_template
