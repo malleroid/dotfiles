@@ -156,7 +156,8 @@
   "enabledPlugins": {
     "commit-commands@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
-    "feature-dev@claude-plugins-official": true
+    "feature-dev@claude-plugins-official": true,
+    "slack@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true
 }
