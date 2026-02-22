@@ -22,6 +22,7 @@ verbose = false
 "uv" = "0.9"
 
 # MCP Servers
+"npm:@upstash/context7-mcp" = "latest"
 "npm:chrome-devtools-mcp" = "latest"
 "npm:notion-mcp-server" = "latest"
 "npm:playwright-mcp" = "latest"
