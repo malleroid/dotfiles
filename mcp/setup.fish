@@ -3,7 +3,7 @@
 # Configures both mcpm-managed (stdio) and remote (SSE) servers for all clients
 
 # ── 1. mcpm-managed servers (stdio) ──
-set mcpm_servers "serena,playwright-mcp,chrome-devtools-mcp,rails-mcp-server"
+set mcpm_servers "serena,playwright-mcp,chrome-devtools-mcp,rails-mcp-server,awslabs.aws-documentation-mcp-server"
 
 echo "=== mcpm servers (stdio) ==="
 echo "Configuring Claude Code..."
