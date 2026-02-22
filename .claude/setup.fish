@@ -22,7 +22,9 @@ echo ""
 echo "Installing plugins..."
 
 set plugins \
-    "commit-commands@claude-plugins-official"
+    "commit-commands@claude-plugins-official" \
+    "claude-md-management@claude-plugins-official" \
+    "feature-dev@claude-plugins-official"
 
 for plugin in $plugins
     claude plugin install $plugin --scope user 2>/dev/null
