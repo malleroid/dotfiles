@@ -32,6 +32,14 @@ for plugin in $plugins
     or echo "  ⏭️  $plugin (already installed)"
 end
 
+# ── MCP Servers (requires auth — register manually) ──
+echo ""
+echo "Manual steps required for authenticated MCP servers:"
+echo "  context7:"
+echo "    1. Get API key at https://context7.com/dashboard"
+echo "    2. Run: claude mcp add --scope user context7 context7-mcp"
+echo "    3. Edit ~/.claude.json and add CONTEXT7_API_KEY to context7.env"
+
 echo ""
 echo "✅ Claude Code setup complete!"
 echo "⚠️  Restart Claude Code for changes to take effect."
