@@ -36,5 +36,16 @@
     "command": "rails-mcp-server",
     "args": [],
     "env": {}
+  },
+  "awslabs.aws-documentation-mcp-server": {
+    "name": "awslabs.aws-documentation-mcp-server",
+    "profile_tags": [],
+    "command": "uvx",
+    "args": [
+      "awslabs.aws-documentation-mcp-server@latest"
+    ],
+    "env": {
+      "FASTMCP_LOG_LEVEL": "ERROR"
+    }
   }
 }

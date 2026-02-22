@@ -3,5 +3,9 @@
     "transport": "sse",
     "url": "https://mcp.atlassian.com/v1/sse",
     "auth": "oauth"
+  },
+  "awslabs-aws-knowledge-mcp-server": {
+    "transport": "http",
+    "url": "https://knowledge-mcp.global.api.aws"
   }
 }
