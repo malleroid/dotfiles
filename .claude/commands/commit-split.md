@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git add *), Bash(git reset *), Bash(git commit *)
+allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git add *), Bash(git reset *), Bash(git commit *), Bash(git config *), Read
 description: 全変更を意味的な単位に分割し、それぞれコミットメッセージを生成して順にコミットする
 ---
 
@@ -9,26 +9,22 @@ description: 全変更を意味的な単位に分割し、それぞれコミッ�
 - All changes (staged + unstaged): !`git diff HEAD`
 - Changed files: !`git status --short`
 - Recent commits (style reference): !`git log --oneline -20`
-- Commit template: !`TMPL=$(git config commit.template 2>/dev/null); [ -n "$TMPL" ] && cat "$TMPL" || echo "(未設定)"`
+- Commit template path: !`git config commit.template`
 
 ## Commit message rules
 
-**Conventional Commits** に従うこと: https://www.conventionalcommits.org/
+フォーマット・emoji・文体・粒度は **Commit template** と **Recent commits** を最優先で参考にすること。
 
-```
-<emoji> <type>[optional scope]: <description>
+description と body の書き方は Conventional Commits（https://www.conventionalcommits.org/）に準拠する:
 
-[optional body]
-```
-
-- `type`: `feat` / `fix` / `docs` / `style` / `refactor` / `test` / `chore` / `perf` / `ci` / `build` / `revert`
-- `emoji`: **Commit template** のルールを参照。`type` に対応する絵文字を先頭に付ける
-- `description`: 命令形・現在形で記述（日本語可）
-- body: 変更の背景・理由が必要な場合のみ記述
-
-**Recent commits のスタイル**（emoji の使い方・文体・粒度）を優先して参考にすること。
+- **description**: 命令形・現在形で変更を簡潔に要約する（日本語可）
+- **body**: description の後に空行を入れ、変更の背景・理由を記述する。必要な場合のみ
 
 ## Your task
+
+### Step 0: テンプレート読み込み
+
+Commit template path が空でなければ Read ツールでそのファイルを読み、コミットフォーマットを把握する。
 
 ### Step 1: 変更の分析と分割計画の提示
 
@@ -56,7 +52,7 @@ description: 全変更を意味的な単位に分割し、それぞれコミッ�
 
 ### Step 2: ユーザー確認
 
-計画を提示してユーザーの承認を得る。修正を求められた場合は計画を修正して再度確認する。
+AskUserQuestion ツールで確認する（選択肢:「コミットする」「修正する」）。修正を求められた場合は計画を修正して再度 AskUserQuestion で確認する。
 
 ### Step 3: コミット実行
 
