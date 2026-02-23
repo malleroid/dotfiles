@@ -35,5 +35,6 @@
 - Package updates: run `brew bundle dump --force` to refresh `Brewfile`, then commit. Use `mise install` / `mise upgrade` to sync tool versions.
 - Adding configs: place new tool config in `$HOME/.config`, then add its symlink step to `link.sh`.
 - Codex config: `codex/config.toml` is the shared base. `link.sh` seeds `~/.codex/config.toml` only when missing, so machine-specific `[projects]` trust entries stay local.
+- Codex agents instruction: `codex/AGENTS.md` is symlinked to `~/.codex/AGENTS.md`.
 - Personal info: override Git `user.name` / `user.email` locally as needed.
 - Quick checks: `exec fish` to reload shell config; `nvim --headless "+checkhealth" +qall` to verify Neovim setup.

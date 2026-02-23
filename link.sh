@@ -29,4 +29,5 @@ if [ ! -f ~/.codex/config.toml ]; then
   cp "$DOTFILES_DIR"/codex/config.toml ~/.codex/config.toml
   chmod 600 ~/.codex/config.toml
 fi
+ln -snfv "$DOTFILES_DIR"/codex/AGENTS.md ~/.codex/AGENTS.md
 ln -snfv "$DOTFILES_DIR"/.commit_template ~/.commit_template
