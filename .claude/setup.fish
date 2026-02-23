@@ -22,7 +22,6 @@ echo ""
 echo "Installing plugins..."
 
 set plugins \
-    "commit-commands@claude-plugins-official" \
     "claude-md-management@claude-plugins-official" \
     "feature-dev@claude-plugins-official" \
     "slack@claude-plugins-official"
