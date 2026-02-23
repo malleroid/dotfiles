@@ -112,6 +112,13 @@ PR レビュー時は以下のプロンプトでブランチの変更内容を�
 
 ---
 
+## Plan Mode
+
+- プランファイルは `$HOME/.claude/plans/` ではなく、現在の作業ディレクトリの `.claude/plans/` に保存すること。
+- 保存先例: `{作業ディレクトリ}/.claude/plans/{plan-name}.md`
+
+---
+
 ## Context7 MCP
 
 - ライブラリ固有の API を使うコード生成・実装時は Context7 を積極的に使うこと
