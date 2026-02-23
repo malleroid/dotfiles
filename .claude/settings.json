@@ -26,6 +26,7 @@
       "Bash(ghq list *)",
       "Bash(ghq root *)",
       "Bash(git add *)",
+      "Bash(git commit -m *)",
       "Bash(git branch *)",
       "Bash(git check-ignore *)",
       "Bash(git checkout *)",
@@ -124,7 +125,9 @@
       "Bash(gh workflow disable *)",
       "Bash(gh workflow enable *)",
       "Bash(gh workflow run *)",
-      "Bash(git commit *)",
+      "Bash(git commit --amend*)",
+      "Bash(git commit --allow-empty*)",
+      "Bash(git commit --no-verify*)",
       "Bash(git push *)"
     ]
   },
