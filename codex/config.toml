@@ -1,0 +1,41 @@
+model = "gpt-5.3-codex"
+personality = "pragmatic"
+model_reasoning_effort = "high"
+
+[mcp_servers.mcpm_rails-mcp-server]
+command = "mcpm"
+args = [
+    "run",
+    "rails-mcp-server",
+]
+
+[mcp_servers.mcpm_playwright-mcp]
+command = "mcpm"
+args = [
+    "run",
+    "playwright-mcp",
+]
+
+[mcp_servers.mcpm_chrome-devtools-mcp]
+command = "mcpm"
+args = [
+    "run",
+    "chrome-devtools-mcp",
+]
+
+[mcp_servers.mcpm_serena]
+command = "mcpm"
+args = [
+    "run",
+    "serena",
+]
+
+[mcp_servers."mcpm_awslabs.aws-documentation-mcp-server"]
+command = "mcpm"
+args = [
+    "run",
+    "awslabs.aws-documentation-mcp-server",
+]
+
+[notice]
+"hide_gpt-5.1-codex-max_migration_prompt" = true
