@@ -72,3 +72,5 @@ end
 
 # Added by Antigravity
 fish_add_path /Users/malleus/.antigravity/antigravity/bin
+# opencode
+fish_add_path /Users/makoto.yazaki/.opencode/bin
