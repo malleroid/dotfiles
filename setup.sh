@@ -27,3 +27,6 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 # claude code native install
 curl -fsSL https://claude.ai/install.sh | sh
+
+# opencode native install
+curl -fsSL https://opencode.ai/install | sh

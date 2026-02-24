@@ -4,7 +4,6 @@
 
 ## AI
 brew "aichat"                     # All-in-one AI-Powered CLI Chat & Copilot | https://aistudio.google.com/app/apikey
-brew "opencode"                   # AI coding agent, built for the terminal
 brew "tgpt"                       # AI Chatbots in terminal without needing API keys
 
 ## API
