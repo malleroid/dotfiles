@@ -74,7 +74,6 @@ brew "spotify_player"             # Command driven spotify player
 brew "tut"                        # TUI for Mastodon with vim inspired keys
 
 ## MCP
-brew "mcp-get"                    # CLI for discovering, installing, and managing MCP servers
 brew "mcp-grafana"                # MCP server for Grafana
 brew "mcpm"                       # Open source, community-driven MCP server and client manager
 brew "rails-mcp-server"           # MCP server for Ruby on Rails
