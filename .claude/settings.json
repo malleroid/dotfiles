@@ -137,7 +137,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/notify.sh",
+            "command": "$HOME/.claude/hooks/notify.sh",
             "timeout": 3
           }
         ]
