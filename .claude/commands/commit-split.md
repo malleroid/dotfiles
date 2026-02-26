@@ -19,6 +19,7 @@ description と body の書き方は Conventional Commits（https://www.conventi
 
 - **description**: 命令形・現在形で変更を簡潔に要約する（日本語可）
 - **body**: description の後に空行を入れ、変更の背景・理由を記述する。必要な場合のみ
+- `Co-Authored-By` トレーラーは **付けない**
 
 ## Your task
 
