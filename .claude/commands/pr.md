@@ -21,18 +21,21 @@ Arguments: $ARGUMENTS
 ## Context
 
 - Current branch: !`git branch --show-current`
-- Default branch (fallback): !`gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null || echo "main"`
-- Commits on this branch (vs default branch): !`BASE=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null || echo main); git log --oneline origin/$BASE..HEAD 2>/dev/null || git log --oneline -10`
-- Diff (vs default branch): !`BASE=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null || echo main); git diff origin/$BASE...HEAD 2>/dev/null || git diff HEAD~5..HEAD`
-- PR template: !`for f in .github/pull_request_template.md .github/PULL_REQUEST_TEMPLATE.md docs/pull_request_template.md pull_request_template.md; do [ -f "$f" ] && cat "$f" && break; done 2>/dev/null || echo "(PR template未設定)"`
-- Recent merged PRs (style reference): !`gh pr list --state merged --limit 5 --json number,title,body --jq '.[] | "## \(.number): \(.title)\n\(.body)\n"' 2>/dev/null || echo "(取得できません)"`
+- Default branch: !`gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'`
+- Recent commits: !`git log --oneline -20`
 
 ## Your task
 
-### Step 1: base branch の確定
+### Step 1: base branch の確定と情報収集
 
-Arguments から base branch を特定する。指定がなければ Context の Default branch を使用する。
-以降の処理では Context の diff・commits ではなく、確定した base branch を使って改めて差分を取得すること（Arguments で指定された場合は Context と異なる可能性があるため）。
+Arguments から base branch を特定する。指定がなければ Context の Default branch を使用する（取得できていなければ `main` をフォールバックとする）。
+
+base branch 確定後、以下を実行して情報を収集する:
+
+1. `git log --oneline origin/<base>..HEAD` でブランチ上のコミット一覧を取得する
+2. `git diff origin/<base>...HEAD` で差分を取得する
+3. PR template を探す: `.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `docs/pull_request_template.md`, `pull_request_template.md` を Read ツールで順に試し、最初に見つかったものを使用する
+4. `gh pr list --state merged --limit 5 --json number,title,body` で最近マージされた PR のスタイルを取得する
 
 ### Step 2: PR title と description の生成
 
