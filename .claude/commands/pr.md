@@ -47,6 +47,8 @@ base branch 確定後、以下を実行して情報を収集する:
 
 PR title は commits の内容から簡潔に1行で生成する。
 
+description の末尾に「Generated with Claude Code」などの AI ツール帰属フッターを含めないこと。
+
 生成した base branch・title・description をユーザーに提示する。
 
 ### Step 3: 分岐
