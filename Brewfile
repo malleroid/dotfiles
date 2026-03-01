@@ -163,6 +163,7 @@ cask "docker"                     # Pack, ship and run any application as a ligh
 cask "kiro"                       # Agent-centric IDE with spec-driven development
 cask "opcode"                     # GUI app and toolkit for Claude Code
 cask "sculptor"                   # GUI for Claude Code
+cask "gcloud-cli"                 # Google Cloud CLI
 cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
 cask "stravu-crystal"             # Run multiple Claude Code instances simultaneously using git worktrees
 cask "tableplus"                  # Native GUI tool for relational databases
