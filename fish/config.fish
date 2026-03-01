@@ -62,7 +62,7 @@ if test (uname) = "Darwin"
 end
 
 # Added by LM Studio CLI (lms)
-set -gx PATH $PATH /Users/malleus/.lmstudio/bin
+set -gx PATH $PATH $HOME/.lmstudio/bin
 # End of LM Studio CLI section
 
 # mise activation (must be at the end to override other PATH settings)
@@ -71,6 +71,6 @@ if status is-interactive
 end
 
 # Added by Antigravity
-fish_add_path /Users/malleus/.antigravity/antigravity/bin
+fish_add_path $HOME/.antigravity/antigravity/bin
 # opencode
-fish_add_path /Users/makoto.yazaki/.opencode/bin
+fish_add_path $HOME/.opencode/bin
