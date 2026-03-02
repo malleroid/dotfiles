@@ -5,6 +5,7 @@
 [core]
 	pager = delta
 	editor = nvim
+	excludesfile = ~/.gitignore
 
 [commit]
 	template = ~/.commit_template
