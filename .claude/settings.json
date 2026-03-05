@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "95"
+  },
   "permissions": {
     "allow": [
       "Bash(brew info *)",
@@ -180,8 +183,5 @@
     "feature-dev@claude-plugins-official": true,
     "slack@claude-plugins-official": true
   },
-  "alwaysThinkingEnabled": true,
-  "env": {
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "95"
-  }
+  "alwaysThinkingEnabled": true
 }
