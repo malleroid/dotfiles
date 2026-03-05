@@ -1,0 +1,8 @@
+# ~/.netrc - machine credentials for CLI tools
+# Copy to ~/.netrc and fill in real values:
+#   cp netrc/.netrc.example ~/.netrc
+#   chmod 600 ~/.netrc
+
+machine yourcompany.atlassian.net
+  login your-email@example.com
+  password your-api-token-here

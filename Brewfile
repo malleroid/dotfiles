@@ -28,7 +28,7 @@ brew "tabiew"                     # TUI to view and query tabular files (CSV,TSV
 ## Dev
 brew "act"                        # Run your GitHub Actions locally
 brew "code2prompt"                # CLI tool to convert your codebase into a single LLM prompt
-brew "fjira"                      # Fuzzy-find cli jira interface
+brew "jira-cli"                   # Feature-rich interactive Jira command-line
 brew "jiratui"                    # Textual User Interface for interacting with Atlassian Jira from your shell
 brew "mise"                       # Polyglot runtime manager (asdf rust clone)
 brew "neovim"                     # Ambitious Vim-fork focused on extensibility and agility
