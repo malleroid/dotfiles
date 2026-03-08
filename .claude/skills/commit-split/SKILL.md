@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git add *), Bash(git reset *), Bash(git commit *), Bash(git config *), Read
+allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git add *), Bash(git reset *), Bash(git commit *), Bash(git config *), Read, AskUserQuestion
 description: 全変更を意味的な単位に分割し、それぞれコミットメッセージを生成して順にコミットする
 ---
 
