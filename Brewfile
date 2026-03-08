@@ -130,7 +130,7 @@ cask "claude"                     # Anthropic's Claude AI desktop app
 cask "cursor"                     # AI-first code editor
 cask "deepchat"                   # AI-powered chat application
 cask "emdash"                     # UI for running multiple coding agents in parallel
-cask "epicenter-whispering"       # Audio transcription that works with local and cloud models
+cask "whispering"                 # Audio transcription that works with local and cloud models
 cask "handy"                      # Speech to text application
 cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
 cask "kiro-cli"                   # AI-powered productivity tool for the command-line
@@ -159,7 +159,7 @@ cask "figma"                      # Collaborative interface design tool
 ## Dev
 cask "antigravity"                # AI Coding Agent IDE
 cask "devknife"                   # Collection of handy developer tools
-cask "docker"                     # Pack, ship and run any application as a lightweight container
+cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
 cask "kiro"                       # Agent-centric IDE with spec-driven development
 cask "opcode"                     # GUI app and toolkit for Claude Code
 cask "sculptor"                   # GUI for Claude Code
