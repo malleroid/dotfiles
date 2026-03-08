@@ -16,7 +16,7 @@ ln -snfv "$DOTFILES_DIR"/.gitconfig ~/.gitconfig
 ln -snfv "$DOTFILES_DIR"/.gitignore ~/.gitignore
 ln -snfv "$DOTFILES_DIR"/.claude/CLAUDE.md ~/.claude/CLAUDE.md
 ln -snfv "$DOTFILES_DIR"/.claude/settings.json ~/.claude/settings.json
-ln -snfv "$DOTFILES_DIR"/.claude/commands ~/.claude/commands
+ln -snfv "$DOTFILES_DIR"/.claude/skills ~/.claude/skills
 ln -snfv "$DOTFILES_DIR"/.claude/agents ~/.claude/agents
 ln -snfv "$DOTFILES_DIR"/.claude/hooks ~/.claude/hooks
 mkdir -p ~/.codex
