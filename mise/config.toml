@@ -25,8 +25,7 @@ verbose = false
 "npm:@upstash/context7-mcp" = "latest"
 "npm:chrome-devtools-mcp" = "latest"
 "npm:notion-mcp-server" = "latest"
-"npm:playwright" = "latest"
-"npm:playwright-mcp" = "latest"
+"npm:@playwright/mcp" = "latest"
 
 # Claude Code Extensions
 "npm:claudekit" = "latest"

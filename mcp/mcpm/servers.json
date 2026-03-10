@@ -16,8 +16,8 @@
   "playwright-mcp": {
     "name": "playwright-mcp",
     "profile_tags": [],
-    "command": "playwright-mcp",
-    "args": [],
+    "command": "mcp-server-playwright",
+    "args": ["--headless"],
     "env": {}
   },
   "chrome-devtools-mcp": {
