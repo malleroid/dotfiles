@@ -12,9 +12,6 @@ brew bundle
 # mise install tools
 mise install
 
-# playwright browser install
-playwright install chromium
-
 # change shell
 sudo sh -c "echo '/opt/homebrew/bin/fish' >> /etc/shells"
 chsh -s /opt/homebrew/bin/fish
