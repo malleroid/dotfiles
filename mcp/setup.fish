@@ -41,13 +41,28 @@ for name in (jq -r 'keys[]' "$servers_config")
             '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
             "$servers_config")
         jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$desktop_cfg" \
-            > /tmp/_mcp_desktop_tmp.json
-        and mv /tmp/_mcp_desktop_tmp.json "$desktop_cfg"
+            > "$script_dir/_tmp_desktop.json"
+        and mv "$script_dir/_tmp_desktop.json" "$desktop_cfg"
         and echo "  ✅ Claude Desktop"
         or  echo "  ❌ Claude Desktop (failed to update)"
     else
         echo "  ⏭️  Claude Desktop (config not found)"
     end
+
+    # Copilot CLI
+    set copilot_cfg "$HOME/.copilot/mcp-config.json"
+    if not test -f "$copilot_cfg"
+        mkdir -p ~/.copilot
+        echo '{"mcpServers":{}}' > "$copilot_cfg"
+    end
+    set entry (jq -c --arg n $name \
+        '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
+        "$servers_config")
+    jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$copilot_cfg" \
+        > "$script_dir/_tmp_copilot.json"
+    and mv "$script_dir/_tmp_copilot.json" "$copilot_cfg"
+    and echo "  ✅ Copilot"
+    or  echo "  ❌ Copilot (failed)"
 
     # Codex CLI (writes through symlink to dotfiles/codex/config.toml)
     codex mcp add $env_flags_codex $name -- $cmd $args 2>/dev/null
