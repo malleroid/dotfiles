@@ -1,7 +1,5 @@
 {
   "serena": {
-    "name": "serena",
-    "profile_tags": [],
     "command": "uvx",
     "args": [
       "--from",
@@ -14,36 +12,23 @@
     "env": {}
   },
   "playwright-mcp": {
-    "name": "playwright-mcp",
-    "profile_tags": [],
     "command": "mcp-server-playwright",
     "args": ["--headless"],
     "env": {}
   },
   "chrome-devtools-mcp": {
-    "name": "chrome-devtools-mcp",
-    "profile_tags": [],
     "command": "chrome-devtools-mcp",
-    "args": [
-      "--headless=true",
-      "--isolated=true"
-    ],
+    "args": ["--headless=true", "--isolated=true"],
     "env": {}
   },
   "rails-mcp-server": {
-    "name": "rails-mcp-server",
-    "profile_tags": [],
     "command": "rails-mcp-server",
     "args": [],
     "env": {}
   },
-  "awslabs.aws-documentation-mcp-server": {
-    "name": "awslabs.aws-documentation-mcp-server",
-    "profile_tags": [],
+  "awslabs-aws-documentation-mcp-server": {
     "command": "uvx",
-    "args": [
-      "awslabs.aws-documentation-mcp-server@latest"
-    ],
+    "args": ["awslabs.aws-documentation-mcp-server@latest"],
     "env": {
       "FASTMCP_LOG_LEVEL": "ERROR"
     }

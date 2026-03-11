@@ -74,7 +74,6 @@ brew "tut"                        # TUI for Mastodon with vim inspired keys
 
 ## MCP
 brew "mcp-grafana"                # MCP server for Grafana
-brew "mcpm"                       # Open source, community-driven MCP server and client manager
 brew "rails-mcp-server"           # MCP server for Ruby on Rails
 brew "terraform-mcp-server"       # MCP server for Terraform
 

@@ -1,46 +1,85 @@
 #!/usr/bin/env fish
 # MCP Server Setup Script
-# Configures both mcpm-managed (stdio) and remote (SSE) servers for all clients
-
-# ── 1. mcpm-managed servers (stdio) ──
-set mcpm_servers "serena,playwright-mcp,chrome-devtools-mcp,rails-mcp-server,awslabs.aws-documentation-mcp-server"
-
-echo "=== mcpm servers (stdio) ==="
-echo "Configuring Claude Code..."
-mcpm client edit claude-code --set-servers $mcpm_servers --force
-
-echo "Configuring Claude Desktop..."
-mcpm client edit claude-desktop --set-servers $mcpm_servers --force
-
-echo "Configuring Codex CLI..."
-mcpm client edit codex-cli --set-servers $mcpm_servers --force
-
-# ── 2. Remote MCP servers (Claude Code only) ──
-# mcpm run proxy does not support OAuth flow, so remote servers are configured directly.
-# NOTE: Claude Desktop is intentionally excluded from remote server configuration.
-echo ""
-echo "=== Remote MCP servers (SSE) ==="
+# Configures stdio and remote servers for all clients
 
 set script_dir (status dirname)
+set servers_config "$script_dir/servers.json"
 set remote_config "$script_dir/remote-servers.json"
-set claude_code_config "$HOME/.claude.json"
+
+# ── 1. stdio servers ──
+echo "=== stdio MCP servers ==="
+
+for name in (jq -r 'keys[]' "$servers_config")
+    set cmd  (jq -r --arg n $name '.[$n].command' "$servers_config")
+    set args (jq -r --arg n $name '.[$n].args[]'  "$servers_config")
+
+    # Build env flags per client
+    set env_flags_claude
+    set env_flags_codex
+    set env_flags_gemini
+    for key in (jq -r --arg n $name '.[$n].env | keys[]' "$servers_config")
+        set val (jq -r --arg n $name --arg k $key '.[$n].env[$k]' "$servers_config")
+        set env_flags_claude $env_flags_claude -e "$key=$val"
+        set env_flags_codex  $env_flags_codex  --env "$key=$val"
+        set env_flags_gemini $env_flags_gemini -e "$key=$val"
+    end
+
+    echo ""
+    echo "  [$name]"
+
+    # Claude Code (remove + add for upsert)
+    # NOTE: name must come before -e flags to avoid -e consuming it as a variadic env value
+    claude mcp remove --scope user $name 2>/dev/null
+    claude mcp add --scope user $name $env_flags_claude -- $cmd $args 2>/dev/null
+    and echo "  ✅ Claude Code"
+    or  echo "  ❌ Claude Code (failed)"
+
+    # Claude Desktop
+    set desktop_cfg "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+    if test -f "$desktop_cfg"
+        set entry (jq -c --arg n $name \
+            '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
+            "$servers_config")
+        jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$desktop_cfg" \
+            > /tmp/_mcp_desktop_tmp.json
+        and mv /tmp/_mcp_desktop_tmp.json "$desktop_cfg"
+        and echo "  ✅ Claude Desktop"
+        or  echo "  ❌ Claude Desktop (failed to update)"
+    else
+        echo "  ⏭️  Claude Desktop (config not found)"
+    end
+
+    # Codex CLI (writes through symlink to dotfiles/codex/config.toml)
+    codex mcp add $env_flags_codex $name -- $cmd $args 2>/dev/null
+    and echo "  ✅ Codex"
+    or  echo "  ⏭️  Codex (already exists or error)"
+
+    # Gemini CLI
+    # NOTE: server args starting with '--' (e.g. --from, --enable-web-dashboard)
+    # may be parsed as gemini options. Verify serena registration manually.
+    gemini mcp add -s user $env_flags_gemini $name $cmd $args 2>/dev/null
+    and echo "  ✅ Gemini"
+    or  echo "  ⏭️  Gemini (already exists or error)"
+end
+
+# ── 2. Remote MCP servers (Claude Code only) ──
+echo ""
+echo "=== Remote MCP servers (SSE/HTTP) ==="
 
 if not test -f "$remote_config"
     echo "  ⏭️  No remote-servers.json found, skipping"
 else
-    # Claude Code: use official CLI
     for name in (jq -r 'keys[]' "$remote_config")
-        set url (jq -r --arg n "$name" '.[$n].url' "$remote_config")
-        set transport (jq -r --arg n "$name" '.[$n].transport' "$remote_config")
-        claude mcp add --transport $transport $name $url --scope user 2>/dev/null
+        set url       (jq -r --arg n $name '.[$n].url'       "$remote_config")
+        set transport (jq -r --arg n $name '.[$n].transport' "$remote_config")
+        claude mcp add --transport $transport --scope user $name $url 2>/dev/null
         and echo "  ✅ Claude Code: $name"
-        or echo "  ⏭️  Claude Code: $name (already exists)"
+        or  echo "  ⏭️  Claude Code: $name (already exists)"
     end
-
 end
 
 echo ""
 echo "✅ Setup complete!"
 echo ""
-echo "⚠️  Remember to restart each client for changes to take effect."
-echo "📋 Remote servers (OAuth): Run /mcp in each client to authenticate on first use."
+echo "⚠️  Restart each client for changes to take effect."
+echo "📋 Remote servers (OAuth): run /mcp in each client to authenticate on first use."
