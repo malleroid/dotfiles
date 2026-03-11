@@ -17,7 +17,7 @@ command = "chrome-devtools-mcp"
 args = ["--headless=true", "--isolated=true"]
 
 [mcp_servers.playwright-mcp]
-command = "mcp-server-playwright"
+command = "playwright-mcp"
 args = ["--headless"]
 
 [mcp_servers.rails-mcp-server]
