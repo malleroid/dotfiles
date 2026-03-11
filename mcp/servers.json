@@ -12,7 +12,7 @@
     "env": {}
   },
   "playwright-mcp": {
-    "command": "mcp-server-playwright",
+    "command": "playwright-mcp",
     "args": ["--headless"],
     "env": {}
   },
