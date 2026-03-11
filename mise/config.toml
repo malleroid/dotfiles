@@ -51,6 +51,7 @@ verbose = false
 
 # Python
 "pipx:pyright" = "latest"
+"pipx:mlx-whisper" = "latest"
 
 # Rust
 "github:rust-lang/rust-analyzer" = "latest"
