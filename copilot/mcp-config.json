@@ -1,0 +1,45 @@
+{
+  "mcpServers": {
+    "awslabs-aws-documentation-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "awslabs.aws-documentation-mcp-server@latest"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "chrome-devtools-mcp": {
+      "command": "chrome-devtools-mcp",
+      "args": [
+        "--headless=true",
+        "--isolated=true"
+      ],
+      "env": {}
+    },
+    "playwright-mcp": {
+      "command": "mcp-server-playwright",
+      "args": [
+        "--headless"
+      ],
+      "env": {}
+    },
+    "rails-mcp-server": {
+      "command": "rails-mcp-server",
+      "args": [],
+      "env": {}
+    },
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--enable-web-dashboard",
+        "false"
+      ],
+      "env": {}
+    }
+  }
+}
