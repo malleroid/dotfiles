@@ -183,5 +183,6 @@
     "feature-dev@claude-plugins-official": true,
     "slack@claude-plugins-official": true
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high"
 }
