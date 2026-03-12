@@ -18,6 +18,8 @@ ln -snfv "$DOTFILES_DIR"/.claude/agents ~/.claude/agents
 ln -snfv "$DOTFILES_DIR"/.claude/hooks ~/.claude/hooks
 mkdir -p ~/.copilot
 ln -snfv "$DOTFILES_DIR"/copilot/mcp-config.json ~/.copilot/mcp-config.json
+mkdir -p ~/.config/rails-mcp
+ln -snfv "$DOTFILES_DIR"/rails-mcp/projects.yml ~/.config/rails-mcp/projects.yml
 mkdir -p ~/.codex
 ln -snfv "$DOTFILES_DIR"/codex/config.toml ~/.codex/config.toml
 ln -snfv "$DOTFILES_DIR"/codex/AGENTS.md ~/.codex/AGENTS.md
