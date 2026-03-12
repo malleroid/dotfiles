@@ -59,6 +59,7 @@ function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
         --model $model \
         --language Japanese \
         --output-format txt \
+        --condition-on-previous-text False \
         --output-dir $output_dir \
         --verbose True
 end
