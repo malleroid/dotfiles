@@ -37,8 +37,10 @@ for name in (jq -r 'keys[]' "$servers_config")
     # Claude Desktop
     set desktop_cfg "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
     if test -f "$desktop_cfg"
-        set entry (jq -c --arg n $name \
-            '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
+        set mise_path "$HOME/.local/share/mise/shims"
+        set default_path "$mise_path:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        set entry (jq -c --arg n $name --arg path "$default_path" \
+            '{command: .[$n].command, args: .[$n].args, env: (.[$n].env + {PATH: $path})}' \
             "$servers_config")
         jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$desktop_cfg" \
             > "$script_dir/_tmp_desktop.json"
