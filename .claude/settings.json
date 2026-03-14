@@ -4,6 +4,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(brew doctor *)",
       "Bash(brew info *)",
       "Bash(brew list *)",
       "Bash(brew outdated *)",
@@ -26,6 +27,7 @@
       "Bash(file *)",
       "Bash(find *)",
       "Bash(gh *)",
+      "Bash(ghq get *)",
       "Bash(ghq list *)",
       "Bash(ghq root *)",
       "Bash(git add *)",
@@ -37,7 +39,10 @@
       "Bash(git fetch *)",
       "Bash(git log *)",
       "Bash(git ls-tree *)",
+      "Bash(git merge *)",
       "Bash(git pull *)",
+      "Bash(git reflog *)",
+      "Bash(git rebase *)",
       "Bash(git rev-parse *)",
       "Bash(git show *)",
       "Bash(git stash *)",
@@ -46,6 +51,7 @@
       "Bash(head *)",
       "Bash(jq *)",
       "Bash(ls *)",
+      "Bash(lsof *)",
       "Bash(mcpm *)",
       "Bash(mise activate *)",
       "Bash(mise backends *)",
@@ -73,14 +79,19 @@
       "WebFetch(domain:aws.amazon.com)",
       "WebFetch(domain:awslabs.github.io)",
       "WebFetch(domain:biomejs.dev)",
+      "WebFetch(domain:cheatsheetseries.owasp.org)",
       "WebFetch(domain:claude.com)",
+      "WebFetch(domain:console.anthropic.com)",
       "WebFetch(domain:context7.com)",
       "WebFetch(domain:deepwiki.com)",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:docs.claude.com)",
+      "WebFetch(domain:docs.cloud.google.com)",
+      "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:docs.renovatebot.com)",
       "WebFetch(domain:docs.ruby-lang.org)",
       "WebFetch(domain:docs.slack.dev)",
+      "WebFetch(domain:formulae.brew.sh)",
       "WebFetch(domain:github.blog)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:google.github.io)",
@@ -95,6 +106,7 @@
       "WebFetch(domain:slack.com)",
       "WebFetch(domain:support.atlassian.com)",
       "WebFetch(domain:www.atlassian.com)",
+      "WebFetch(domain:www.conventionalcommits.org)",
       "WebFetch(domain:www.database-answers.com)",
       "WebFetch(domain:www.npmjs.com)",
       "WebSearch"
@@ -131,7 +143,8 @@
       "Bash(git commit --amend*)",
       "Bash(git commit --allow-empty*)",
       "Bash(git commit --no-verify*)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git reset *)"
     ]
   },
   "hooks": {
