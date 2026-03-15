@@ -1,4 +1,5 @@
 ---
+name: alternatives-analysis
 allowed-tools: Read, Grep, Glob, WebSearch, AskUserQuestion
 description: "技術的な代替案の構造化比較分析。選択肢を評価軸ごとに比較し、ADRの「検討内容」セクションに対応した出力を生成する。代替案の比較、技術選定、アーキテクチャの選択肢検討、ADR作成時に使用。"
 ---

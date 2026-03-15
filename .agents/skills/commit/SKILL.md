@@ -1,4 +1,5 @@
 ---
+name: commit
 allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git commit *), Bash(git config *), Read, AskUserQuestion
 description: "staged の変更からコミットメッセージを生成してコミットする。引数に 'preview' を渡すとメッセージ生成のみ行う"
 ---

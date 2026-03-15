@@ -1,4 +1,5 @@
 ---
+name: design-review
 allowed-tools: Read, Grep, Glob, AskUserQuestion
 description: "設計ドキュメント・設計提案の構造化レビュー。12の観点から設計の健全性を評価する。設計レビュー、アーキテクチャレビュー、設計書の確認、設計の妥当性検証を行う場合に使用。"
 ---
