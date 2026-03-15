@@ -1,4 +1,5 @@
 ---
+name: db-design
 allowed-tools: Read, AskUserQuestion
 description: "SQLアンチパターン第2版をベースにDBスキーマのレビューと設計支援を行う"
 ---

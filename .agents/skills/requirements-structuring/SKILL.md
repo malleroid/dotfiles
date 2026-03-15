@@ -1,4 +1,5 @@
 ---
+name: requirements-structuring
 allowed-tools: Read, Grep, Glob, AskUserQuestion
 description: "非構造化な入力（議事録、Confluenceコピー、口頭メモ）から要件を構造化する。機能要件・非機能要件・制約条件・前提条件・未決事項に分類し、MoSCoW優先度を仮付与する。要件定義、要件整理、議事録からの要件抽出に使用。"
 ---

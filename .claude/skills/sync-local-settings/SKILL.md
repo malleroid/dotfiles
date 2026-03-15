@@ -1,4 +1,5 @@
 ---
+name: sync-local-settings
 allowed-tools: Bash(ghq list *), Bash(jq *), Read, Edit, AskUserQuestion
 description: "ghq 管理下の全リポジトリから .claude/settings.local.json を収集し、global settings.json への取り込みを提案する"
 ---

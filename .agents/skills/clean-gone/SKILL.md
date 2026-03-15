@@ -1,4 +1,5 @@
 ---
+name: clean-gone
 allowed-tools: Bash(git branch *), Bash(git worktree *), Bash(git fetch *)
 description: リモートで削除済みのローカルブランチ（[gone]）とその worktree を一括削除する
 ---

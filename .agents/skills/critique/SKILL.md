@@ -1,4 +1,5 @@
 ---
+name: critique
 description: "直前のAIの回答を批判的にレビューする"
 allowed-tools: []
 ---

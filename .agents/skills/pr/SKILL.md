@@ -1,4 +1,5 @@
 ---
+name: pr
 allowed-tools: Bash(git branch *), Bash(git log *), Bash(git diff *), Bash(git push *), Bash(git remote *), Bash(gh pr create *), Bash(gh pr list *), Bash(gh repo view *), Read, AskUserQuestion
 description: "ブランチを push して PR を作成する。引数: [base-branch] [preview]"
 ---
