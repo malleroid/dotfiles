@@ -35,7 +35,19 @@ base branch 確定後、以下を実行して情報を収集する:
 
 1. `git log --oneline origin/<base>..HEAD` でブランチ上のコミット一覧を取得する
 2. `git diff origin/<base>...HEAD` で差分を取得する
-3. PR template を探す: `.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `docs/pull_request_template.md`, `pull_request_template.md` を Read ツールで順に試し、最初に見つかったものを使用する
+3. PR template を探す（**Glob ツールは使わず、必ず Read ツールで以下の全パスを並列に試すこと**）:
+   - `.github/pull_request_template.md`
+   - `.github/PULL_REQUEST_TEMPLATE.md`
+   - `.github/PULL_REQUEST_TEMPLATE/` （ディレクトリの場合は中のファイル一覧を取得）
+   - `docs/pull_request_template.md`
+   - `docs/PULL_REQUEST_TEMPLATE.md`
+   - `pull_request_template.md`
+   - `PULL_REQUEST_TEMPLATE.md`
+
+   結果の扱い:
+   - 見つかったものが **1つ** → それを使用
+   - 見つかったものが **複数** → AskUserQuestion でユーザーにどれを使うか選択させる
+   - 見つからない → テンプレートなしで進める
 4. `gh pr list --state merged --limit 5 --json number,title,body` で最近マージされた PR のスタイルを取得する
 
 ### Step 2: PR title と description の生成
