@@ -1,0 +1,35 @@
+# Ghostty terminal configuration
+# ~/.config/ghostty/config
+
+# --- Appearance ---
+theme = Iceberg Dark
+background-opacity = 0.80
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+
+# --- Font ---
+# 要確認: ghostty +list-fonts | grep -i hackgen
+# font-family = HackGen35 Nerd Console
+# font-size = 14
+
+# --- Scrollback ---
+# バイト単位 (10MB)。主要なスクロールバックは zellij 側 (100k lines) で管理
+scrollback-limit = 10000000
+
+# --- Keybindings (terminal-level) ---
+# Font size
+keybind = super+equal=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+zero=reset_font_size
+
+# Clipboard
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+
+# Window
+keybind = super+n=new_window
+keybind = alt+enter=toggle_fullscreen
+keybind = super+q=quit
+
+# Claude Code: Shift+Enter → newline
+keybind = shift+enter=text:\x1b\r
