@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# ollama
+if ! command -v ollama >/dev/null 2>&1; then
+  echo "Installing ollama..."
+  curl -fsSL https://ollama.com/install.sh | sh
+fi
+
+# claude code
+if ! command -v claude >/dev/null 2>&1; then
+  echo "Installing Claude Code..."
+  curl -fsSL https://claude.ai/install.sh | sh
+fi
+
+# opencode
+if ! command -v opencode >/dev/null 2>&1; then
+  echo "Installing OpenCode..."
+  curl -fsSL https://opencode.ai/install | sh
+fi
