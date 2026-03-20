@@ -1,3 +1,11 @@
 **/.claude/settings.local.json
+**/settings.local.json
 .serena/
 .chezmoi.toml
+
+# Fisher generated files
+dot_config/fish/completions/
+dot_config/fish/conf.d/
+dot_config/fish/functions/
+dot_config/fish/themes/
+dot_config/fish/fish_variables
