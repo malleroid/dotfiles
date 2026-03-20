@@ -2,7 +2,7 @@
 
 ## Context
 
-現在の dotfiles は `link.sh` (29 symlinks) + `setup.sh` (macOS専用) + `Brewfile` (CLI 97 + cask 52) で管理。
+現在の dotfiles は `link.sh` (20 symlinks) + `setup.sh` (macOS専用) + `Brewfile` (CLI 79 + cask 57) で管理。
 **mac×2 + Ubuntu + Arch + devcontainer + EC2** への展開に向け、chezmoi (dotfiles) + Nix (CLIパッケージ) に移行する。
 
 **ゴール**: `sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply malleroid/dotfiles` 1行で全環境をセットアップ可能にする。
@@ -208,7 +208,7 @@ abbr -a awsmfa 'oathtool --totp --base32 $(security find-generic-password -a $US
 {{ end -}}
 ```
 
-L112-116 を置換:
+L112-116 を置換 (※ Linux 側のパスを `/usr/bin/fish` → `fish` に変更。Nix 経由だと `~/.nix-profile/bin/fish` になるため PATH 解決にする):
 ```fish
 {{ if eq .chezmoi.os "darwin" -}}
 abbr -a reload 'exec /opt/homebrew/bin/fish -l'
@@ -295,6 +295,7 @@ bat --version
 - OS 分岐は `{{ if eq .chezmoi.os "darwin" }}` / `{{ if eq .chezmoi.os "linux" }}`
 - 冪等性: `command -v <tool> >/dev/null && exit 0` で既インストール時 skip
 - `run_onchange_` のトリガー: `# hash: {{ include "nix-packages.txt" | sha256sum }}`
+- `.chezmoiignore` で除外したファイル (e.g. `mcp/`) を run スクリプトから参照する場合は `{{ joinPath .chezmoi.sourceDir "mcp/servers.json" | quote }}` でソースディレクトリを直接参照する（`.chezmoiignore` はターゲットへのデプロイのみ抑止し、`include` や `joinPath .chezmoi.sourceDir` によるソース参照は影響しない）
 
 ### `run_onchange_after_10-nix-packages.sh.tmpl` の構造
 
@@ -316,6 +317,16 @@ while IFS= read -r pkg; do
   nix profile install "nixpkgs#$pkg" 2>/dev/null || echo "WARN: $pkg not found"
 done < {{ joinPath .chezmoi.sourceDir "nix-packages.txt" | quote }}
 ```
+
+### 実装時に要検討 (TODO)
+
+| スクリプト | 要検討事項 | リスク |
+|---|---|---|
+| `01-install-nix.sh.tmpl` | Determinate Systems installer vs 公式 installer の選択。前者なら `nix profile` の experimental flag 設定が不要になるが、公式でないインストーラへの依存が増える | 高 |
+| `22-fisher-bootstrap.sh.tmpl` | bash から Fisher を呼ぶ方法。Fisher は fish プラグインのため `fish -c "curl ... \| source && fisher update"` のような間接実行が必要。`fish_plugins` からの `fisher update` 復元フローを確認する | 高 |
+| `11-brew-casks.sh.tmpl` | `brew bundle --file=` で `Brewfile.casks` を読む形か。hash トリガーは `10-nix-packages` と同構造 (`# hash: {{ include "Brewfile.casks" \| sha256sum }}`) で良いか | 高 |
+| `24-native-tools.sh.tmpl` | ollama/claude/opencode の各 curl インストーラが Linux でも動作するか要確認。現 `setup.sh` は macOS 前提。Linux 非対応なら OS ガードが必要 | 中 |
+| `21-change-shell.sh.tmpl` | Linux では `chsh` 前に `/etc/shells` へ fish パスの追加が必要。Nix の fish は `~/.nix-profile/bin/fish` にあり、`/etc/shells` 追記に root 権限が要る | 中 |
 
 ### 検証
 ```
@@ -358,6 +369,16 @@ chezmoi init --source . --apply
 | codex config | `cat ~/.codex/config.toml` → `[projects]` セクション保持 |
 | chezmoi diff | `chezmoi diff` → 差分なし |
 | chezmoi verify | `chezmoi verify` → exit 0 |
+
+### 5-5. Homebrew CLI パッケージの削除
+
+Nix で同じツールが動作することを 5-4 で確認した後、Homebrew 側の CLI パッケージを削除する。
+
+1. `nix-packages.txt` に記載したパッケージ名と対応する Homebrew formula を照合
+2. `brew uninstall <formula>` で1つずつ削除（cask は残す）
+3. `brew autoremove` で不要な依存を削除
+4. `brew cleanup` でキャッシュを削除
+5. 削除後に `which <tool>` で Nix 版が使われていることを確認
 
 ---
 

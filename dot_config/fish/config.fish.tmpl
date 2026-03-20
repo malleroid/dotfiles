@@ -47,19 +47,11 @@ zoxide init fish --cmd j | source
 # the fuck
 thefuck --alias | source
 
-if test (uname) = "Darwin"
-  # add homebrew path (append to avoid overriding mise)
-  fish_add_path --append /opt/homebrew/bin
-  fish_add_path --append /opt/homebrew/sbin
-
-  # mysql client path
-  # fish_add_path /opt/homebrew/opt/mysql-client/bin
-
-  # set -gx LDFLAGS "-L/opt/homebrew/opt/mysql-client/lib"
-  # set -gx CPPFLAGS "-I/opt/homebrew/opt/mysql-client/include"
-
-  # set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/mysql-client/lib/pkgconfig"
-end
+{{ if eq .chezmoi.os "darwin" -}}
+# add homebrew path (append to avoid overriding mise)
+fish_add_path --append /opt/homebrew/bin
+fish_add_path --append /opt/homebrew/sbin
+{{ end -}}
 
 # Added by LM Studio CLI (lms)
 set -gx PATH $PATH $HOME/.lmstudio/bin

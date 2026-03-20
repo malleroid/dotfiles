@@ -7,7 +7,7 @@ if not ssh-add -l > /dev/null 2>&1
   source $SSH_AGENT_FILE > /dev/null 2>&1
 
   # load ssh key from apple key chain if macos
-  if test (uname) = "Darwin"
-    ssh-add --apple-load-keychain
-  end
+  {{ if eq .chezmoi.os "darwin" -}}
+  ssh-add --apple-load-keychain
+  {{ end -}}
 end
