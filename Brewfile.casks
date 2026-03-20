@@ -48,7 +48,6 @@ cask "tableplus"                  # Native GUI tool for relational databases
 cask "trae"                       # Menu bar app for Traefik reverse proxy
 cask "via"                        # Keyboard configurator
 cask "visual-studio-code"         # Open-source code editor
-cask "warp"                       # Rust-based terminal
 cask "ghostty"                    # Fast, native terminal emulator
 
 ## Media
