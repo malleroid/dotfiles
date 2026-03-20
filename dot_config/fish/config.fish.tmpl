@@ -44,8 +44,8 @@ starship init fish | source
 # zoxide
 zoxide init fish --cmd j | source
 
-# the fuck
-thefuck --alias | source
+# pay-respects (thefuck replacement)
+pay-respects fish --alias fuck | source
 
 {{ if eq .chezmoi.os "darwin" -}}
 # add homebrew path (append to avoid overriding mise)
