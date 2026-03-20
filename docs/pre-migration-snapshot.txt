@@ -1,0 +1,35 @@
+# Pre-migration symlink snapshot (2026-03-20)
+# Generated from link.sh symlink targets
+# Used to verify chezmoi apply produces equivalent results
+
+## ~/.config/
+~/.config/gitui -> /Users/malleus/ghq/github.com/malleroid/dotfiles/gitui
+~/.config/fish -> /Users/malleus/ghq/github.com/malleroid/dotfiles/fish
+~/.config/mise -> /Users/malleus/ghq/github.com/malleroid/dotfiles/mise
+~/.config/nvim -> /Users/malleus/ghq/github.com/malleroid/dotfiles/nvim
+~/.config/serpl -> /Users/malleus/ghq/github.com/malleroid/dotfiles/serpl
+~/.config/starship.toml -> /Users/malleus/ghq/github.com/malleroid/dotfiles/starship.toml
+~/.config/wezterm -> /Users/malleus/ghq/github.com/malleroid/dotfiles/wezterm
+~/.config/rails-mcp/projects.yml -> /Users/malleus/ghq/github.com/malleroid/dotfiles/rails-mcp/projects.yml
+
+## ~/
+~/.gitconfig -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.gitconfig
+~/.gitignore -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.gitignore
+~/.commit_template -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.commit_template
+
+## ~/.claude/
+~/.claude/CLAUDE.md -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.claude/CLAUDE.md
+~/.claude/settings.json -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.claude/settings.json
+~/.claude/skills -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.agents/skills
+~/.claude/agents -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.claude/agents
+~/.claude/hooks -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.claude/hooks
+
+## ~/.agents/
+~/.agents/skills -> /Users/malleus/ghq/github.com/malleroid/dotfiles/.agents/skills
+
+## ~/.copilot/
+~/.copilot/mcp-config.json -> /Users/malleus/ghq/github.com/malleroid/dotfiles/copilot/mcp-config.json
+
+## ~/.codex/
+~/.codex/config.toml -> /Users/malleus/ghq/github.com/malleroid/dotfiles/codex/config.toml
+~/.codex/AGENTS.md -> /Users/malleus/ghq/github.com/malleroid/dotfiles/codex/AGENTS.md

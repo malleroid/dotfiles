@@ -1,0 +1,8 @@
+{{- $env_type := promptStringOnce . "env_type" "Environment type (full/ephemeral)" "full" -}}
+
+[data]
+  env_type = {{ $env_type | quote }}
+  is_ephemeral = {{ eq $env_type "ephemeral" }}
+
+[edit]
+  command = "nvim"

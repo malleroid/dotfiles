@@ -1,0 +1,78 @@
+# macOS GUI Applications (managed by Homebrew Cask)
+
+## AI
+cask "aionui"                     # GUI for Gemini CLI
+cask "aqua-voice"                 # Voice AI interface
+cask "chatgpt"                    # OpenAI's ChatGPT desktop app
+cask "claude"                     # Anthropic's Claude AI desktop app
+cask "cursor"                     # AI-first code editor
+cask "deepchat"                   # AI-powered chat application
+cask "emdash"                     # UI for running multiple coding agents in parallel
+cask "whispering"                 # Audio transcription that works with local and cloud models
+cask "handy"                      # Speech to text application
+cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
+cask "kiro-cli"                   # AI-powered productivity tool for the command-line
+cask "lm-studio"                  # Run local LLMs on your computer
+cask "nao"                        # AI assistant
+cask "witsy"                      # AI assistant for macOS
+
+## Browser
+cask "browseros"                  # Open-source agentic browser
+cask "comet"                      # AI-first web browser
+cask "chatgpt-atlas"              # OpenAI's official browser with ChatGPT built in
+cask "firefox"                    # Web browser
+cask "google-chrome"              # Web browser
+cask "strawberry"                 # AI-powered web browser
+cask "vivaldi"                    # Web browser focusing on customization and control
+
+## Chat
+cask "discord"                    # Voice and text chat software
+cask "slack"                      # Team communication and collaboration software
+cask "zoom"                       # Video communication and virtual meeting platform
+cask "zulip"                      # Team chat application
+
+## Design
+cask "figma"                      # Collaborative interface design tool
+
+## Dev
+cask "antigravity"                # AI Coding Agent IDE
+cask "devknife"                   # Collection of handy developer tools
+cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
+cask "kiro"                       # Agent-centric IDE with spec-driven development
+cask "opcode"                     # GUI app and toolkit for Claude Code
+cask "sculptor"                   # GUI for Claude Code
+cask "gcloud-cli"                 # Google Cloud CLI
+cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
+cask "stravu-crystal"             # Run multiple Claude Code instances simultaneously using git worktrees
+cask "tableplus"                  # Native GUI tool for relational databases
+cask "trae"                       # Menu bar app for Traefik reverse proxy
+cask "via"                        # Keyboard configurator
+cask "visual-studio-code"         # Open-source code editor
+cask "warp"                       # Rust-based terminal
+cask "wezterm"                    # GPU-accelerated cross-platform terminal emulator
+
+## Media
+cask "obs"                        # Open-source software for live streaming and screen recording
+cask "stability-matrix"           # Multi-platform package manager for Stable Diffusion
+
+## Note
+cask "notion"                     # App to write, plan, collaborate, and get organized
+cask "obsidian"                   # Knowledge base that works on top of a local folder of plain text Markdown files
+
+## Productivity
+cask "blankie"                    # Ambient sound mixer for creating custom soundscapes
+cask "clariti"                    # Focus and relaxation soundscapes
+cask "deepl"                      # Translation app
+cask "raycast"                    # Control your tools with a few keystrokes
+
+## Storage
+cask "cyberduck"                  # Server and cloud storage browser
+
+## System
+cask "balenaetcher"               # Flash OS images to SD cards & USB drives
+cask "block-goose"                # Lightweight ad blocker
+cask "font-hackgen-nerd"          # HackGen Nerd Font
+cask "MonitorControl"             # Control external display brightness & volume
+cask "stats"                      # System monitor for the menu bar
+cask "ui-tars"                    # UI automation tool
+cask "void"                       # Menu bar utility that hides icons
