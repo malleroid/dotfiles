@@ -1,0 +1,28 @@
+#!/bin/bash
+{{ if .is_ephemeral -}}
+exit 0
+{{ end -}}
+
+# Find fish binary path
+FISH_PATH="$(command -v fish 2>/dev/null)"
+
+if [ -z "$FISH_PATH" ]; then
+  echo "fish not found, skipping"
+  exit 0
+fi
+
+# Check if already default shell
+if [ "$SHELL" = "$FISH_PATH" ]; then
+  echo "fish is already default shell, skipping"
+  exit 0
+fi
+
+echo "Setting fish as default shell..."
+
+# Add to /etc/shells if not present
+if ! grep -qF "$FISH_PATH" /etc/shells; then
+  echo "Adding $FISH_PATH to /etc/shells (requires sudo)..."
+  echo "$FISH_PATH" | sudo tee -a /etc/shells >/dev/null
+fi
+
+chsh -s "$FISH_PATH"

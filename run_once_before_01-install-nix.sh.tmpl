@@ -1,0 +1,12 @@
+#!/bin/bash
+{{ if .is_ephemeral -}}
+exit 0
+{{ end -}}
+
+if command -v nix >/dev/null 2>&1; then
+  echo "Nix already installed, skipping"
+  exit 0
+fi
+
+echo "Installing Nix (NixOS Community Installer)..."
+curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
