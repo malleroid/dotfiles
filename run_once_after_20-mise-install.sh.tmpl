@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "mise not installed, skipping"
+  exit 0
+fi
+
+echo "Installing mise tools..."
+mise install --yes

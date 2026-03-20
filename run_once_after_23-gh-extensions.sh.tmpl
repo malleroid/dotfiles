@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "gh not found, skipping"
+  exit 0
+fi
+
+echo "Installing gh extensions..."
+gh extension install dlvhdr/gh-dash 2>/dev/null || true
+gh extension install seachicken/gh-poi 2>/dev/null || true

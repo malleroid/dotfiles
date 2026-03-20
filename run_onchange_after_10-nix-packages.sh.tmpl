@@ -1,0 +1,22 @@
+#!/bin/bash
+{{ if .is_ephemeral -}}
+exit 0
+{{ end -}}
+
+# nix-packages.txt hash: {{ include "nix-packages.txt" | sha256sum }}
+
+if ! command -v nix >/dev/null 2>&1; then
+  echo "Nix not installed, skipping"
+  exit 0
+fi
+
+echo "Installing Nix packages..."
+while IFS= read -r pkg; do
+  [[ "$pkg" =~ ^#.*$ || -z "$pkg" ]] && continue
+  # strip inline comments
+  pkg="${pkg%%#*}"
+  pkg="$(echo "$pkg" | xargs)"
+  [ -z "$pkg" ] && continue
+  echo "  Installing $pkg..."
+  nix profile add "nixpkgs#$pkg" 2>/dev/null || echo "  WARN: $pkg not found"
+done < {{ joinPath .chezmoi.sourceDir "nix-packages.txt" | quote }}

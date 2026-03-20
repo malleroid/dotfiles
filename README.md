@@ -1,40 +1,77 @@
 # dotfiles
 
 ## Overview
-- Personal dotfiles for macOS with Homebrew, fish shell, and Neovim.
-- Bootstrap with `setup.sh`, then symlink into `$HOME`/`~/.config` via `link.sh`.
+- Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/) with Nix (CLI packages) and Homebrew (macOS GUI apps).
+- Targets: macOS, Ubuntu, Arch Linux, devcontainers, EC2.
 - Defaults: fish shell + Starship prompt, Neovim editor, WezTerm terminal.
 
 ## Setup
-1. Clone  
-   `git clone git@github.com:malleroid/dotfiles.git ~/dotfiles && cd ~/dotfiles`
-2. Install base tools (Homebrew, Brew Bundle, mise, fish, etc.)  
-   `./setup.sh`  
-   - Installs Homebrew and all packages from `Brewfile`.  
-   - Runs `mise install` to align tool versions.  
-   - Switches the login shell to `/opt/homebrew/bin/fish`.  
-   - Installs fish plugins via fisher and GitHub CLI extensions.  
-   - Requires `sudo`; follow the prompts.
-3. Link dotfiles  
-   `./link.sh`  
-   - Creates symlinks under `~/.config` and the home directory. Existing files may be overwritten.
-4. Reload shell (log in again or `exec fish`) to apply settings.
+
+One command to bootstrap a new machine:
+
+```sh
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply malleroid/dotfiles
+```
+
+This will:
+1. Install chezmoi to `./bin/` and `exec` it directly (PATH not required)
+2. Clone this repo and apply dotfiles
+3. Run setup scripts (Nix, Homebrew, packages, shell config, etc.)
+
+For ephemeral environments (devcontainers, EC2):
+
+```sh
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --one-shot --promptString 'Environment type (full/ephemeral)=ephemeral' malleroid/dotfiles
+```
+
+To install chezmoi permanently to `~/.local/bin/`:
+
+```sh
+sh -c "$(curl -fsLS get.chezmoi.io/lb)"
+```
+
+## Package Management
+
+| What | Manager | File |
+|------|---------|------|
+| CLI tools (69 packages) | Nix | `nix-packages.txt` |
+| macOS GUI apps (57 casks) | Homebrew | `Brewfile.casks` |
+| Language runtimes & dev tools | mise | `dot_config/mise/config.toml` |
 
 ## Layout
-- `setup.sh` / `link.sh`: Bootstrap and symlink scripts.
-- `Brewfile`: Brew-managed CLI/GUI packages.
-- `fish/`: Shell config (`config.fish`, custom functions, fisher plugins).
-- `nvim/`: Neovim config.
-- `starship.toml`: Prompt config.
-- `wezterm/`: WezTerm config.
-- `gitui/`, `mise/`, `serpl/`, `mcpm/`, `codex/`: Tool-specific configs.
-- `.gitconfig`, `.gitignore`, `.commit_template`: Git settings.
-- `.claude/`: Claude-related settings.
+
+```
+dotfiles/
+├── .chezmoi.toml.tmpl          # chezmoi config (env_type prompt)
+├── .chezmoiignore              # files excluded from deployment
+├── nix-packages.txt            # CLI packages for Nix
+├── Brewfile.casks              # macOS GUI apps for Homebrew
+├── dot_gitconfig                # → ~/.gitconfig
+├── dot_gitignore                # → ~/.gitignore
+├── dot_commit_template          # → ~/.commit_template
+├── dot_config/                  # → ~/.config/
+│   ├── fish/                    #   fish shell (3 files templated for OS)
+│   ├── nvim/                    #   Neovim
+│   ├── mise/                    #   mise runtime manager
+│   ├── wezterm/                 #   WezTerm terminal
+│   ├── starship.toml            #   Starship prompt
+│   ├── nix/                     #   Nix config (experimental features)
+│   ├── gitui/, serpl/           #   TUI tools
+│   └── rails-mcp/              #   Rails MCP server
+├── dot_claude/                  # → ~/.claude/
+│   ├── agents/                  #   sub-agent definitions
+│   ├── hooks/                   #   git guard hooks (executable_)
+│   └── symlink_skills.tmpl      #   → ~/.agents/skills
+├── dot_agents/skills/           # → ~/.agents/skills/
+├── dot_copilot/                 # → ~/.copilot/
+├── dot_codex/                   # → ~/.codex/ (create_ prefix: no overwrite)
+└── run_*                        # chezmoi setup scripts (9 total)
+```
 
 ## Operations
-- Package updates: run `brew bundle dump --force` to refresh `Brewfile`, then commit. Use `mise install` / `mise upgrade` to sync tool versions.
-- Adding configs: place new tool config in `$HOME/.config`, then add its symlink step to `link.sh`.
-- Codex config: `codex/config.toml` is the shared base. `link.sh` seeds `~/.codex/config.toml` only when missing, so machine-specific `[projects]` trust entries stay local.
-- Codex agents instruction: `codex/AGENTS.md` is symlinked to `~/.codex/AGENTS.md`.
-- Personal info: override Git `user.name` / `user.email` locally as needed.
-- Quick checks: `exec fish` to reload shell config; `nvim --headless "+checkhealth" +qall` to verify Neovim setup.
+
+- **Add a Nix package**: Add to `nix-packages.txt`, then `chezmoi apply` (triggers `run_onchange`).
+- **Add a macOS cask**: Add to `Brewfile.casks`, then `chezmoi apply`.
+- **Update dotfiles**: Edit `dot_*` files, then `chezmoi apply` to deploy.
+- **Sync from home**: `chezmoi re-add <file>` to pull changes back from `~/`.
+- **Quick checks**: `exec fish` to reload shell; `chezmoi diff` to preview changes.

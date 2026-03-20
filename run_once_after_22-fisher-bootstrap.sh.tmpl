@@ -1,0 +1,12 @@
+#!/bin/bash
+{{ if .is_ephemeral -}}
+exit 0
+{{ end -}}
+
+if ! command -v fish >/dev/null 2>&1; then
+  echo "fish not found, skipping"
+  exit 0
+fi
+
+echo "Installing Fisher and plugins..."
+fish -c "curl -sL https://git.io/fisher | source && fisher update"
