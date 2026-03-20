@@ -2,7 +2,7 @@
 # ~/.config/ghostty/config
 
 # --- Appearance ---
-theme = iceberg-dark
+theme = Iceberg Dark
 background-opacity = 0.80
 mouse-hide-while-typing = true
 copy-on-select = clipboard
