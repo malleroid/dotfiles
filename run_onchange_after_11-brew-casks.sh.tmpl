@@ -11,4 +11,4 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 echo "Installing Homebrew casks..."
-brew bundle --no-lock --file={{ joinPath .chezmoi.sourceDir "Brewfile.casks" | quote }}
+brew bundle --file={{ joinPath .chezmoi.sourceDir "Brewfile.casks" | quote }}
