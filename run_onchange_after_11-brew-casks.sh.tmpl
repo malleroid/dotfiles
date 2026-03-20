@@ -1,0 +1,14 @@
+#!/bin/bash
+{{ if ne .chezmoi.os "darwin" -}}
+exit 0
+{{ end -}}
+
+# Brewfile.casks hash: {{ include "Brewfile.casks" | sha256sum }}
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew not installed, skipping"
+  exit 0
+fi
+
+echo "Installing Homebrew casks..."
+brew bundle --no-lock --file={{ joinPath .chezmoi.sourceDir "Brewfile.casks" | quote }}
