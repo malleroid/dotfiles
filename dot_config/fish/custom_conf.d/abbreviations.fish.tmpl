@@ -91,9 +91,6 @@ abbr -a du 'dust'
 # glances
 abbr -a top 'glances'
 
-# gnu-sed
-abbr -a sed 'gsed'
-
 # httpie
 abbr -a curl 'http'
 
@@ -109,11 +106,7 @@ abbr -a awsmfa 'oathtool --totp --base32 $(security find-generic-password -a $US
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
 
-{{ if eq .chezmoi.os "darwin" -}}
-abbr -a reload 'exec /opt/homebrew/bin/fish -l'
-{{ else -}}
 abbr -a reload 'exec fish -l'
-{{ end -}}
 
 # terraform
 abbr -a tf 'terraform'
