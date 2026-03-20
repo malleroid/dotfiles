@@ -17,3 +17,7 @@ if ! command -v opencode >/dev/null 2>&1; then
   echo "Installing OpenCode..."
   curl -fsSL https://opencode.ai/install | sh
 fi
+
+# beads (always run to keep up-to-date)
+echo "Installing/updating beads..."
+curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
