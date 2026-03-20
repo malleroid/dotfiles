@@ -48,8 +48,7 @@ cask "tableplus"                  # Native GUI tool for relational databases
 cask "trae"                       # Menu bar app for Traefik reverse proxy
 cask "via"                        # Keyboard configurator
 cask "visual-studio-code"         # Open-source code editor
-cask "warp"                       # Rust-based terminal
-cask "wezterm"                    # GPU-accelerated cross-platform terminal emulator
+cask "ghostty"                    # Fast, native terminal emulator
 
 ## Media
 cask "obs"                        # Open-source software for live streaming and screen recording

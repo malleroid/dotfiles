@@ -26,7 +26,7 @@ raycast/**
 # Ephemeral 環境で除外
 {{ if .is_ephemeral }}
 .config/nvim/**
-.config/wezterm/**
+.config/ghostty/**
 .config/gitui/**
 .config/serpl/**
 .config/rails-mcp/**

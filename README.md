@@ -3,7 +3,7 @@
 ## Overview
 - Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/) with Nix (CLI packages) and Homebrew (macOS GUI apps).
 - Targets: macOS, Ubuntu, Arch Linux, devcontainers, EC2.
-- Defaults: fish shell + Starship prompt, Neovim editor, WezTerm terminal.
+- Defaults: fish shell + Starship prompt, Neovim editor, Ghostty terminal + Zellij multiplexer.
 
 ## Setup
 

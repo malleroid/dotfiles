@@ -20,7 +20,7 @@ fi
 echo "Setting fish as default shell..."
 
 # Add to /etc/shells if not present
-if ! grep -qF "$FISH_PATH" /etc/shells; then
+if ! grep -qxF "$FISH_PATH" /etc/shells; then
   echo "Adding $FISH_PATH to /etc/shells (requires sudo)..."
   echo "$FISH_PATH" | sudo tee -a /etc/shells >/dev/null
 fi

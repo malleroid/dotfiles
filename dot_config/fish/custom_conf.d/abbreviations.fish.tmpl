@@ -102,6 +102,13 @@ abbr -a ping 'gping'
 abbr -a awsmfa 'oathtool --totp --base32 $(security find-generic-password -a $USER -s oath-toolkit-aws-mfa -w) | pbcopy'
 {{ end -}}
 
+# zellij
+abbr -a zj 'zellij'
+abbr -a zja 'zellij attach'
+abbr -a zjl 'zellij list-sessions'
+abbr -a zjk 'zellij kill-session'
+abbr -a zjka 'zellij kill-all-sessions'
+
 # shell
 abbr -a c 'clear'
 abbr -a gr 'grep --color=auto'
