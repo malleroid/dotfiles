@@ -1,2 +1,110 @@
 # Nix packages (1 per line, # for comments)
-# Populated in Phase 3
+# Brewfile name → nixpkgs name noted where different
+
+## AI
+aichat
+tgpt
+
+## API
+httpie
+httptap
+openapi-tui
+posting
+
+## Benchmark
+hyperfine
+
+## Cloud
+awscli2                           # brew: awscli
+granted
+
+## Database
+dblab
+harlequin
+lazysql
+tabiew
+
+## Dev
+act
+code2prompt
+jira-cli-go                       # brew: jira-cli
+jiratui
+mise
+neovim
+scc
+
+## DevOps
+dive
+lazydocker
+lazyssh
+terraformer
+tflint
+
+## Doc
+glow
+gocheat
+slides
+tlrc
+
+## FileManager
+aria2
+bat
+eza
+fd
+filebrowser
+fzf
+yazi
+zoxide
+
+## Git
+gh
+ghq
+git
+delta                             # brew: git-delta
+gitui
+
+## Media
+spotify-player                    # brew: spotify_player
+tut
+
+## MCP
+mcp-grafana
+terraform-mcp-server
+
+## Monitor
+bandwhich
+duf
+dust
+fastfetch
+glances
+htop
+hwatch
+nvtopPackages.apple               # brew: nvtop (Apple GPU variant for Darwin)
+procs
+tailspin
+
+## Network
+gping
+
+## Search
+gnugrep                           # brew: grep
+igrep
+jless
+jq
+jqp
+ripgrep
+serpl
+
+## Security
+mkcert
+oath-toolkit
+radare2
+
+## Shell
+fish
+pay-respects                      # brew: thefuck (Rust replacement)
+starship
+zellij
+
+## Util
+gnused                            # brew: gnu-sed
