@@ -19,8 +19,6 @@ awscli2                           # brew: awscli
 granted
 
 ## Database
-dblab
-harlequin
 lazysql
 tabiew
 
@@ -28,7 +26,6 @@ tabiew
 act
 code2prompt
 jira-cli-go                       # brew: jira-cli
-jiratui
 mise
 neovim
 scc
