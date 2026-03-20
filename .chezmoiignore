@@ -1,0 +1,36 @@
+# リポジトリ専用ファイル (デプロイしない)
+README.md
+Brewfile.casks
+nix-packages.txt
+.editorconfig
+link.sh
+setup.sh
+Brewfile
+docs/**
+mcp/**
+jira-cli/**
+raycast/**
+.ruby-lsp/**
+.claude/plans/**
+.claude/docs/**
+.claude/settings.local.json
+.claude/setup.fish
+
+# Fisher/自動生成 (各ツールが管理)
+.config/fish/completions/**
+.config/fish/conf.d/**
+.config/fish/functions/**
+.config/fish/themes/**
+.config/fish/fish_variables
+
+# Ephemeral 環境で除外
+{{ if .is_ephemeral }}
+.config/nvim/**
+.config/wezterm/**
+.config/gitui/**
+.config/serpl/**
+.config/rails-mcp/**
+.copilot/**
+.codex/**
+.agents/**
+{{ end }}

@@ -1,0 +1,2 @@
+# Nix packages (1 per line, # for comments)
+# Populated in Phase 3
