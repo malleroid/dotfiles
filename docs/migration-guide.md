@@ -79,7 +79,22 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 brew uninstall chezmoi
 ```
 
-### 7. Verify
+### 7. Fix login shell (Homebrew fish → Nix fish)
+
+The old setup set `/opt/homebrew/bin/fish` as the login shell via `chsh`.
+After migration to Nix, this path no longer exists and causes terminal launch failures (e.g., Ghostty).
+
+```sh
+# Add Nix fish to /etc/shells
+echo ~/.nix-profile/bin/fish | sudo tee -a /etc/shells
+
+# Change login shell
+chsh -s ~/.nix-profile/bin/fish
+```
+
+After this, restart your terminal or log out/in.
+
+### 8. Verify
 
 ```sh
 chezmoi diff          # should show no diff
