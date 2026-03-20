@@ -402,8 +402,10 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply malleroid/dotfiles
 ### 6-3. devcontainer (ephemeral)
 - `postCreateCommand` に設定:
   ```
-  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply --data='{"env_type":"ephemeral"}' malleroid/dotfiles
+  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --one-shot --promptString 'Environment type (full/ephemeral)=ephemeral' malleroid/dotfiles
   ```
+  - `--one-shot`: apply 後に chezmoi バイナリ・ソース・設定を全て削除（ディスク節約）
+  - `--promptString`: `.chezmoi.toml.tmpl` の promptStringOnce に非対話的に値を渡す
 - Nix / Homebrew が skip されること
 - 設定ファイルのみデプロイされること
 - nvim/wezterm/gitui 等が除外されること
@@ -412,25 +414,41 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply malleroid/dotfiles
 
 ## Phase 7: クリーンアップ
 
-### 削除対象
+### 7-1. 不要ファイルの削除
 | ファイル | 理由 |
 |---|---|
 | `link.sh` | chezmoi に置換 |
 | `setup.sh` | run スクリプトに置換 |
 | `Brewfile` | `Brewfile.casks` + `nix-packages.txt` に分割 |
-| `netrc/` | `docs/` に移動済 |
-| `jiratui/` | `docs/` に移動済 (example) |
-| `jira-cli/` | `docs/` に移動済 (example) |
-| `raycast/` | `docs/` に移動済 |
-| `fish/conf.d/` | Fisher 生成ファイル。chezmoi 管理外 |
+| `jira-cli/` | example のみ。jiratui 同様不要 |
+| `raycast/` | 2023年の古い export。不要 |
+| `docs/jiratui-config.yaml.example` | jiratui を削除したため不要 |
+| `docs/pre-migration-snapshot.txt` | 移行完了後は不要 |
 
-### README.md 更新
+※ `netrc/`, `jiratui/` は Phase 1 で移動・削除済み
+※ `docs/netrc.example` は参照用として残す
+
+### 7-2. chezmoi を self-bootstrap に切り替え
+1. `sh -c "$(curl -fsLS get.chezmoi.io)"` で `~/.local/bin/chezmoi` をインストール
+2. 動作確認
+3. `brew uninstall chezmoi`
+
+### 7-3. README.md 更新
 ```markdown
 ## Setup
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply malleroid/dotfiles
 ```
 
-### master にマージ
+### 7-4. 既存マシン向け移行手順ドキュメント
+`docs/migration-guide.md` を作成:
+- 壊れた symlink の対処（`~/.codex/config.toml` の rm）
+- Nix インストール後のシェル再読み込み（`nix` が PATH に入らない問題）
+- `nix profile add` での手動パッケージインストール
+- Homebrew CLI の削除手順（`brew uninstall` + `brew autoremove` + `brew cleanup`）
+- `chezmoi apply` で run スクリプトが全て実行されること
+
+### 7-5. コミット & PR 作成
+Phase 6 は別スコープのため、master マージではなく PR 作成まで
 
 ---
 
