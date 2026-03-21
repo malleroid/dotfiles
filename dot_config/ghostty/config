@@ -2,7 +2,7 @@
 # ~/.config/ghostty/config
 
 # --- Appearance ---
-theme = Iceberg Dark
+theme = Cyberdyne
 background-opacity = 0.85
 minimum-contrast = 1
 mouse-hide-while-typing = true
