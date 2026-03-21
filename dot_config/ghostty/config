@@ -12,23 +12,22 @@ copy-on-select = clipboard
 # font-family = HackGen35 Nerd Console
 # font-size = 14
 
+# --- Shell Integration ---
+# Disabled: starship handles prompt/title, Zellij doesn't support OSC 133/7
+shell-integration = none
+
 # --- Scrollback ---
 # バイト単位 (10MB)。主要なスクロールバックは zellij 側 (100k lines) で管理
 scrollback-limit = 10000000
 
-# --- Keybindings (terminal-level) ---
-# Font size
+# --- Keybindings ---
+# Clear all defaults to avoid conflicts with Zellij, then re-add essentials
+keybind = clear
 keybind = super+equal=increase_font_size:1
 keybind = super+minus=decrease_font_size:1
 keybind = super+zero=reset_font_size
-
-# Clipboard
 keybind = super+c=copy_to_clipboard
 keybind = super+v=paste_from_clipboard
-
-# Window
 keybind = alt+enter=toggle_fullscreen
 keybind = super+q=quit
-
-# Claude Code: Shift+Enter → newline
 keybind = shift+enter=text:\x1b\r
