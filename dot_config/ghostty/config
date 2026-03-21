@@ -12,9 +12,6 @@ copy-on-select = clipboard
 # font-family = HackGen35 Nerd Console
 # font-size = 14
 
-# --- Shell / Multiplexer ---
-command = zellij attach --create personal
-
 # --- Scrollback ---
 # バイト単位 (10MB)。主要なスクロールバックは zellij 側 (100k lines) で管理
 scrollback-limit = 10000000
