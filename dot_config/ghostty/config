@@ -11,6 +11,7 @@ copy-on-select = clipboard
 # 要確認: ghostty +list-fonts | grep -i hackgen
 # font-family = HackGen35 Nerd Console
 # font-size = 14
+font-thicken = true
 
 # --- macOS ---
 macos-option-as-alt = true
