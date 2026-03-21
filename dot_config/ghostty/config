@@ -4,6 +4,7 @@
 # --- Appearance ---
 theme = Iceberg Dark
 background-opacity = 0.80
+minimum-contrast = 1
 mouse-hide-while-typing = true
 copy-on-select = clipboard
 
@@ -19,6 +20,7 @@ window-padding-y = 0
 window-padding-color = extend
 window-step-resize = true
 window-save-state = always
+confirm-close-surface = true
 
 # --- macOS ---
 macos-option-as-alt = true
