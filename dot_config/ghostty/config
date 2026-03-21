@@ -13,6 +13,10 @@ copy-on-select = clipboard
 # font-size = 14
 font-thicken = true
 
+# --- Window ---
+window-padding-x = 2
+window-padding-y = 0
+
 # --- macOS ---
 macos-option-as-alt = true
 
