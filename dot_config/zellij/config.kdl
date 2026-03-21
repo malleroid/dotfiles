@@ -10,13 +10,22 @@ default_layout "compact"
 default_mode "normal"
 
 // --- Keybindings ---
+// Mode switching: Cmd (Super) instead of Ctrl to avoid conflicts with
+// shell/editor keybindings (ghq Ctrl+G, vim Ctrl+S/P/N, etc.)
 keybinds {
-    normal {
-        // 誤終了防止
-        unbind "Ctrl q"
-    }
+    normal {}
     shared_except "locked" {
-        unbind "Ctrl q"
+        // Remove default Ctrl bindings (conflict with shell/editor)
+        unbind "Ctrl q" "Ctrl g" "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl s" "Ctrl o" "Ctrl h" "Ctrl b"
+        // Mode switching (Cmd key)
+        bind "Super g" { SwitchToMode "Locked"; }
+        bind "Super p" { SwitchToMode "Pane"; }
+        bind "Super t" { SwitchToMode "Tab"; }
+        bind "Super n" { SwitchToMode "Resize"; }
+        bind "Super s" { SwitchToMode "Scroll"; }
+        bind "Super o" { SwitchToMode "Session"; }
+        bind "Super h" { SwitchToMode "Move"; }
+        bind "Super b" { SwitchToMode "Tmux"; }
         // Tab switching (Alt+1-9)
         bind "Alt 1" { GoToTab 1; SwitchToMode "Normal"; }
         bind "Alt 2" { GoToTab 2; SwitchToMode "Normal"; }
@@ -27,5 +36,9 @@ keybinds {
         bind "Alt 7" { GoToTab 7; SwitchToMode "Normal"; }
         bind "Alt 8" { GoToTab 8; SwitchToMode "Normal"; }
         bind "Alt 9" { GoToTab 9; SwitchToMode "Normal"; }
+    }
+    locked {
+        unbind "Ctrl g"
+        bind "Super g" { SwitchToMode "Normal"; }
     }
 }
