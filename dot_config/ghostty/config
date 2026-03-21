@@ -3,7 +3,7 @@
 
 # --- Appearance ---
 theme = Iceberg Dark
-background-opacity = 0.80
+background-opacity = 0.85
 minimum-contrast = 1
 mouse-hide-while-typing = true
 copy-on-select = clipboard
