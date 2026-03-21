@@ -18,6 +18,7 @@ window-padding-x = 2
 window-padding-y = 0
 window-padding-color = extend
 window-step-resize = true
+window-save-state = always
 
 # --- macOS ---
 macos-option-as-alt = true
