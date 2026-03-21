@@ -12,6 +12,10 @@ copy-on-select = clipboard
 # font-family = HackGen35 Nerd Console
 # font-size = 14
 
+# --- Shell / Multiplexer ---
+# Wrapper script sources Nix profile for PATH, then exec's zellij
+command = ~/.local/bin/start-zellij
+
 # --- Shell Integration ---
 # Disabled: starship handles prompt/title, Zellij doesn't support OSC 133/7
 shell-integration = none

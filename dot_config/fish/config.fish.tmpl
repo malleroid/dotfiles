@@ -67,11 +67,3 @@ end
 fish_add_path $HOME/.antigravity/antigravity/bin
 # opencode
 fish_add_path $HOME/.opencode/bin
-
-# Zellij auto-attach (Ghostty only, skip if already inside Zellij)
-# exec replaces fish with zellij; zellij spawns a new fish that skips this block
-if status is-interactive
-    if set -q GHOSTTY_RESOURCES_DIR; and not set -q ZELLIJ_PANE_ID
-        exec zellij attach --create personal
-    end
-end
