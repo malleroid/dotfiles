@@ -24,7 +24,7 @@ keybinds {
         bind "Super n" { SwitchToMode "Resize"; }
         bind "Super s" { SwitchToMode "Scroll"; }
         bind "Super o" { SwitchToMode "Session"; }
-        bind "Super h" { SwitchToMode "Move"; }
+        bind "Super Shift h" { SwitchToMode "Move"; }
         bind "Super b" { SwitchToMode "Tmux"; }
         // Tab switching (Alt+1-9)
         bind "Alt 1" { GoToTab 1; SwitchToMode "Normal"; }
