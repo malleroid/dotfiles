@@ -37,6 +37,10 @@ keybinds {
         bind "Alt 8" { GoToTab 8; SwitchToMode "Normal"; }
         bind "Alt 9" { GoToTab 9; SwitchToMode "Normal"; }
     }
+    tab {
+        unbind "r"
+        bind "c" { SwitchToMode "RenameTab"; TabNameInput 0; }
+    }
     locked {
         unbind "Ctrl g"
         bind "Super g" { SwitchToMode "Normal"; }
