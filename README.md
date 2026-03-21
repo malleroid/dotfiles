@@ -53,7 +53,8 @@ dotfiles/
 │   ├── fish/                    #   fish shell (3 files templated for OS)
 │   ├── nvim/                    #   Neovim
 │   ├── mise/                    #   mise runtime manager
-│   ├── wezterm/                 #   WezTerm terminal
+│   ├── ghostty/                 #   Ghostty terminal
+│   ├── zellij/                  #   Zellij multiplexer
 │   ├── starship.toml            #   Starship prompt
 │   ├── nix/                     #   Nix config (experimental features)
 │   ├── gitui/, serpl/           #   TUI tools
