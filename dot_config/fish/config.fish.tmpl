@@ -38,6 +38,11 @@ set -g theme_title_display_path no
 # color
 set -g theme_color_scheme dracula
 
+# Zellij auto-attach (Ghostty only, skip if already inside Zellij)
+if set -q GHOSTTY_RESOURCES_DIR; and not set -q ZELLIJ
+    zellij attach --create personal
+end
+
 # Starship
 starship init fish | source
 
