@@ -12,6 +12,9 @@ copy-on-select = clipboard
 # font-family = HackGen35 Nerd Console
 # font-size = 14
 
+# --- macOS ---
+macos-option-as-alt = true
+
 # --- Shell / Multiplexer ---
 # Wrapper script sources Nix profile for PATH, then exec's zellij
 command = ~/.local/bin/start-zellij
