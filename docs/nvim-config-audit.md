@@ -88,10 +88,36 @@ copilot, vtsls, pyright, rust_analyzer, gopls, lua_ls, ruby_lsp, html, cssls, js
 
 ## 気になる点・改善候補
 
-### 1. keymaps.lua が無い
-キーマップが各プラグインファイルに分散している。プラグイン固有のマップはそのままでも良いが、
-汎用的なキーマップ (`<Space>` でバッファ間移動、`<C-h/j/k/l>` でウィンドウ移動等) を
-集約する `config/keymaps.lua` があると見通しが良くなる。
+### 1. keymaps.lua が無い → ファイル作成済み、中身は未実装
+`config/keymaps.lua` を作成し `init.lua` から読み込む構成にした。
+以下の候補から必要なものを追加していく。
+
+**ウィンドウ移動** (現状 `Ctrl+W` → `h/j/k/l` の2ストローク):
+
+| キー | 操作 | 注意 |
+|---|---|---|
+| `Ctrl+H/J/K/L` | ウィンドウ間フォーカス移動 | Zellij `Cmd+H/J/K/L` との競合確認が必要 |
+
+**バッファ切替** (現状コマンドか Telescope のみ):
+
+| キー | 操作 |
+|---|---|
+| `Shift+H` / `Shift+L` | 前/次のバッファ |
+
+**便利系**:
+
+| キー | 操作 |
+|---|---|
+| `<Space>w` | 保存 (`:w`) |
+| `<Space>q` | 閉じる (`:q`) |
+| `Esc` (Normal) | 検索ハイライト解除 (`:noh`) |
+
+**Visual モード操作**:
+
+| キー | 操作 |
+|---|---|
+| `J` / `K` (Visual) | 選択行を上下に移動 |
+| `<` / `>` (Visual) | インデント後も選択維持 |
 
 ### 2. ~~autopairs の blink.cmp 連携が壊れている可能性~~ → 解決済み
 blink.cmp 連携コードを削除、blink.cmp 依存も除去。
