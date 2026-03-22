@@ -49,6 +49,10 @@ keybinds {
         unbind "Alt [" "Alt ]"
         bind "Super [" { PreviousSwapLayout; }
         bind "Super ]" { NextSwapLayout; }
+        // Tab reordering (Cmd+Shift key)
+        unbind "Alt i" "Alt o"
+        bind "Super Shift [" { MoveTab "Left"; }
+        bind "Super Shift ]" { MoveTab "Right"; }
     }
     scroll {
         bind "Ctrl b" { PageScrollUp; }
