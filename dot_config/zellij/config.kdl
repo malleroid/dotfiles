@@ -37,8 +37,12 @@ keybinds {
         bind "Alt 8" { GoToTab 8; SwitchToMode "Normal"; }
         bind "Alt 9" { GoToTab 9; SwitchToMode "Normal"; }
         // Direct pane actions (Cmd key)
-        unbind "Alt n"
+        unbind "Alt n" "Alt h" "Alt j" "Alt k" "Alt l"
         bind "Super n" { NewPane; }
+        bind "Super h" { MoveFocusOrTab "Left"; }
+        bind "Super j" { MoveFocus "Down"; }
+        bind "Super k" { MoveFocus "Up"; }
+        bind "Super l" { MoveFocusOrTab "Right"; }
         // Layout switching (Cmd key)
         unbind "Alt [" "Alt ]"
         bind "Super [" { PreviousSwapLayout; }
