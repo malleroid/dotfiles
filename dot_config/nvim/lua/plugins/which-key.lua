@@ -45,6 +45,9 @@ return {
         { "<leader>hb", desc = "Blame line" },
         { "<leader>hd", desc = "Diff this" },
 
+        { "<leader>-", desc = "Open yazi (current file)" },
+        { "<leader>cw", desc = "Open yazi (working directory)" },
+
         { "<leader>c", group = "Code" },
         { "<leader>ca", desc = "Code action" },
 
