@@ -33,8 +33,11 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 ```
 
 This will:
+- Generate `~/.config/chezmoi/chezmoi.toml` with `sourceDir` pointing to the dotfiles repo (from `.chezmoi.toml.tmpl`)
 - Deploy all dotfiles (replacing broken symlinks with real files)
 - Run setup scripts (Nix install, packages, shell config, etc.)
+
+After this, `chezmoi apply` / `chezmoi re-add` etc. work without `--source`.
 
 ### 4. Known issue: Nix not in PATH after install
 
@@ -97,6 +100,7 @@ After this, restart your terminal or log out/in.
 ### 8. Verify
 
 ```sh
+chezmoi source-path   # should be ~/ghq/github.com/malleroid/dotfiles
 chezmoi diff          # should show no diff
 fish                  # should start without errors
 which bat             # should point to ~/.nix-profile/bin/bat

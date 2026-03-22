@@ -1,5 +1,7 @@
 {{- $env_type := promptStringOnce . "env_type" "Environment type (full/ephemeral)" "full" -}}
 
+sourceDir = {{ joinPath .chezmoi.homeDir "ghq/github.com/malleroid/dotfiles" | quote }}
+
 [data]
   env_type = {{ $env_type | quote }}
   is_ephemeral = {{ eq $env_type "ephemeral" }}
