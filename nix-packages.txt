@@ -7,7 +7,7 @@ tgpt                              # AI Chatbots in terminal without needing API 
 
 ## API
 httpie                            # User-friendly cURL replacement (command-line HTTP client)
-httptap                           # HTTP request visualizer with phase-by-phase timing breakdown
+httptap                           # View HTTP/HTTPS requests made by any program
 openapi-tui                       # TUI to list, browse and run APIs defined with openapi spec
 posting                           # Modern API client that lives in your terminal
 
