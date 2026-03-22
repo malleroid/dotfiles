@@ -37,6 +37,7 @@ cask "kiro"                       # Agent-centric IDE with spec-driven developme
 cask "trae"                       # AI code editor by ByteDance
 cask "visual-studio-code"         # Open-source code editor
 cask "void"                       # Open-source AI code editor
+cask "zed"                        # High-performance code editor by ex-Atom team
 
 ## Dev
 cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
