@@ -1,0 +1,2 @@
+-- Plugin-independent keymaps
+-- Plugin-specific keymaps remain in their respective plugin files
