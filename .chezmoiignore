@@ -28,7 +28,6 @@ raycast/**
 .config/nvim/**
 .config/ghostty/**
 .config/gitui/**
-.config/serpl/**
 .config/rails-mcp/**
 .copilot/**
 .codex/**

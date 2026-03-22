@@ -90,7 +90,6 @@ jless                             # Command-line pager for JSON data
 jq                                # Lightweight and flexible command-line JSON processor
 jqp                               # TUI playground to experiment and play with jq
 ripgrep                           # Search tool like grep and The Silver Searcher
-serpl                             # Simple terminal UI for search and replace
 
 ## Security
 mkcert                            # Make locally-trusted development certificates
