@@ -8,6 +8,9 @@ copy_on_select true
 mouse_mode true
 default_layout "compact"
 default_mode "normal"
+show_startup_tips false
+serialize_pane_viewport true
+scrollback_lines_to_serialize 1000
 
 // --- Keybindings ---
 // Mode switching: Cmd (Super) instead of Ctrl to avoid conflicts with
