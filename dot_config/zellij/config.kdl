@@ -27,6 +27,11 @@ themes {
         orange "#D08770"
     }
 }
+ui {
+    pane_frames {
+        rounded_corners true
+    }
+}
 
 // --- Keybindings ---
 // Mode switching: Cmd (Super) instead of Ctrl to avoid conflicts with
