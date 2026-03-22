@@ -24,10 +24,11 @@ dot_config/nvim/
         ├── neo-tree.lua    # ファイルエクスプローラ
         ├── telescope.lua   # ファジーファインダー
         ├── treesitter.lua  # シンタックスハイライト + context
-        └── which-key.lua   # キーマップヘルプ
+        ├── which-key.lua   # キーマップヘルプ
+        └── yazi.lua        # yazi ファイルマネージャ連携
 ```
 
-## プラグイン一覧 (19個)
+## プラグイン一覧 (20個)
 
 | カテゴリ | プラグイン | 用途 |
 |---------|----------|------|
@@ -36,6 +37,7 @@ dot_config/nvim/
 | UI | nvim-web-devicons | アイコン |
 | UI | which-key.nvim | キーマップガイド |
 | ファイル操作 | neo-tree.nvim (+ nui.nvim, plenary.nvim) | ファイルツリー |
+| ファイル操作 | yazi.nvim | yazi ファイルマネージャ連携 |
 | 検索 | telescope.nvim (+ plenary.nvim) | ファジーファインダー |
 | LSP | nvim-lspconfig | LSP クライアント設定 |
 | 補完 | blink.cmp + friendly-snippets | 自動補完・スニペット |
@@ -56,6 +58,9 @@ copilot, vtsls, pyright, rust_analyzer, gopls, lua_ls, ruby_lsp, html, cssls, js
 | `<Space>fg` | live grep | telescope.lua |
 | `<Space>fb` | バッファ一覧 | telescope.lua |
 | `<Space>fh` | ヘルプタグ | telescope.lua |
+| `<Space>-` | yazi (現在のファイル) | yazi.lua |
+| `<Space>cw` | yazi (作業ディレクトリ) | yazi.lua |
+| `Ctrl+Up` | yazi セッション再開 | yazi.lua |
 | `<Space>e` | Neo-tree トグル | neo-tree.lua |
 | `<Space>gs` | Git status (Neo-tree) | neo-tree.lua |
 | `<Space>bf` | Buffers (Neo-tree) | neo-tree.lua |
