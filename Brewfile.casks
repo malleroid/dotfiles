@@ -2,18 +2,15 @@
 
 ## AI
 cask "aionui"                     # GUI for Gemini CLI
+cask "block-goose"                # Open-source AI agent by Block
 cask "aqua-voice"                 # Voice AI interface
 cask "chatgpt"                    # OpenAI's ChatGPT desktop app
 cask "claude"                     # Anthropic's Claude AI desktop app
-cask "cursor"                     # AI-first code editor
-cask "deepchat"                   # AI-powered chat application
-cask "emdash"                     # UI for running multiple coding agents in parallel
 cask "whispering"                 # Audio transcription that works with local and cloud models
 cask "handy"                      # Speech to text application
-cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
 cask "lm-studio"                  # Run local LLMs on your computer
-cask "nao"                        # AI assistant
-cask "witsy"                      # AI assistant for macOS
+cask "nao"                        # Data analytics agent builder for BigQuery/Snowflake/Postgres
+cask "ui-tars"                    # Vision-language model GUI agent by ByteDance
 
 ## Browser
 cask "browseros"                  # Open-source agentic browser
@@ -33,20 +30,20 @@ cask "zulip"                      # Team chat application
 ## Design
 cask "figma"                      # Collaborative interface design tool
 
-## Dev
+## Editor / IDE
 cask "antigravity"                # AI Coding Agent IDE
-cask "devknife"                   # Collection of handy developer tools
-cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
+cask "cursor"                     # AI-first code editor
 cask "kiro"                       # Agent-centric IDE with spec-driven development
-cask "opcode"                     # GUI app and toolkit for Claude Code
-cask "sculptor"                   # GUI for Claude Code
+cask "trae"                       # AI code editor by ByteDance
+cask "visual-studio-code"         # Open-source code editor
+cask "void"                       # Open-source AI code editor
+
+## Dev
+cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
 cask "gcloud-cli"                 # Google Cloud CLI
 cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
-cask "stravu-crystal"             # Run multiple Claude Code instances simultaneously using git worktrees
 cask "tableplus"                  # Native GUI tool for relational databases
-cask "trae"                       # Menu bar app for Traefik reverse proxy
 cask "via"                        # Keyboard configurator
-cask "visual-studio-code"         # Open-source code editor
 cask "ghostty"                    # Fast, native terminal emulator
 
 ## Media
@@ -68,9 +65,6 @@ cask "cyberduck"                  # Server and cloud storage browser
 
 ## System
 cask "balenaetcher"               # Flash OS images to SD cards & USB drives
-cask "block-goose"                # Lightweight ad blocker
 cask "font-hackgen-nerd"          # HackGen Nerd Font
 cask "MonitorControl"             # Control external display brightness & volume
 cask "stats"                      # System monitor for the menu bar
-cask "ui-tars"                    # UI automation tool
-cask "void"                       # Menu bar utility that hides icons
