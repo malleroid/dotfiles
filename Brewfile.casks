@@ -1,7 +1,6 @@
 # macOS GUI Applications (managed by Homebrew Cask)
 
 ## AI
-cask "aionui"                     # GUI for Gemini CLI
 cask "block-goose"                # Open-source AI agent by Block
 cask "aqua-voice"                 # Voice AI interface
 cask "chatgpt"                    # OpenAI's ChatGPT desktop app
