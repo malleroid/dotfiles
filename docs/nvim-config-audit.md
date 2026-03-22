@@ -137,12 +137,12 @@ telescope-fzf-native.nvim を追加すると、大規模プロジェクトでの
 `<C-h/j/k/l>` でウィンドウ移動、`<S-h/l>` でバッファ切替など、
 基本的なナビゲーションキーマップが未設定。
 
-### 7. nvim-lspconfig が実質未使用の可能性
-`lsp.lua` で `vim.lsp.config` と `vim.lsp.enable()` を直接使用しており、
-これらは Neovim 0.11 のネイティブ API。nvim-lspconfig はこれらの API が無かった時代に
-サーバー設定のボイラープレートを提供するプラグインだったため、
-現在の書き方ではプラグインとして読み込んでいるが実質利用していない可能性がある。
-外しても動作するか要検証。
+### 7. ~~nvim-lspconfig が実質未使用の可能性~~ → 検証済み、必要
+Neovim 0.11 以降の nvim-lspconfig は「データリポジトリ」として機能する。
+`vim.lsp.enable("vtsls")` 等を呼ぶ際、nvim-lspconfig の `lsp/` ディレクトリにある
+各サーバーのデフォルト設定 (cmd, filetypes, root_markers 等) が自動でマージされる。
+外すと 11 サーバー分のボイラープレートを自分で書く必要があるため、外せない。
+現在の使い方 (vim.lsp.config + vim.lsp.enable) は 0.11 の推奨パターンで正しい。
 
 ### 8. Comment.nvim が Neovim 組み込み機能と重複
 Neovim 0.10 以降、`gcc` / `gc` によるコメントトグルが組み込みで提供されている。
