@@ -78,6 +78,8 @@ keybinds {
         unbind "Alt i" "Alt o"
         bind "Super Shift [" { MoveTab "Left"; }
         bind "Super Shift ]" { MoveTab "Right"; }
+        // Search (Cmd+F, skip Scroll mode)
+        bind "Super f" { SwitchToMode "EnterSearch"; SearchInput 0; }
     }
     scroll {
         bind "Ctrl b" { PageScrollUp; }
