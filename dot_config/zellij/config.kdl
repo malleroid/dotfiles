@@ -36,6 +36,9 @@ keybinds {
         bind "Alt 7" { GoToTab 7; SwitchToMode "Normal"; }
         bind "Alt 8" { GoToTab 8; SwitchToMode "Normal"; }
         bind "Alt 9" { GoToTab 9; SwitchToMode "Normal"; }
+        // Direct pane actions (Cmd key)
+        unbind "Alt n"
+        bind "Super n" { NewPane; }
         // Layout switching (Cmd key)
         unbind "Alt [" "Alt ]"
         bind "Super [" { PreviousSwapLayout; }
