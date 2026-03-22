@@ -1,0 +1,14 @@
+#!/bin/bash
+# {{- /* chezmoi:template: */ -}}
+# macOS per-app keyboard shortcut overrides
+# Re-runs on any change to this file
+
+{{ if eq .chezmoi.os "darwin" -}}
+
+echo "Configuring macOS app keyboard shortcuts..."
+
+# Ghostty: Disable Cmd+H (Hide) by remapping to Cmd+Alt+Ctrl+Shift+H
+# This frees Super+H for Zellij pane navigation
+defaults write com.mitchellh.ghostty NSUserKeyEquivalents -dict-add "Hide Ghostty" '@~^$h'
+
+{{ end -}}
