@@ -46,7 +46,8 @@ keybinds {
         bind "Super p" { SwitchToMode "Pane"; }
         bind "Super t" { SwitchToMode "Tab"; }
         bind "Super r" { SwitchToMode "Resize"; }
-        bind "Super s" { SwitchToMode "Scroll"; }
+        bind "Super s" { LaunchOrFocusPlugin "session-manager" { floating true; move_to_focused_tab true; }; SwitchToMode "Normal"; }
+        bind "Super Shift s" { SwitchToMode "Scroll"; }
         bind "Super o" { SwitchToMode "Session"; }
         bind "Super Shift h" { SwitchToMode "Move"; }
         bind "Super b" { SwitchToMode "Tmux"; }

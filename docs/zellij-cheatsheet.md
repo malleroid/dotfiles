@@ -11,7 +11,8 @@
 | `Cmd+T` | Tab | タブ操作 |
 | `Cmd+R` | Resize | ペインリサイズ |
 | `Cmd+Shift+H` | Move | ペイン位置移動 |
-| `Cmd+S` | Scroll | スクロール・検索 |
+| `Cmd+S` | — | セッションマネージャー (直接起動) |
+| `Cmd+Shift+S` | Scroll | スクロール・検索 |
 | `Cmd+O` | Session | セッション管理 |
 | `Cmd+B` | Tmux | tmux 互換操作 |
 | `Esc` / `Enter` | Normal | どのモードからでも戻る |
