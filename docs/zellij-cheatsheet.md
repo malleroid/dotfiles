@@ -9,7 +9,7 @@
 | `Cmd+G` | Locked | 全キーをアプリにパススルー (vim 等で衝突回避) |
 | `Cmd+P` | Pane | ペイン操作 |
 | `Cmd+T` | Tab | タブ操作 |
-| `Cmd+N` | Resize | ペインリサイズ |
+| `Cmd+R` | Resize | ペインリサイズ |
 | `Cmd+Shift+H` | Move | ペイン位置移動 |
 | `Cmd+S` | Scroll | スクロール・検索 |
 | `Cmd+O` | Session | セッション管理 |
@@ -182,7 +182,7 @@
 
 ---
 
-## Resize モード (`Cmd+N`)
+## Resize モード (`Cmd+R`)
 
 | キー | 操作 |
 |---|---|

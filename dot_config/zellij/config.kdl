@@ -21,7 +21,7 @@ keybinds {
         bind "Super g" { SwitchToMode "Locked"; }
         bind "Super p" { SwitchToMode "Pane"; }
         bind "Super t" { SwitchToMode "Tab"; }
-        bind "Super n" { SwitchToMode "Resize"; }
+        bind "Super r" { SwitchToMode "Resize"; }
         bind "Super s" { SwitchToMode "Scroll"; }
         bind "Super o" { SwitchToMode "Session"; }
         bind "Super Shift h" { SwitchToMode "Move"; }
