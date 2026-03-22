@@ -93,11 +93,9 @@ copilot, vtsls, pyright, rust_analyzer, gopls, lua_ls, ruby_lsp, html, cssls, js
 汎用的なキーマップ (`<Space>` でバッファ間移動、`<C-h/j/k/l>` でウィンドウ移動等) を
 集約する `config/keymaps.lua` があると見通しが良くなる。
 
-### 2. autopairs の blink.cmp 連携が壊れている可能性
-`autopairs.lua` で `require("blink.cmp").on_accept` に直接代入しているが、
-blink.cmp の公式 API にこのフックは存在しない。
-blink.cmp 側の `auto_brackets.enabled = true` で関数補完時の括弧挿入は対応済みなので、
-autopairs 側の連携コードは不要 (削除推奨)。
+### 2. ~~autopairs の blink.cmp 連携が壊れている可能性~~ → 解決済み
+blink.cmp 連携コードを削除、blink.cmp 依存も除去。
+補完時の括弧挿入は blink.cmp の `auto_brackets` が担当。
 
 ### 3. フォーマッタ / リンター不在
 LSP の `buf.format` のみ。LSP がフォーマットをサポートしない言語 (Markdown, Shell 等) には
