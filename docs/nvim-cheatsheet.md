@@ -38,6 +38,28 @@
 | `Esc` | 閉じる |
 | `Enter` | 選択して開く |
 
+### yazi.nvim (ファイルマネージャ)
+
+| キー | 操作 |
+|---|---|
+| `<Space>-` | 現在のファイルの場所で yazi を開く |
+| `<Space>cw` | 作業ディレクトリで yazi を開く |
+| `Ctrl+Up` | 前回の yazi セッションを再開 |
+
+#### yazi 内の追加キー (yazi.nvim 提供)
+
+| キー | 操作 |
+|---|---|
+| `Ctrl+V` | 縦分割で開く |
+| `Ctrl+X` | 横分割で開く |
+| `Ctrl+T` | 新タブで開く |
+| `Ctrl+S` | ディレクトリ内を grep |
+| `Ctrl+G` | ディレクトリ内を置換 |
+| `Tab` | 開いているバッファを巡回 |
+| `Ctrl+Y` | 相対パスをコピー |
+| `Ctrl+Q` | quickfix リストに送る |
+| `F1` | ヘルプ |
+
 ### Neo-tree
 
 | キー | 操作 |
@@ -160,6 +182,8 @@ copilot, vtsls (TS/JS), pyright, rust_analyzer, gopls, lua_ls, ruby_lsp, html, c
 
 | プレフィクス | グループ名 |
 |---|---|
+| `<Space>-` | yazi (現在のファイル) |
+| `<Space>cw` | yazi (作業ディレクトリ) |
 | `<Space>f` | Find (検索) |
 | `<Space>g` | Git |
 | `<Space>h` | Hunk (Git 変更箇所) |
