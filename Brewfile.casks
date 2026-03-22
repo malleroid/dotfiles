@@ -11,7 +11,6 @@ cask "emdash"                     # UI for running multiple coding agents in par
 cask "whispering"                 # Audio transcription that works with local and cloud models
 cask "handy"                      # Speech to text application
 cask "hotovo-aider-desk"          # Desktop GUI for Aider AI pair programming
-cask "kiro-cli"                   # AI-powered productivity tool for the command-line
 cask "lm-studio"                  # Run local LLMs on your computer
 cask "nao"                        # AI assistant
 cask "witsy"                      # AI assistant for macOS
