@@ -49,3 +49,5 @@ keybind = super+v=paste_from_clipboard
 keybind = alt+enter=toggle_fullscreen
 keybind = super+q=quit
 keybind = shift+enter=text:\x1b\r
+# Bypass Japanese IME intercepting Ctrl+3 (face marks shortcut)
+keybind = ctrl+three=text:\x1b[51;5u
