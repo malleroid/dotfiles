@@ -123,14 +123,16 @@ copilot, vtsls, pyright, rust_analyzer, gopls, lua_ls, ruby_lsp, html, cssls, js
 blink.cmp 連携コードを削除、blink.cmp 依存も除去。
 補完時の括弧挿入は blink.cmp の `auto_brackets` が担当。
 
-### 3. フォーマッタ / リンター不在
-LSP の `buf.format` のみ。LSP がフォーマットをサポートしない言語 (Markdown, Shell 等) には
-conform.nvim (フォーマッタ) や nvim-lint (リンター) の導入を検討。
+### 3. ~~フォーマッタ / リンター不在~~ → フォーマッタ解決済み
+conform.nvim を導入。biome, ruff, stylua, shfmt, fish_indent を定義済み。
+CLIが未インストールでも LSP フォーマットにフォールバック。
+リンター (nvim-lint) は LSP diagnostics で大半カバーされるため、必要になったら追加。
 
 ### 4. デバッガ不在
 nvim-dap 系プラグインが無い。デバッグが必要なら nvim-dap + nvim-dap-ui を検討。
 
-### 5. Telescope に fzf-native 未導入
+### 5. ~~Telescope に fzf-native 未導入~~ → 解決済み
+telescope-fzf-native.nvim を導入。C ネイティブの fzf アルゴリズムで検索高速化。
 telescope-fzf-native.nvim を追加すると、大規模プロジェクトでの検索速度が改善する。
 
 ### 6. ウィンドウ / バッファ操作のキーマップ不足
