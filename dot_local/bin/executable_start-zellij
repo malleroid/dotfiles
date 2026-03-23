@@ -1,5 +1,7 @@
 #!/bin/sh
 # Wrapper to launch Zellij with Nix PATH available.
 # Used by Ghostty's command option since it runs via bash --noprofile --norc.
+# nix.sh requires both HOME and USER; Ghostty's --noprofile --norc may not set USER.
+export USER="${USER:-$(id -un)}"
 . /nix/var/nix/profiles/default/etc/profile.d/nix.sh 2>/dev/null
 exec zellij attach --create personal
