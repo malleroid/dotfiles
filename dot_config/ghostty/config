@@ -3,7 +3,7 @@
 
 # --- Appearance ---
 theme = Cyberdyne
-background-opacity = 0.85
+background-opacity = 0.75
 minimum-contrast = 1
 mouse-hide-while-typing = true
 copy-on-select = clipboard
