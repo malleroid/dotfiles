@@ -19,6 +19,7 @@ awscli2                           # Official Amazon AWS command-line interface (
 granted                           # Easiest way to access your cloud
 
 ## Database
+dolt                              # Version-controlled SQL database (required by beads/bd)
 lazysql                           # Cross-platform TUI database management tool
 tabiew                            # TUI to view and query tabular files (CSV,TSV, Parquet, etc.)
 
