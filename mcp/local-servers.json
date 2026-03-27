@@ -1,0 +1,6 @@
+{
+  "whimsical-desktop": {
+    "transport": "http",
+    "url": "http://localhost:21190/mcp"
+  }
+}

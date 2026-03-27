@@ -1,10 +1,33 @@
 #!/usr/bin/env fish
 # MCP Server Setup Script
-# Configures stdio and remote servers for all clients
+# Configures stdio, local HTTP, and remote servers for all clients
 
 set script_dir (status dirname)
 set servers_config "$script_dir/servers.json"
+set local_config "$script_dir/local-servers.json"
 set remote_config "$script_dir/remote-servers.json"
+set desktop_cfg "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+
+# ── Helper: register an HTTP/SSE server to Claude Code & Claude Desktop ──
+function _register_http_server --argument-names name url transport
+    # Claude Code (remove + add for upsert)
+    claude mcp remove --scope user $name 2>/dev/null
+    claude mcp add --transport $transport --scope user $name $url 2>/dev/null
+    and echo "  ✅ Claude Code: $name"
+    or  echo "  ❌ Claude Code: $name (failed)"
+
+    # Claude Desktop
+    if test -f "$desktop_cfg"
+        set entry (printf '{"url":"%s"}' $url)
+        jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$desktop_cfg" \
+            > "$script_dir/_tmp_desktop.json"
+        and mv "$script_dir/_tmp_desktop.json" "$desktop_cfg"
+        and echo "  ✅ Claude Desktop: $name"
+        or  echo "  ❌ Claude Desktop: $name (failed to update)"
+    else
+        echo "  ⏭️  Claude Desktop: $name (config not found)"
+    end
+end
 
 # ── 1. stdio servers ──
 echo "=== stdio MCP servers ==="
@@ -35,7 +58,6 @@ for name in (jq -r 'keys[]' "$servers_config")
     or  echo "  ❌ Claude Code (failed)"
 
     # Claude Desktop
-    set desktop_cfg "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
     if test -f "$desktop_cfg"
         set mise_path "$HOME/.local/share/mise/shims"
         set default_path "$mise_path:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -79,7 +101,21 @@ for name in (jq -r 'keys[]' "$servers_config")
     or  echo "  ⏭️  Gemini (already exists or error)"
 end
 
-# ── 2. Remote MCP servers (Claude Code only) ──
+# ── 2. Local HTTP servers (Claude Code + Claude Desktop) ──
+echo ""
+echo "=== Local MCP servers (HTTP) ==="
+
+if not test -f "$local_config"
+    echo "  ⏭️  No local-servers.json found, skipping"
+else
+    for name in (jq -r 'keys[]' "$local_config")
+        set url       (jq -r --arg n $name '.[$n].url'       "$local_config")
+        set transport (jq -r --arg n $name '.[$n].transport' "$local_config")
+        _register_http_server $name $url $transport
+    end
+end
+
+# ── 3. Remote MCP servers (Claude Code only) ──
 echo ""
 echo "=== Remote MCP servers (SSE/HTTP) ==="
 
@@ -89,9 +125,10 @@ else
     for name in (jq -r 'keys[]' "$remote_config")
         set url       (jq -r --arg n $name '.[$n].url'       "$remote_config")
         set transport (jq -r --arg n $name '.[$n].transport' "$remote_config")
+        claude mcp remove --scope user $name 2>/dev/null
         claude mcp add --transport $transport --scope user $name $url 2>/dev/null
         and echo "  ✅ Claude Code: $name"
-        or  echo "  ⏭️  Claude Code: $name (already exists)"
+        or  echo "  ❌ Claude Code: $name (failed)"
     end
 end
 
