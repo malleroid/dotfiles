@@ -205,6 +205,11 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/guard_force_push.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/guard_git_c.sh",
+            "timeout": 5
           }
         ]
       }
