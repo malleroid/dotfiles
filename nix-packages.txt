@@ -62,6 +62,7 @@ delta                             # Syntax-highlighting pager for git and diff o
 gitui                             # Blazing fast terminal-ui for git written in rust
 
 ## Media
+ffmpeg                            # Play, record, convert, and stream audio and video
 spotify-player                    # Command driven spotify player (brew: spotify_player)
 tut                               # TUI for Mastodon with vim inspired keys
 
