@@ -2,8 +2,8 @@
 # ~/.config/ghostty/config
 
 # --- Appearance ---
-theme = Cyberdyne
 background-opacity = 0.75
+theme = emerald-synth
 minimum-contrast = 1
 mouse-hide-while-typing = true
 copy-on-select = clipboard
