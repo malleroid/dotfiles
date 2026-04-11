@@ -8,6 +8,10 @@ legacy_version_file = true
 # Disable experimental features for stability
 experimental = false
 
+# Use precompiled Ruby binaries (avoid dyld issues from system library changes)
+ruby.compile = false
+ruby.github_attestations = true
+
 # Use shorter paths for better readability
 verbose = false
 
