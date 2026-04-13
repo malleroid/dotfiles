@@ -30,6 +30,7 @@ jira-cli-go                       # Feature-rich interactive Jira command-line (
 mise                              # Polyglot runtime manager (asdf rust clone)
 neovim                            # Ambitious Vim-fork focused on extensibility and agility
 scc                               # Fast and accurate code counter with complexity and COCOMO estimates
+tree-sitter                       # Parser generator CLI (required by nvim-treesitter main branch)
 
 ## DevOps
 dive                              # Tool for exploring each layer in a docker image

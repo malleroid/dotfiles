@@ -1,62 +1,48 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
+    lazy = false,
     dependencies = {
       "nvim-treesitter/nvim-treesitter-context",
     },
     config = function()
-      require("nvim-treesitter.configs").setup({
-        -- Auto-install parsers for these languages
-        ensure_installed = {
-          "typescript",
-          "javascript",
-          "tsx",
-          "python",
-          "rust",
-          "go",
-          "lua",
-          "ruby",
-          "html",
-          "css",
-          "json",
-          "terraform",
-          "vim",
-          "vimdoc",
-          "markdown",
-          "markdown_inline",
-          "bash",
-        },
+      local parsers = {
+        "typescript",
+        "javascript",
+        "tsx",
+        "python",
+        "rust",
+        "go",
+        "lua",
+        "ruby",
+        "html",
+        "css",
+        "json",
+        "terraform",
+        "vim",
+        "vimdoc",
+        "markdown",
+        "markdown_inline",
+        "bash",
+      }
 
-        -- Install parsers synchronously (only applied to `ensure_installed`)
-        sync_install = false,
+      -- Install parsers (install is idempotent and async)
+      local nts = require("nvim-treesitter")
+      nts.install(parsers)
 
-        -- Automatically install missing parsers when entering buffer
-        auto_install = true,
-
-        -- Highlighting
-        highlight = {
-          enable = true,
-          -- Use vim syntax highlighting in addition to treesitter
-          additional_vim_regex_highlighting = false,
-        },
-
-        -- Indentation
-        indent = {
-          enable = true,
-        },
-
-        -- Incremental selection
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<C-Space>",
-            node_incremental = "<C-Space>",
-            scope_incremental = false,
-            node_decremental = "<BS>",
-          },
-        },
+      -- Start treesitter highlighting on FileType (replaces highlight = { enable = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("UserTreesitterStart", {}),
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+          if lang and vim.treesitter.language.add(lang) then
+            pcall(vim.treesitter.start, args.buf, lang)
+            -- Indentation based on treesitter
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
 
       -- Configure treesitter-context (show current function/class at top)
