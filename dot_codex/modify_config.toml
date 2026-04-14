@@ -1,0 +1,44 @@
+#!/bin/sh
+# chezmoi modify_ script for ~/.codex/config.toml
+# Managed sections are overwritten; [projects.*] is preserved from existing file.
+# Requires: dasel
+
+existing=$(cat)
+
+# --- Managed base config ---
+cat << 'EOF'
+model = "gpt-5.4"
+personality = "pragmatic"
+model_reasoning_effort = "high"
+
+[mcp_servers.awslabs-aws-documentation-mcp-server]
+command = "uvx"
+args = ["awslabs.aws-documentation-mcp-server@latest"]
+
+[mcp_servers.awslabs-aws-documentation-mcp-server.env]
+FASTMCP_LOG_LEVEL = "ERROR"
+
+[mcp_servers.chrome-devtools-mcp]
+command = "chrome-devtools-mcp"
+args = ["--headless=true", "--isolated=true"]
+
+[mcp_servers.playwright-mcp]
+command = "playwright-mcp"
+args = ["--headless"]
+
+[mcp_servers.rails-mcp-server]
+command = "rails-mcp-server"
+
+[mcp_servers.serena]
+command = "uvx"
+args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--enable-web-dashboard", "false"]
+
+[plugins."github@openai-curated"]
+enabled = true
+EOF
+
+# --- Preserve [projects.*] from existing file ---
+if [ -n "$existing" ] && printf '%s' "$existing" | dasel -i toml 'projects' >/dev/null 2>&1; then
+  printf '\n'
+  printf '%s' "$existing" | sed -n '/^\[projects\./,$p'
+fi
