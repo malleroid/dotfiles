@@ -90,6 +90,7 @@ gping                             # Ping, but with a graph
 gnugrep                           # GNU grep, egrep and fgrep (brew: grep)
 igrep                             # Interactive grep
 jless                             # Command-line pager for JSON data
+dasel                             # Query and modify data structures (JSON, TOML, YAML, etc.)
 jq                                # Lightweight and flexible command-line JSON processor
 jqp                               # TUI playground to experiment and play with jq
 ripgrep                           # Search tool like grep and The Silver Searcher
