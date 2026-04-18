@@ -64,6 +64,7 @@ gitui                             # Blazing fast terminal-ui for git written in 
 
 ## Media
 ffmpeg                            # Play, record, convert, and stream audio and video
+yt-dlp                            # Download video/audio/subtitles from YouTube and other sites
 spotify-player                    # Command driven spotify player (brew: spotify_player)
 tut                               # TUI for Mastodon with vim inspired keys
 
