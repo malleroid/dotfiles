@@ -65,6 +65,10 @@ if status is-interactive
     mise activate fish | source
 end
 
+# mise shims: ensure PATH resolves mise-managed tools per-cwd even in non-interactive
+# subprocesses (e.g. Claude Code hooks) that don't go through `mise activate`.
+fish_add_path $HOME/.local/share/mise/shims
+
 # Added by Antigravity
 fish_add_path $HOME/.antigravity/antigravity/bin
 # opencode
