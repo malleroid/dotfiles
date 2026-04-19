@@ -40,7 +40,6 @@ cask "zed"                        # High-performance code editor by ex-Atom team
 
 ## Dev
 cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
-cask "session-manager-plugin"     # Plugin for AWS CLI to start and end sessions
 cask "tableplus"                  # Native GUI tool for relational databases
 cask "via"                        # Keyboard configurator
 cask "ghostty"                    # Fast, native terminal emulator
