@@ -17,6 +17,7 @@ hyperfine                         # Command-line benchmarking tool
 ## Cloud
 awscli2                           # Official Amazon AWS command-line interface (brew: awscli)
 google-cloud-sdk                   # Google Cloud CLI (brew: gcloud-cli)
+ssm-session-manager-plugin         # Plugin for AWS CLI to start and end sessions (brew: session-manager-plugin)
 granted                           # Easiest way to access your cloud
 
 ## Database
