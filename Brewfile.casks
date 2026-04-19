@@ -5,7 +5,6 @@ cask "block-goose"                # Open-source AI agent by Block
 cask "aqua-voice"                 # Voice AI interface
 cask "chatgpt"                    # OpenAI's ChatGPT desktop app
 cask "claude"                     # Anthropic's Claude AI desktop app
-cask "codex"                      # OpenAI's coding agent desktop app
 cask "whispering"                 # Audio transcription that works with local and cloud models
 cask "handy"                      # Speech to text application
 cask "lm-studio"                  # Run local LLMs on your computer
