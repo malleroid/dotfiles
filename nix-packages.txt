@@ -16,6 +16,7 @@ hyperfine                         # Command-line benchmarking tool
 
 ## Cloud
 awscli2                           # Official Amazon AWS command-line interface (brew: awscli)
+google-cloud-sdk                   # Google Cloud CLI (brew: gcloud-cli)
 granted                           # Easiest way to access your cloud
 
 ## Database
