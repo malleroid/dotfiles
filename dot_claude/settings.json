@@ -256,5 +256,6 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "theme": "dark-daltonized"
 }
