@@ -14,6 +14,16 @@ tab_size = 2
 max_width = 600
 max_height = 900
 
+[plugin]
+prepend_previewers = [
+	{ mime = "image/*", run = "noop" },
+	{ mime = "application/pdf", run = "noop" },
+]
+prepend_preloaders = [
+	{ mime = "image/*", run = "noop" },
+	{ mime = "application/pdf", run = "noop" },
+]
+
 [opener]
 edit = [
 	{ run = "$EDITOR %s", block = true, for = "unix" },
