@@ -1,0 +1,130 @@
+{
+  description = "malleroid dotfiles CLI package bundle";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  };
+
+  outputs = { nixpkgs, ... }:
+    let
+      system = "aarch64-darwin";
+      pkgs = import nixpkgs { inherit system; };
+    in
+    {
+      packages.${system}.default = pkgs.buildEnv {
+        name = "dotfiles-cli";
+        paths = with pkgs; [
+          # ## AI
+          aichat # All-in-one AI-Powered CLI Chat & Copilot
+          tgpt # AI Chatbots in terminal without needing API keys
+
+          # ## API
+          httpie # User-friendly cURL replacement (command-line HTTP client)
+          httptap # View HTTP/HTTPS requests made by any program
+          openapi-tui # TUI to list, browse and run APIs defined with openapi spec
+          posting # Modern API client that lives in your terminal
+
+          # ## Benchmark
+          hyperfine # Command-line benchmarking tool
+
+          # ## Cloud
+          awscli2 # Official Amazon AWS command-line interface (brew: awscli)
+          google-cloud-sdk # Google Cloud CLI (brew: gcloud-cli)
+          ssm-session-manager-plugin # Plugin for AWS CLI to start and end sessions (brew: session-manager-plugin)
+          granted # Easiest way to access your cloud
+
+          # ## Database
+          dolt # Version-controlled SQL database (required by beads/bd)
+          lazysql # Cross-platform TUI database management tool
+          tabiew # TUI to view and query tabular files (CSV,TSV, Parquet, etc.)
+
+          # ## Dev
+          act # Run your GitHub Actions locally
+          code2prompt # CLI tool to convert your codebase into a single LLM prompt
+          jira-cli-go # Feature-rich interactive Jira command-line (brew: jira-cli)
+          mise # Polyglot runtime manager (asdf rust clone)
+          neovim # Ambitious Vim-fork focused on extensibility and agility
+          scc # Fast and accurate code counter with complexity and COCOMO estimates
+          tree-sitter # Parser generator CLI (required by nvim-treesitter main branch)
+
+          # ## DevOps
+          dive # Tool for exploring each layer in a docker image
+          lazydocker # Lazier way to manage everything docker
+          lazyssh # Terminal-based SSH manager
+          terraformer # CLI tool to generate terraform files from existing infrastructure
+          tflint # Linter for Terraform files
+
+          # ## Doc
+          glow # Render markdown on the CLI
+          gocheat # TUI Cheatsheet for keybindings, hotkeys and more
+          slides # Terminal based presentation tool
+          tlrc # Official tldr client written in Rust
+
+          # ## FileManager
+          aria2 # Download with resuming and segmented downloading
+          bat # Clone of cat(1) with syntax highlighting and Git integration
+          eza # Modern, maintained replacement for ls
+          fd # Simple, fast and user-friendly alternative to find
+          filebrowser # Web File Browser
+          fzf # Command-line fuzzy finder written in Go
+          yazi # Blazing fast terminal file manager written in Rust, based on async I/O
+          zoxide # Shell extension to navigate your filesystem faster
+
+          # ## Git
+          gh # GitHub command-line tool
+          ghq # Remote repository management made easy
+          git # Distributed revision control system
+          delta # Syntax-highlighting pager for git and diff output (brew: git-delta)
+          gitui # Blazing fast terminal-ui for git written in rust
+
+          # ## Media
+          ffmpeg # Play, record, convert, and stream audio and video
+          yt-dlp # Download video/audio/subtitles from YouTube and other sites
+          spotify-player # Command driven spotify player (brew: spotify_player)
+          tut # TUI for Mastodon with vim inspired keys
+
+          # ## MCP
+          mcp-grafana # MCP server for Grafana
+          terraform-mcp-server # MCP server for Terraform
+
+          # ## Monitor
+          bandwhich # Terminal bandwidth utilization tool
+          duf # Disk Usage/Free Utility - a better 'df' alternative
+          dust # More intuitive version of du in rust
+          fastfetch # Like neofetch, but much faster because written mostly in C
+          glances # Alternative to top/htop
+          htop # Improved top (interactive process viewer)
+          hwatch # Modern alternative to the watch command
+          nvtopPackages.apple # Interactive GPU process monitor (brew: nvtop, Apple GPU variant)
+          procs # Modern replacement for ps written in Rust
+          tailspin # Log file highlighter
+
+          # ## Network
+          gping # Ping, but with a graph
+
+          # ## Search
+          gnugrep # GNU grep, egrep and fgrep (brew: grep)
+          igrep # Interactive grep
+          jless # Command-line pager for JSON data
+          dasel # Query and modify data structures (JSON, TOML, YAML, etc.)
+          jq # Lightweight and flexible command-line JSON processor
+          jqp # TUI playground to experiment and play with jq
+          ripgrep # Search tool like grep and The Silver Searcher
+
+          # ## Security
+          mkcert # Make locally-trusted development certificates
+          oath-toolkit # Tools for one-time password authentication systems
+          radare2 # Reverse engineering framework
+
+          # ## Shell
+          fish # User-friendly command-line shell for UNIX-like operating systems
+          pay-respects # Programmatically correct mistyped console commands (brew: thefuck, Rust replacement)
+          starship # Cross-shell prompt for astronauts
+          zellij # Pluggable terminal workspace, with terminal multiplexer as the base feature
+
+          # ## Util
+          gnused # GNU implementation of the famous stream editor (brew: gnu-sed)
+        ];
+      };
+    };
+}
