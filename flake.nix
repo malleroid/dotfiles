@@ -3,12 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    # 2026-04-29: yt-dlp が deno/rusty-v8 を引き込み、最新 unstable では aarch64-darwin で未キャッシュ。
+    # 既存 profile で動作確認済みの revision に固定して cache 命中を確保する。
+    nixpkgs-yt-dlp.url = "github:NixOS/nixpkgs/b86751bc4085f48661017fa226dee99fab6c651b";
   };
 
-  outputs = { nixpkgs, ... }:
+  outputs = { nixpkgs, nixpkgs-yt-dlp, ... }:
     let
       system = "aarch64-darwin";
       pkgs = import nixpkgs { inherit system; };
+      pkgsYtDlp = import nixpkgs-yt-dlp { inherit system; };
     in
     {
       packages.${system}.default = pkgs.buildEnv {
@@ -79,7 +84,7 @@
 
           # ## Media
           ffmpeg # Play, record, convert, and stream audio and video
-          yt-dlp # Download video/audio/subtitles from YouTube and other sites
+          pkgsYtDlp.yt-dlp # Download video/audio/subtitles from YouTube and other sites (pinned via nixpkgs-yt-dlp input)
           spotify-player # Command driven spotify player (brew: spotify_player)
           tut # TUI for Mastodon with vim inspired keys
 
