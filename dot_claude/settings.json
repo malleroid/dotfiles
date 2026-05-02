@@ -257,5 +257,6 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "theme": "dark-daltonized"
+  "theme": "dark-daltonized",
+  "remoteControlAtStartup": true
 }
