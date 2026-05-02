@@ -51,13 +51,13 @@ with "Nix not installed, skipping".
 chezmoi apply
 ```
 
-Or install packages manually:
+Or install the bundle manually:
 
 ```sh
-nix profile add nixpkgs#bat nixpkgs#eza nixpkgs#fd ...
+nix profile add "path:$HOME/ghq/github.com/malleroid/dotfiles"
 ```
 
-See `nix-packages.txt` for the full list.
+The full package set is defined in `flake.nix`.
 
 ### 5. Remove Homebrew CLI packages
 
@@ -65,7 +65,7 @@ After verifying Nix packages work:
 
 ```sh
 # Uninstall all CLI formulas that are now in Nix
-brew uninstall aichat tgpt httpie ... (see nix-packages.txt for full list)
+brew uninstall aichat tgpt httpie ... (see `flake.nix` for full list)
 
 # Also remove tools that were dropped
 brew uninstall dblab harlequin jiratui pieces-cli specify pug qman progressline x-cmd rails-mcp-server
