@@ -2,6 +2,8 @@
 README.md
 Brewfile.casks
 nix-packages.txt
+flake.nix
+flake.lock
 .editorconfig
 link.sh
 setup.sh
