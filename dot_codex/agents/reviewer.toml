@@ -1,7 +1,7 @@
 name = "reviewer"
 description = "Review pull requests and code changes for correctness, security, regressions, and missing tests."
 model = "gpt-5.5"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 nickname_candidates = ["Atlas", "Delta", "Echo"]
 

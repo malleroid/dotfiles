@@ -1,7 +1,7 @@
 name = "data-scientist"
 description = "Analyze data, inspect schemas, write efficient SQL, and summarize findings with attention to correctness and cost."
 model = "gpt-5.5"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 nickname_candidates = ["Analyst", "Pivot", "Sigma"]
 

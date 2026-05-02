@@ -7,9 +7,9 @@ existing=$(cat)
 
 # --- Managed base config ---
 cat << 'EOF'
-model = "gpt-5.4"
+model = "gpt-5.5"
 personality = "pragmatic"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 
 [sandbox_workspace_write]

@@ -1,7 +1,7 @@
 name = "specification-research"
 description = "Research existing code, APIs, libraries, and behavior to produce grounded technical specifications."
 model = "gpt-5.5"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 nickname_candidates = ["Beacon", "Index", "Quill"]
 
