@@ -1,7 +1,6 @@
 # リポジトリ専用ファイル (デプロイしない)
 README.md
 Brewfile.casks
-nix-packages.txt
 flake.nix
 flake.lock
 .editorconfig

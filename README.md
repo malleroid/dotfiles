@@ -34,7 +34,7 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 
 | What | Manager | File |
 |------|---------|------|
-| CLI tools (70 packages) | Nix | `nix-packages.txt` |
+| CLI tools (70 packages) | Nix | `flake.nix` |
 | macOS GUI apps (57 casks) | Homebrew | `Brewfile.casks` |
 | Language runtimes & dev tools | mise | `dot_config/mise/config.toml` |
 
@@ -44,7 +44,8 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 dotfiles/
 ├── .chezmoi.toml.tmpl          # chezmoi config (env_type prompt)
 ├── .chezmoiignore              # files excluded from deployment
-├── nix-packages.txt            # CLI packages for Nix
+├── flake.nix                   # CLI packages for Nix (flake bundle)
+├── flake.lock                  # Pinned nixpkgs revisions
 ├── Brewfile.casks              # macOS GUI apps for Homebrew
 ├── dot_gitconfig                # → ~/.gitconfig
 ├── dot_gitignore                # → ~/.gitignore
@@ -71,7 +72,9 @@ dotfiles/
 
 ## Operations
 
-- **Add a Nix package**: Add to `nix-packages.txt`, then `chezmoi apply` (triggers `run_onchange`).
+- **Add/remove a Nix package**: Edit `flake.nix` paths, then `chezmoi apply` (triggers `run_onchange`). Run `nix build . --dry-run` first to confirm cache hit.
+- **Update Nix packages**: `nix flake update` → review `flake.lock` diff → commit → `chezmoi apply`.
+- **Cleanup**: `nix profile wipe-history --older-than 30d` and `nix-collect-garbage -d` periodically.
 - **Add a macOS cask**: Add to `Brewfile.casks`, then `chezmoi apply`.
 - **Update dotfiles**: Edit `dot_*` files, then `chezmoi apply` to deploy.
 - **Sync from home**: `chezmoi re-add <file>` to pull changes back from `~/`.
