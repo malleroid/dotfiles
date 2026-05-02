@@ -1,7 +1,6 @@
 #!/bin/sh
 # chezmoi modify_ script for ~/.codex/config.toml
-# Managed sections are overwritten; [projects.*] is preserved from existing file.
-# Requires: dasel
+# Managed sections are overwritten; selected local tables are preserved from existing file.
 
 existing=$(cat)
 
@@ -46,10 +45,22 @@ enabled = true
 
 [features]
 codex_hooks = true
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-remaining"]
 EOF
 
-# --- Preserve [projects.*] from existing file ---
-if [ -n "$existing" ] && printf '%s' "$existing" | dasel -i toml 'projects' >/dev/null 2>&1; then
+# --- Preserve local tables from existing file ---
+preserved=$(
+  printf '%s' "$existing" | awk '
+    /^\[projects\./ { keep = 1 }
+    /^\[tui\.model_availability_nux\]/ { keep = 1 }
+    /^\[/ && !/^\[projects\./ && !/^\[tui\.model_availability_nux\]/ { keep = 0 }
+    keep { print }
+  '
+)
+
+if [ -n "$preserved" ]; then
   printf '\n'
-  printf '%s' "$existing" | sed -n '/^\[projects\./,$p'
+  printf '%s\n' "$preserved"
 fi
