@@ -72,6 +72,8 @@ dotfiles/
 
 ## Operations
 
+For detailed Nix flake workflow (updates, pinning, recovery), see [docs/nix-flake-operations.md](docs/nix-flake-operations.md).
+
 - **Add/remove a Nix package**: Edit `flake.nix` paths, then `chezmoi apply` (triggers `run_onchange`). Run `nix build . --dry-run` first to confirm cache hit.
 - **Update Nix packages**: `nix-update-bundle` (auto-backs up lock, runs `nix flake update`, reports cache misses).
 - **Check pin candidates**: `nix-check-pins` (test if any extra `nixpkgs-*` input can be dropped).
