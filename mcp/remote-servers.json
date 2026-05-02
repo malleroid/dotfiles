@@ -7,5 +7,10 @@
   "awslabs-aws-knowledge-mcp-server": {
     "transport": "http",
     "url": "https://knowledge-mcp.global.api.aws"
+  },
+  "whimsical": {
+    "transport": "http",
+    "url": "https://mcp.whimsical.com/mcp",
+    "auth": "oauth"
   }
 }
