@@ -10,6 +10,14 @@ cat << 'EOF'
 model = "gpt-5.4"
 personality = "pragmatic"
 model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+exclude_slash_tmp = true
+exclude_tmpdir_env_var = true
+
+[shell_environment_policy]
+experimental_use_profile = true
 
 [mcp_servers.awslabs-aws-documentation-mcp-server]
 command = "uvx"
@@ -35,6 +43,9 @@ args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-s
 
 [plugins."github@openai-curated"]
 enabled = true
+
+[features]
+codex_hooks = true
 EOF
 
 # --- Preserve [projects.*] from existing file ---
