@@ -6,6 +6,10 @@
 - Do not run shell commands that create, modify, delete, or move files outside the current repository without explicit user approval.
 - Do not run network-fetching commands such as `curl` or `wget` without explicit user approval.
 - Do not push confidential or personal data to public repositories.
+- Prefer relative paths in shell commands when operating on repository files.
+- Do not chain shell commands with `&&`, `||`, or `;` unless there is no practical alternative. Use separate tool calls so approvals and audit trails stay precise.
+- Avoid `git -C <path>`; run commands from the target directory instead so command-prefix matching stays reliable.
+- Do not use `/tmp` or `$TMPDIR` for scratch files by default. If temporary files are needed, keep them under the current repository, such as `./tmp/`.
 
 ## Environment
 
