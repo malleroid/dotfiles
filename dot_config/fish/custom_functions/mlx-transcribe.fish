@@ -5,7 +5,7 @@ function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
     set --local model_large mlx-community/whisper-large-v3-mlx
 
     # Defaults
-    set --local model $model_large
+    set --local model $model_turbo
     set --local output_dir .
     set --local audio_files
 
@@ -32,7 +32,7 @@ function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
                 echo "Usage: mlx-transcribe [options] <audio files...>"
                 echo ""
                 echo "Options:"
-                echo "  -m, --model <name>       Model to use (default: large)"
+                echo "  -m, --model <name>       Model to use (default: turbo)"
                 echo "                           Shortcuts: kotoba, turbo, large"
                 echo "                           Or full HuggingFace repo name"
                 echo "  -o, --output-dir <path>  Output directory (default: .)"
