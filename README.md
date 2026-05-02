@@ -73,7 +73,8 @@ dotfiles/
 ## Operations
 
 - **Add/remove a Nix package**: Edit `flake.nix` paths, then `chezmoi apply` (triggers `run_onchange`). Run `nix build . --dry-run` first to confirm cache hit.
-- **Update Nix packages**: `nix flake update` → review `flake.lock` diff → commit → `chezmoi apply`.
+- **Update Nix packages**: `nix-update-bundle` (auto-backs up lock, runs `nix flake update`, reports cache misses).
+- **Check pin candidates**: `nix-check-pins` (test if any extra `nixpkgs-*` input can be dropped).
 - **Cleanup**: `nix profile wipe-history --older-than 30d` and `nix-collect-garbage -d` periodically.
 - **Add a macOS cask**: Add to `Brewfile.casks`, then `chezmoi apply`.
 - **Update dotfiles**: Edit `dot_*` files, then `chezmoi apply` to deploy.
