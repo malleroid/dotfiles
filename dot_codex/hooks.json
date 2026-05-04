@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.codex/hooks/notify.sh",
+            "timeoutSec": 3,
+            "statusMessage": "Notifying for permission request"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "^Bash$",
@@ -28,6 +40,18 @@
             "type": "command",
             "command": "$HOME/.codex/hooks/guard_secrets.sh",
             "statusMessage": "Checking for sensitive files"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.codex/hooks/notify.sh",
+            "timeoutSec": 3,
+            "statusMessage": "Notifying for completed turn"
           }
         ]
       }
