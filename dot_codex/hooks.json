@@ -17,8 +17,13 @@
         ]
       },
       {
-        "matcher": "^apply_patch$|Edit|Write",
+        "matcher": "^(apply_patch|Edit|Write|MultiEdit)$",
         "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.codex/hooks/guard_project_dir.sh",
+            "statusMessage": "Checking project directory boundaries"
+          },
           {
             "type": "command",
             "command": "$HOME/.codex/hooks/guard_secrets.sh",
