@@ -44,6 +44,9 @@ cask "tableplus"                  # Native GUI tool for relational databases
 cask "via"                        # Keyboard configurator
 cask "ghostty"                    # Fast, native terminal emulator
 
+## Game
+cask "steam"                      # Video game digital distribution service
+
 ## Media
 cask "obs"                        # Open-source software for live streaming and screen recording
 cask "stability-matrix"           # Multi-platform package manager for Stable Diffusion
