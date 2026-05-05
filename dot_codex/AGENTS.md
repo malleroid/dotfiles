@@ -25,6 +25,14 @@
   - If no reviewer role is configured, perform the review in the current thread.
 - Keep review feedback focused on code health and actionable findings.
 
+## Web Access
+
+- Use live web search when the user explicitly asks for current information, or when the answer depends on information that may have changed recently.
+- Start Codex with `--search` when live web search is required.
+- Prefer official sources for product, API, library, legal, financial, or operational facts.
+- Do not use shell-based network fetch commands such as `curl` or `wget` without explicit user approval.
+- For page interaction, debugging, or browser-observable behavior, prefer configured MCP/browser tools such as Chrome DevTools or Playwright over ad-hoc shell fetches.
+
 ## MCP Usage Guidance
 
 - Use Context7 when generating implementation that depends on fast-moving library APIs.
