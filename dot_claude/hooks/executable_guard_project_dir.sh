@@ -25,6 +25,12 @@ while IFS= read -r FILE_PATH; do
     FILE_PATH="${PROJECT_DIR}/${FILE_PATH}"
   fi
 
+  # Allow Claude Code's own state directory (auto memory, sessions, etc.)
+  CLAUDE_HOME="${HOME}/.claude"
+  if [[ "$FILE_PATH" == "$CLAUDE_HOME/"* || "$FILE_PATH" == "$CLAUDE_HOME" ]]; then
+    continue
+  fi
+
   if [[ "$FILE_PATH" != "$PROJECT_DIR/"* && "$FILE_PATH" != "$PROJECT_DIR" ]]; then
     echo "🚫 Blocked: File operation outside project directory" >&2
     echo "File: $FILE_PATH" >&2
