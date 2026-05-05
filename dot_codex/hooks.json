@@ -18,6 +18,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "$HOME/.codex/hooks/guard_dangerous_commands.sh",
+            "statusMessage": "Checking dangerous command policy"
+          },
+          {
+            "type": "command",
             "command": "$HOME/.codex/hooks/guard_force_push.sh",
             "statusMessage": "Checking for force push"
           },
