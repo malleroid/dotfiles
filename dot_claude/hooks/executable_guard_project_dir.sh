@@ -25,9 +25,10 @@ while IFS= read -r FILE_PATH; do
     FILE_PATH="${PROJECT_DIR}/${FILE_PATH}"
   fi
 
-  # Allow Claude Code's own state directory (auto memory, sessions, etc.)
-  CLAUDE_HOME="${HOME}/.claude"
-  if [[ "$FILE_PATH" == "$CLAUDE_HOME/"* || "$FILE_PATH" == "$CLAUDE_HOME" ]]; then
+  # Allow only Claude Code's auto memory dir (~/.claude/projects/<slug>/memory/).
+  # Other ~/.claude/ paths (plans/, agents/, settings.json, etc.) stay blocked
+  # so plans land in {project}/.claude/plans/ and config edits go via dotfiles.
+  if [[ "$FILE_PATH" == "${HOME}/.claude/projects/"*"/memory/"* ]]; then
     continue
   fi
 
