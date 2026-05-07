@@ -256,7 +256,9 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
-  "theme": "dark-daltonized",
-  "remoteControlAtStartup": true
+  "effortLevel": "xhigh",
+  "theme": "dark-ansi",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": false,
+  "model": "claude-opus-4-7"
 }
