@@ -18,7 +18,10 @@ verbose = false
 [tools]
 # Global tool versions
 "node" = "lts"
-"python" = "3.14"
+# Pin Python to the patch version because pipx-managed venvs keep an absolute
+# interpreter symlink. A floating minor version can break pipx tools after
+# `mise upgrade` removes the previous patch release.
+"python" = "3.14.5"
 "ruby" = "3.4"
 "rust" = "latest"
 "go" = "latest"
