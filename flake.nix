@@ -62,6 +62,7 @@
           # ## Doc
           glow # Render markdown on the CLI
           gocheat # TUI Cheatsheet for keybindings, hotkeys and more
+          poppler-utils # PDF utilities (pdftotext, pdfinfo, pdfimages, pdftoppm)
           slides # Terminal based presentation tool
           tlrc # Official tldr client written in Rust
 
