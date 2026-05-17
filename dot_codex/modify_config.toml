@@ -47,7 +47,7 @@ enabled = true
 codex_hooks = true
 
 [tui]
-status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-remaining"]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used"]
 EOF
 
 # --- Preserve local tables from existing file ---
