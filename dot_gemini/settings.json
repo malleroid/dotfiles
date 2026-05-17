@@ -56,6 +56,10 @@
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
+    },
+    "context7": {
+      "command": "context7-mcp",
+      "args": []
     }
   },
   "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",

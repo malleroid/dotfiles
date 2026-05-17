@@ -40,6 +40,11 @@
         "false"
       ],
       "env": {}
+    },
+    "context7": {
+      "command": "context7-mcp",
+      "args": [],
+      "env": {}
     }
   }
 }
