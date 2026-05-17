@@ -1,0 +1,24 @@
+# Local mapping for Claude Code account switching.
+#
+# Setup:
+#   cp ~/.config/fish/claude_account.local.fish.example \
+#      ~/.config/fish/claude_account.local.fish
+#   $EDITOR ~/.config/fish/claude_account.local.fish
+#
+# Keep the real file local; do not track it in dotfiles.
+#
+# Return one of: "personal" or "work"
+# (matches Keychain item names: claude-personal / claude-work)
+
+function __claude_account_for_path
+    switch $argv[1]
+        # Per-repo override (matched first, before any broader rule below).
+        case "$HOME/ghq/github.com/<owner>/<repo>*"
+            echo work
+        # Broader rule, e.g. an entire org.
+        case "$HOME/ghq/github.com/<owner>/*"
+            echo work
+        case '*'
+            echo personal
+    end
+end
