@@ -23,6 +23,7 @@ cask "vivaldi"                    # Web browser focusing on customization and co
 ## Chat
 cask "discord"                    # Voice and text chat software
 cask "slack"                      # Team communication and collaboration software
+cask "microsoft-teams"            # Team communication and collaboration software
 cask "zoom"                       # Video communication and virtual meeting platform
 cask "zulip"                      # Team chat application
 
