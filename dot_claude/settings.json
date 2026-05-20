@@ -192,6 +192,7 @@
       "Bash(git reset *)"
     ]
   },
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -239,7 +240,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); model=$(echo \"$input\" | jq -r '.model.display_name'); pct=$(echo \"$input\" | jq -r '.context_window.used_percentage // 0'); git_branch=$(git -C \"$cwd\" --no-optional-locks rev-parse --abbrev-ref HEAD 2>/dev/null); if [ -n \"$git_branch\" ]; then printf '%s   %s   %s   ctx:%s%%' \"$(date +%H:%M:%S)\" \"$cwd\" \"$git_branch\" \"$pct\"; else printf '%s   %s   ctx:%s%%' \"$(date +%H:%M:%S)\" \"$cwd\" \"$pct\"; fi"
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); pct=$(echo \"$input\" | jq -r '.context_window.used_percentage // 0'); acct=\"${CLAUDE_ACCOUNT:-personal}\"; if [ \"$acct\" = work ]; then acct_disp=$(printf '\\033[1;37;41m %s \\033[0m' \"$acct\"); else acct_disp=$(printf '\\033[1;30;42m %s \\033[0m' \"$acct\"); fi; git_branch=$(git -C \"$cwd\" --no-optional-locks rev-parse --abbrev-ref HEAD 2>/dev/null); if [ -n \"$git_branch\" ]; then printf '%s  %s   %s   %s   ctx:%s%%' \"$acct_disp\" \"$(date +%H:%M:%S)\" \"$cwd\" \"$git_branch\" \"$pct\"; else printf '%s  %s   %s   ctx:%s%%' \"$acct_disp\" \"$(date +%H:%M:%S)\" \"$cwd\" \"$pct\"; fi"
   },
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
@@ -259,6 +260,5 @@
   "effortLevel": "xhigh",
   "theme": "dark-ansi",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false,
-  "model": "claude-opus-4-7"
+  "agentPushNotifEnabled": false
 }
