@@ -1,20 +1,20 @@
-# Claude Code OAuth token を repo 単位で切り替える
+# Switch the Claude Code OAuth token per repository.
 #
-# 仕組み:
-#   1. ~/.config/fish/claude_account.local.fish があれば source
-#      （実マッピングは public dotfiles に乗せたくないため別ファイル化）
-#   2. PWD 変化のたびに __claude_account_for_path で account 名を解決
-#   3. 直前と異なる account なら macOS Keychain からトークンを取得し
-#      CLAUDE_CODE_OAUTH_TOKEN に export
+# How it works:
+#   1. Source ~/.config/fish/claude_account.local.fish if present
+#      (the real mapping is kept in a separate file, off the public dotfiles).
+#   2. Resolve the account name via __claude_account_for_path on every PWD change.
+#   3. If the account differs from the previous one, fetch the token from the
+#      macOS Keychain and export it as CLAUDE_CODE_OAUTH_TOKEN.
 #
-# セットアップ:
+# Setup:
 #   cp ~/.config/fish/claude_account.local.fish.example \
 #      ~/.config/fish/claude_account.local.fish
-#   # 編集してマッピングを書く
+#   # Edit it to write the mapping.
 #
-#   claude setup-token   # 個人 Max
+#   claude setup-token   # personal Max
 #   security add-generic-password -U -s claude-personal -a $USER -w '<token>'
-#   claude logout; claude login   # 会社 Team
+#   claude logout; claude login   # work Team
 #   claude setup-token
 #   security add-generic-password -U -s claude-work -a $USER -w '<token>'
 
@@ -29,11 +29,13 @@ function __claude_account_switch --on-variable PWD
     end
     test "$__claude_current_account" = "$target"; and return
     set -g __claude_current_account "$target"
+    # Export so child processes (e.g. Claude Code statusLine) can read it.
+    set -gx CLAUDE_ACCOUNT "$target"
     set -l token (security find-generic-password -s "claude-$target" -a "$USER" -w 2>/dev/null)
     if test -n "$token"
         set -gx CLAUDE_CODE_OAUTH_TOKEN "$token"
     else
-        # Keychain item が無ければ env var を外して claude login の Keychain にフォールバック
+        # No Keychain item: drop the env var and fall back to the claude login Keychain.
         set -e CLAUDE_CODE_OAUTH_TOKEN
     end
 end
