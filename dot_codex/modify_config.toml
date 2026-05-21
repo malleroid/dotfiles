@@ -29,6 +29,9 @@ FASTMCP_LOG_LEVEL = "ERROR"
 command = "chrome-devtools-mcp"
 args = ["--headless=true", "--isolated=true"]
 
+[mcp_servers.context7]
+command = "context7-mcp"
+
 [mcp_servers.playwright-mcp]
 command = "playwright-mcp"
 args = ["--headless"]
