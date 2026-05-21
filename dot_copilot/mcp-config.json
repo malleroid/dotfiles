@@ -45,6 +45,27 @@
       "command": "context7-mcp",
       "args": [],
       "env": {}
+    },
+    "atlassian-rovo": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "tools": [
+        "*"
+      ]
+    },
+    "awslabs-aws-knowledge-mcp-server": {
+      "type": "http",
+      "url": "https://knowledge-mcp.global.api.aws",
+      "tools": [
+        "*"
+      ]
+    },
+    "whimsical": {
+      "type": "http",
+      "url": "https://mcp.whimsical.com/mcp",
+      "tools": [
+        "*"
+      ]
     }
   }
 }

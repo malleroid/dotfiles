@@ -115,7 +115,7 @@ else
     end
 end
 
-# ── 3. Remote MCP servers (Claude Code only) ──
+# ── 3. Remote MCP servers (Claude Code + Copilot CLI) ──
 echo ""
 echo "=== Remote MCP servers (SSE/HTTP) ==="
 
@@ -123,12 +123,38 @@ if not test -f "$remote_config"
     echo "  ⏭️  No remote-servers.json found, skipping"
 else
     for name in (jq -r 'keys[]' "$remote_config")
-        set url       (jq -r --arg n $name '.[$n].url'       "$remote_config")
-        set transport (jq -r --arg n $name '.[$n].transport' "$remote_config")
+        set url       (jq -r --arg n $name '.[$n].url'         "$remote_config")
+        set transport (jq -r --arg n $name '.[$n].transport'   "$remote_config")
+        set auth      (jq -r --arg n $name '.[$n].auth // ""'  "$remote_config")
+
+        echo ""
+        echo "  [$name]"
+
+        # Claude Code (remove + add for upsert)
         claude mcp remove --scope user $name 2>/dev/null
         claude mcp add --transport $transport --scope user $name $url 2>/dev/null
-        and echo "  ✅ Claude Code: $name"
-        or  echo "  ❌ Claude Code: $name (failed)"
+        and echo "  ✅ Claude Code"
+        or  echo "  ❌ Claude Code (failed)"
+
+        # Copilot CLI (HTTP/SSE; transport -> type, OAuth auto-negotiated via DCR)
+        set copilot_cfg "$HOME/.copilot/mcp-config.json"
+        if not test -f "$copilot_cfg"
+            mkdir -p ~/.copilot
+            echo '{"mcpServers":{}}' > "$copilot_cfg"
+        end
+        set entry (jq -c --arg n $name \
+            '{type: .[$n].transport, url: .[$n].url, tools: ["*"]}' \
+            "$remote_config")
+        jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$copilot_cfg" \
+            > "$script_dir/_tmp_copilot.json"
+        and mv "$script_dir/_tmp_copilot.json" "$copilot_cfg"
+        and echo "  ✅ Copilot"
+        or  echo "  ❌ Copilot (failed)"
+
+        # OAuth servers need a one-time browser auth (cannot be scripted)
+        if test "$auth" = oauth
+            echo "  🔑 OAuth: run '/mcp auth $name' in Copilot on first use"
+        end
     end
 end
 
