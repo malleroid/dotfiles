@@ -22,3 +22,14 @@ function __claude_account_for_path
             echo personal
     end
 end
+
+# Auth method per account: "login" = native `claude auth login` (full scope, Remote Control);
+# "token" = setup-token from Keychain item claude-<name> (inference-only).
+function __claude_account_auth_method
+    switch $argv[1]
+        case personal
+            echo login
+        case '*'
+            echo token
+    end
+end
