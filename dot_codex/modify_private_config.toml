@@ -58,7 +58,8 @@ preserved=$(
   printf '%s' "$existing" | awk '
     /^\[projects\./ { keep = 1 }
     /^\[tui\.model_availability_nux\]/ { keep = 1 }
-    /^\[/ && !/^\[projects\./ && !/^\[tui\.model_availability_nux\]/ { keep = 0 }
+    /^\[hooks\.state(\]|\.)/ { keep = 1 }
+    /^\[/ && !/^\[projects\./ && !/^\[tui\.model_availability_nux\]/ && !/^\[hooks\.state(\]|\.)/ { keep = 0 }
     keep { print }
   '
 )
