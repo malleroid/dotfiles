@@ -7,29 +7,32 @@
 #
 # Keep the real file local; do not track it in dotfiles.
 #
-# Return one of: "personal" or "work"
-# (matches Keychain item names: claude-personal / claude-work)
+# Policy (machine-specific). __claude_account_for_path returns an account name; the
+# `case '*'` default should be THIS machine's keychain-login account (claude auth login).
+# __claude_account_auth_method maps each account to "login" (use keychain login = full
+# scope, Remote Control) or "token" (inject CLAUDE_CODE_OAUTH_TOKEN from Keychain item
+# claude-<account>, inference-only).
+#
+# Make the default the SAFE/sanctioned account for this machine; mark other accounts
+# "token" and opt them in per path. Example below = a company machine (default: org;
+# your own repos: personal, to spare the org quota).
 
 function __claude_account_for_path
     switch $argv[1]
-        # Per-repo override (matched first, before any broader rule below).
-        case "$HOME/ghq/github.com/<owner>/<repo>*"
-            echo work
-        # Broader rule, e.g. an entire org.
-        case "$HOME/ghq/github.com/<owner>/*"
-            echo work
-        case '*'
+        # Opt-in: your own repos -> a non-default (token) account.
+        case "$HOME/ghq/github.com/<your-owner>/*"
             echo personal
+        # Default: everything else -> the keychain-login account.
+        case '*'
+            echo org
     end
 end
 
-# Auth method per account: "login" = native `claude auth login` (full scope, Remote Control);
-# "token" = setup-token from Keychain item claude-<name> (inference-only).
 function __claude_account_auth_method
     switch $argv[1]
-        case personal
-            echo login
+        case org
+            echo login    # keychain login (full scope); this machine's default account
         case '*'
-            echo token
+            echo token    # setup-token from Keychain item claude-<account> (inference-only)
     end
 end
