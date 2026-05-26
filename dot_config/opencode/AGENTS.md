@@ -8,6 +8,7 @@
 - Do not push confidential or personal data to public repositories.
 - Prefer relative paths in shell commands when operating on repository files.
 - Do not chain shell commands with `&&`, `||`, or `;` unless there is no practical alternative.
+- Do not use shell brace expansion such as `{a,b}` or `{1..10}`. It can expand a single-looking command into multiple paths or arguments and bypass the intent of command approval rules.
 - Avoid `git -C <path>`; run commands from the target directory instead.
 - Do not use `/tmp` or `$TMPDIR` for scratch files by default. If temporary files are needed, keep them under the current repository, such as `./tmp/`.
 
