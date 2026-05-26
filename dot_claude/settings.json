@@ -233,6 +233,11 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/guard_git_c.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/guard_shell_syntax.sh",
+            "timeout": 5
           }
         ]
       }
