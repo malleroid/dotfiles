@@ -65,8 +65,7 @@ dotfiles/
 │   ├── hooks/                   #   git guard hooks (executable_)
 │   └── symlink_skills.tmpl      #   → ~/.agents/skills
 ├── dot_gemini/                  # → ~/.gemini/
-│   ├── hooks/                   #   Gemini CLI notification hooks
-│   └── settings.json            #   Gemini CLI user settings
+│   └── antigravity-cli/         #   Antigravity CLI (agy) settings
 ├── dot_agents/skills/           # → ~/.agents/skills/
 ├── dot_copilot/                 # → ~/.copilot/
 ├── dot_codex/                   # → ~/.codex/ (create_ prefix: no overwrite)
