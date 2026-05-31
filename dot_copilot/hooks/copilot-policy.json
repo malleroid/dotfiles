@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "matcher": "bash",
+        "command": "$HOME/.copilot/hooks/guard_bash_policy.sh",
+        "timeoutSec": 5
+      },
+      {
+        "type": "command",
+        "matcher": "create|edit",
+        "command": "$HOME/.copilot/hooks/guard_file_policy.sh",
+        "timeoutSec": 5
+      }
+    ],
+    "notification": [
+      {
+        "type": "command",
+        "matcher": "permission_prompt|agent_idle",
+        "command": "$HOME/.copilot/hooks/notify.sh",
+        "timeoutSec": 3
+      }
+    ]
+  }
+}
