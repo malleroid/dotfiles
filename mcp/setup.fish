@@ -39,12 +39,10 @@ for name in (jq -r 'keys[]' "$servers_config")
     # Build env flags per client
     set env_flags_claude
     set env_flags_codex
-    set env_flags_gemini
     for key in (jq -r --arg n $name '.[$n].env | keys[]' "$servers_config")
         set val (jq -r --arg n $name --arg k $key '.[$n].env[$k]' "$servers_config")
         set env_flags_claude $env_flags_claude -e "$key=$val"
         set env_flags_codex  $env_flags_codex  --env "$key=$val"
-        set env_flags_gemini $env_flags_gemini -e "$key=$val"
     end
 
     echo ""
@@ -93,12 +91,22 @@ for name in (jq -r 'keys[]' "$servers_config")
     and echo "  ✅ Codex"
     or  echo "  ⏭️  Codex (already exists or error)"
 
-    # Gemini CLI
-    # NOTE: server args starting with '--' (e.g. --from, --enable-web-dashboard)
-    # may be parsed as gemini options. Verify serena registration manually.
-    gemini mcp add -s user $env_flags_gemini $name $cmd $args 2>/dev/null
-    and echo "  ✅ Gemini"
-    or  echo "  ⏭️  Gemini (already exists or error)"
+    # Antigravity CLI (agy): write to ~/.gemini/config/mcp_config.json (global)
+    # NOTE: agy creates this file empty on first run, so check size (-s) not just
+    # existence (-f) — otherwise jq would read invalid (empty) JSON.
+    set agy_cfg "$HOME/.gemini/config/mcp_config.json"
+    mkdir -p (dirname "$agy_cfg")
+    if not test -s "$agy_cfg"
+        echo '{"mcpServers":{}}' > "$agy_cfg"
+    end
+    set entry (jq -c --arg n $name \
+        '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
+        "$servers_config")
+    jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$agy_cfg" \
+        > "$script_dir/_tmp_agy.json"
+    and mv "$script_dir/_tmp_agy.json" "$agy_cfg"
+    and echo "  ✅ Antigravity CLI (agy)"
+    or  echo "  ❌ Antigravity CLI (failed)"
 end
 
 # ── 2. Local HTTP servers (Claude Code + Claude Desktop) ──
