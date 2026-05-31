@@ -44,7 +44,6 @@ verbose = false
 "npm:@antiwork/shortest" = "latest"
 "npm:@e2b/cli" = "latest"
 "npm:@github/copilot" = "latest"
-"npm:@google/gemini-cli" = "latest"
 "npm:@openai/codex" = "latest"
 "npm:aicommit2" = "latest"
 

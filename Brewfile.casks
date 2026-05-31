@@ -31,7 +31,6 @@ cask "zulip"                      # Team chat application
 cask "figma"                      # Collaborative interface design tool
 
 ## Editor / IDE
-cask "antigravity"                # AI Coding Agent IDE
 cask "cursor"                     # AI-first code editor
 cask "kiro"                       # Agent-centric IDE with spec-driven development
 cask "trae"                       # AI code editor by ByteDance
