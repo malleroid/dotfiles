@@ -9,6 +9,7 @@
 - Do not push confidential or personal data to public repositories.
 - Prefer relative paths in shell commands when operating on repository files.
 - Avoid chaining shell commands with `&&`, `||`, or `;` unless there is no practical alternative.
+- Avoid shell brace expansion such as `{a,b}` or `{1..10}`. It can expand one-looking command into multiple paths or arguments and bypass command approval intent.
 - Avoid `git -C <path>`; run commands from the target directory instead.
 - Do not use `/tmp` or `$TMPDIR` for scratch files by default. If temporary files are needed, keep them under the current repository, such as `./tmp/`.
 
@@ -21,10 +22,18 @@
 
 ## Code Review
 
+- When doing code review, use the `reviewer` agent if it is available.
+- Do not collect or rewrite review context in the parent session before invoking the reviewer agent. Pass the user request through directly.
 - Keep review feedback focused on code health and actionable findings.
 - Prioritize bugs, security risks, behavioral regressions, and missing tests.
 - Present findings first, ordered by severity, with file and line references when available.
 - If no issues are found, say so clearly and mention any residual testing gaps or risk.
+
+## Planning
+
+- Keep plan files inside the current repository, not under `$HOME/.copilot/`.
+- Prefer `.copilot/plans/` for saved plans.
+- Rename generated plan files to descriptive names after creation.
 
 ## Web Access
 
