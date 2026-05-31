@@ -1,0 +1,13 @@
+#!/bin/sh
+# chezmoi modify_ script for ~/.gemini/antigravity-cli/settings.json
+# Managed keys: notifications.
+# Preserved: trustedWorkspaces / statusLine / and any other key agy maintains
+# (overlay strategy via jq — anything not in managed list survives).
+
+existing=$(cat)
+
+if [ -z "$existing" ] || ! printf '%s' "$existing" | jq empty >/dev/null 2>&1; then
+  existing='{}'
+fi
+
+printf '%s' "$existing" | jq '. + {notifications: true}'
