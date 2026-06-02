@@ -16,6 +16,30 @@
 
 - Assume `fish` shell is the default shell environment on this machine.
 
+## Response Source Labels
+
+- Every user-facing response (including short acknowledgements) must start with a source label on the first line.
+- Labels:
+  - 🔍 **investigated**: Main claims are backed by tools called in this turn (Read / Grep / Bash / WebFetch / Context7 etc.).
+  - 💭 **inferred**: Based on training-data recall, logical inference, code generation, opinion, or simple acknowledgement. No tool calls in this turn, or tool results unrelated to the claims.
+  - 🔍💭 **mixed**: Both. Append an inline marker (🔍 / 💭) to each individual claim so the reader can tell them apart.
+- Decision flow:
+  1. Did this turn call any tools? No → 💭. Yes → step 2.
+  2. Are the main claims backed by tool results? All → 🔍. Some → 🔍💭 (inline markers required). Unrelated → 💭.
+  3. Anywhere the response includes opinion, recommendation, or synthesized code, mark that part 💭.
+- Example (mixed):
+
+  ```
+  🔍💭 mixed
+
+  - `foo.ts` is 200 lines and exports `bar()` 🔍
+  - Splitting it into `util/` would be cleaner 💭
+  ```
+
+- For pure 🔍 or 💭 responses, inline markers can be omitted.
+- Responses without labels are not allowed. Turns that only run tools and emit no user-facing text do not need a label.
+- The label is self-reported, not a guarantee — it helps the user calibrate trust quickly, but they should still verify when stakes are high.
+
 ## Code Review
 
 - Codex terminology note:
