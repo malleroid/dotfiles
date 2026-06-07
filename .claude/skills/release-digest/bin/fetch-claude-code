@@ -1,0 +1,25 @@
+#!/usr/bin/env fish
+#
+# fetch-claude-code — fetch Claude Code releases from the last N days and print a
+# losslessly-normalized JSON array to stdout. This is the deterministic fetch layer
+# of the release-digest skill.
+#
+# Usage:  fetch-claude-code [days]      (defaults to 1)
+# Output: [ { version, date, published_at, url, change_count, bugfix_only, changes[] } ]
+#
+# Invariants:
+#   - exclude draft / prerelease
+#   - keep every CHANGELOG bullet (classification & translation are the skill's LLM job)
+#   - reuse gh's existing login for auth (5,000/hr authenticated vs 60/hr for anon curl)
+#
+# Portability: date math uses BSD `date -v`, i.e. macOS local only.
+#   When moving to Linux / CI (cron), switch to GNU date: `date -u -d "$days days ago"`.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l cutoff (date -u -v-$days"d" +%Y-%m-%dT%H:%M:%SZ)
+set -l here (dirname (status filename))
+
+gh api "repos/anthropics/claude-code/releases?per_page=100" \
+  | jq --arg cutoff $cutoff -f "$here/normalize.jq"
