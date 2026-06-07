@@ -3,6 +3,9 @@
 .serena/
 .chezmoi.toml
 
+# Scratch dir for temp files (the ./tmp/ mandated by CLAUDE.md)
+tmp/
+
 # Fisher generated files
 dot_config/fish/completions/
 dot_config/fish/conf.d/

@@ -1,4 +1,6 @@
 # リポジトリ専用ファイル (デプロイしない)
+# Scratch dir for temp files (the ./tmp/ mandated by CLAUDE.md)
+tmp/**
 README.md
 Brewfile.casks
 flake.nix
