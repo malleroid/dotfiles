@@ -43,6 +43,7 @@ cask "docker-desktop"             # Pack, ship and run any application as a ligh
 cask "tableplus"                  # Native GUI tool for relational databases
 cask "via"                        # Keyboard configurator
 cask "ghostty"                    # Fast, native terminal emulator
+cask "tailscale-app"              # Mesh VPN based on WireGuard
 
 ## Media
 cask "obs"                        # Open-source software for live streaming and screen recording

@@ -35,7 +35,7 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 | What | Manager | File |
 |------|---------|------|
 | CLI tools (70 packages) | Nix | `flake.nix` |
-| macOS GUI apps (57 casks) | Homebrew | `Brewfile.casks` |
+| macOS GUI apps (58 casks) | Homebrew | `Brewfile.casks` |
 | Language runtimes & dev tools | mise | `dot_config/mise/config.toml` |
 
 ## Layout
