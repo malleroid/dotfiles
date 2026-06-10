@@ -14,5 +14,13 @@
     "unit": "date",
     "spec": "sources/dev-platform.md",
     "enabled": true
+  },
+  {
+    "id": "claude-apps",
+    "name": "Claude Apps",
+    "fetcher": "bin/fetch-claude-apps",
+    "unit": "date",
+    "spec": "sources/claude-apps.md",
+    "enabled": true
   }
 ]

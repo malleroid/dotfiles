@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-claude-apps — fetch Claude Apps release notes (claude.ai / Desktop / Cowork / mobile /
+# M365 / Chrome) from the last N days, normalized to the shared schema. Deterministic fetch
+# layer of the release-digest skill.
+#
+# Usage:  fetch-claude-apps [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per dated section)
+#
+# Source: the raw Markdown of the Help Center release-notes article (the `.md` suffix returns
+# text/markdown) — no HTML scraping and no LLM in this layer.
+# Portability: pure curl + python3, so it runs standalone (cron) without an agent.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL https://support.claude.com/en/articles/12138966-release-notes.md \
+  | python3 "$here/parse-apps.py" --days $days
