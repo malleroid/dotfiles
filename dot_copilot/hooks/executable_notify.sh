@@ -6,7 +6,17 @@ notification_type=$(printf %s "$input" | jq -r '.notification_type // .notificat
 
 pane_label=""
 if [ -n "${ZELLIJ_PANE_ID:-}" ]; then
-  pane_label="${ZELLIJ_SESSION_NAME:-zellij} pane${ZELLIJ_PANE_ID} "
+  pane_label=$(zellij action list-panes -t -j 2>/dev/null | jq -r \
+    --argjson id "$ZELLIJ_PANE_ID" \
+    --arg session "${ZELLIJ_SESSION_NAME:-zellij}" \
+    '.[] | select((.is_plugin | not) and .id == $id)
+     | "\($session) \(.tab_name) \(.title)"
+     | gsub("\\s+"; " ")' 2>/dev/null || true)
+  if [ -n "$pane_label" ]; then
+    pane_label="${pane_label% } "
+  else
+    pane_label="${ZELLIJ_SESSION_NAME:-zellij} pane${ZELLIJ_PANE_ID} "
+  fi
 fi
 
 case "$notification_type" in
