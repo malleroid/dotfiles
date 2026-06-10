@@ -1,0 +1,21 @@
+#!/usr/bin/env fish
+#
+# fetch-openai-api — fetch the OpenAI API changelog from the last N days, normalized to the
+# shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-openai-api [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per date)
+#
+# Source: the changelog page HTML (no .md variant and no RSS exist). The parser keys on
+# stable text patterns ("June, 2026" month sections, "Jun 9" date badges) and data
+# attributes rather than hashed CSS class names. Source-provided category labels
+# (Feature/Update/Fix/Announcement) are passed through as classification hints.
+# Portability: pure curl + python3, so it runs standalone (cron) without an agent.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL https://developers.openai.com/api/docs/changelog \
+  | python3 "$here/parse-oai-api.py" --days $days

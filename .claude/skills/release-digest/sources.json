@@ -22,5 +22,30 @@
     "unit": "date",
     "spec": "sources/claude-apps.md",
     "enabled": true
+  },
+  {
+    "id": "openai-api",
+    "name": "OpenAI API",
+    "fetcher": "bin/fetch-openai-api",
+    "unit": "date",
+    "spec": "sources/openai-api.md",
+    "enabled": true
+  },
+  {
+    "id": "openai-codex",
+    "name": "OpenAI Codex",
+    "fetcher": "bin/fetch-openai-codex",
+    "unit": "date",
+    "spec": "sources/openai-codex.md",
+    "enabled": true
+  },
+  {
+    "id": "chatgpt",
+    "name": "ChatGPT",
+    "fetcher": null,
+    "unit": "date",
+    "spec": null,
+    "enabled": false,
+    "notes": "help.openai.com/en/articles/6825453 が Cloudflare challenge で curl/WebFetch とも 403 (2026-06)。真っ当な取得手段が現れたら enable する。大きな発表は openai-api / News にも載るため当面の実害は小"
   }
 ]

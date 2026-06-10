@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-openai-codex — fetch the OpenAI Codex changelog (CLI / IDE / app / mobile / web) from
+# the last N days, normalized to the shared schema. Deterministic fetch layer of the
+# release-digest skill.
+#
+# Usage:  fetch-openai-codex [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per date)
+#
+# Source: the changelog page HTML (no .md variant and no RSS exist). Very parseable: each
+# entry <li> carries an ISO date in its id (codex-YYYY-MM-DD-slug) plus data-codex-topics.
+# Portability: pure curl + python3, so it runs standalone (cron) without an agent.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL https://developers.openai.com/codex/changelog \
+  | python3 "$here/parse-oai-codex.py" --days $days
