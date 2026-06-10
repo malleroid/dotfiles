@@ -196,6 +196,10 @@
     ]
   },
   "model": "opus",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "hooks": {
     "Notification": [
       {
