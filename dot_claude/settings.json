@@ -6,6 +6,10 @@
     "DISABLE_ERROR_REPORTING": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(aws pricing *)",
@@ -196,10 +200,6 @@
     ]
   },
   "model": "claude-fable-5[1m]",
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
   "hooks": {
     "Notification": [
       {
