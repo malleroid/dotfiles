@@ -2,7 +2,8 @@
 # Claude Code notification with voice and tab info
 
 INPUT=$(cat)
-NOTIFICATION_TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
+# Notification events carry notification_type; Stop events only hook_event_name
+EVENT=$(echo "$INPUT" | jq -r '.notification_type // .hook_event_name // "unknown"')
 
 # Zellij pane identification: "<session> <tab name> <pane title>" (zellij 0.44+)
 # Pane title carries the Claude Code session name via OSC; strip the
@@ -23,12 +24,16 @@ if [ -n "$ZELLIJ_PANE_ID" ]; then
 fi
 
 # Short English messages for speed
-case "$NOTIFICATION_TYPE" in
+case "$EVENT" in
   permission_prompt)
     MSG="${PANE_LABEL}check"
     ;;
-  idle_prompt)
+  Stop)
     MSG="${PANE_LABEL}complete"
+    ;;
+  idle_prompt)
+    # Stop hook already announced completion; stay silent
+    exit 0
     ;;
   *)
     MSG="${PANE_LABEL}notify"
