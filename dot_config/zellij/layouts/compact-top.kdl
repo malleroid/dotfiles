@@ -1,0 +1,9 @@
+// Compact layout with the status bar at the top instead of the bottom
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="compact-bar"
+        }
+        children
+    }
+}
