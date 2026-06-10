@@ -51,6 +51,7 @@ hooks = true
 
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used"]
+terminal_title = ["activity", "project-name", "thread-title"]
 EOF
 
 # --- Preserve local tables from existing file ---
