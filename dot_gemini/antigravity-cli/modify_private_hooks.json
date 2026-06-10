@@ -1,0 +1,25 @@
+#!/bin/sh
+# chezmoi modify_ script for ~/.gemini/antigravity-cli/hooks.json
+# Managed key: zellij-notify. Other hooks configured through /hooks are preserved.
+
+existing=$(cat)
+
+if [ -z "$existing" ] || ! printf '%s' "$existing" | jq empty >/dev/null 2>&1; then
+  existing='{}'
+fi
+
+printf '%s' "$existing" | jq '. + {
+  "zellij-notify": {
+    "PreInvocation": null,
+    "PostInvocation": null,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "$HOME/.gemini/antigravity-cli/hooks/notify.sh",
+        "timeout": 3
+      }
+    ],
+    "PreToolUse": null,
+    "PostToolUse": null
+  }
+}'
