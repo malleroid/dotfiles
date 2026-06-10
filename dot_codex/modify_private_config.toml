@@ -50,7 +50,7 @@ enabled = true
 hooks = true
 
 [tui]
-status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used"]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "five-hour-limit", "weekly-limit"]
 terminal_title = ["activity", "project-name", "thread-title"]
 EOF
 
