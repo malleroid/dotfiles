@@ -1,0 +1,18 @@
+[
+  {
+    "id": "claude-code",
+    "name": "Claude Code",
+    "fetcher": "bin/fetch-claude-code",
+    "unit": "version",
+    "spec": "sources/claude-code.md",
+    "enabled": true
+  },
+  {
+    "id": "dev-platform",
+    "name": "Claude Platform (API)",
+    "fetcher": "bin/fetch-dev-platform",
+    "unit": "date",
+    "spec": "sources/dev-platform.md",
+    "enabled": true
+  }
+]
