@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-opencode — fetch opencode (sst/opencode) releases from the last N days, normalized to the
+# shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-opencode [days]      (defaults to 1)
+# Output: [ { version, date, published_at, url, change_count, changes[] } ]   (one per release)
+#
+# Source: GitHub Releases via gh api (authenticated, 5,000/hr). Unlike Claude Code, opencode
+# release bodies are structured markdown (## Component / ### Category / - bullet), so a dedicated
+# parser keeps that context instead of the shared normalize.jq.
+# Portability: gh + python3, runs standalone (cron) where gh auth is present.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+gh api "repos/sst/opencode/releases?per_page=100" \
+  | python3 "$here/parse-opencode.py" --days $days
