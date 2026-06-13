@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-github-changelog — fetch the GitHub Changelog from the last N days, normalized to the
+# shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-github-changelog [days]      (defaults to 1)
+# Output: [ { unit, date, url, changelog_type, labels, title, change_count, changes[] } ]
+#
+# Source: the github.blog/changelog RSS feed (WordPress). Each <item> carries a per-post link,
+# an RFC822 pubDate, an HTML body, and <category> tags for changelog-type (Improvement/Retired/
+# Release) and changelog-label (copilot/actions/...). Covers all of GitHub, not just AI tools.
+# Portability: pure curl + python3, so it runs standalone (cron). --compressed for gzip.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL --compressed https://github.blog/changelog/feed/ \
+  | python3 "$here/parse-github-changelog.py" --days $days

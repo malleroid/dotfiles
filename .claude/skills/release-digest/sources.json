@@ -82,6 +82,15 @@
     "notes": "changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
   },
   {
+    "id": "github-changelog",
+    "name": "GitHub Changelog",
+    "fetcher": "bin/fetch-github-changelog",
+    "unit": "item",
+    "spec": "sources/github-changelog.md",
+    "enabled": true,
+    "notes": "GitHub プラットフォーム全体 (Copilot/Actions/security 等)。RSS の category(changelog-type/label)を分類ヒントに label グルーピングで出力する"
+  },
+  {
     "id": "copilot-cli",
     "name": "GitHub Copilot CLI",
     "fetcher": "bin/fetch-copilot-cli",
