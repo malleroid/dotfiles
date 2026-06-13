@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-kiro — fetch the Kiro (AWS) changelog from the last N days, normalized to the shared
+# schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-kiro [days]      (defaults to 1)
+# Output: [ { unit, date, url, category, title, change_count, changes[] } ]   (one per entry)
+#
+# Source: a real Atom feed. Each <entry> is one feature release with a <category term>, a
+# per-entry <link>, an ISO <published> date, and an HTML <summary> teaser (full detail on the
+# linked page). Cleanest possible source alongside Vertex.
+# Portability: pure curl + python3, so it runs standalone (cron). --compressed for gzip.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL --compressed https://kiro.dev/changelog/feed.atom \
+  | python3 "$here/parse-kiro.py" --days $days

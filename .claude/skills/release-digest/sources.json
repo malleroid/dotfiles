@@ -82,6 +82,14 @@
     "notes": "changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
   },
   {
+    "id": "kiro",
+    "name": "Kiro",
+    "fetcher": "bin/fetch-kiro",
+    "unit": "entry",
+    "spec": "sources/kiro.md",
+    "enabled": true
+  },
+  {
     "id": "chatgpt",
     "name": "ChatGPT",
     "fetcher": null,
