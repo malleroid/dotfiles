@@ -1,0 +1,21 @@
+#!/usr/bin/env fish
+#
+# fetch-gemini-api — fetch the Gemini API release notes from the last N days, normalized to the
+# shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-gemini-api [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per date)
+#
+# Source: ai.google.dev is a server-rendered DevSite (no .md, no RSS). The content is stable,
+# well-formed HTML: date headings carry id="MM-DD-YYYY" (also used as the deep-link anchor) and
+# the parser bounds itself to the devsite-article-body container.
+# Portability: pure curl + python3, so it runs standalone (cron). --compressed because DevSite
+# serves gzip even to unnegotiated clients.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL --compressed https://ai.google.dev/gemini-api/docs/changelog \
+  | python3 "$here/parse-gemini-api.py" --days $days

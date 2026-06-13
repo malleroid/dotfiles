@@ -40,6 +40,14 @@
     "enabled": true
   },
   {
+    "id": "gemini-api",
+    "name": "Gemini API",
+    "fetcher": "bin/fetch-gemini-api",
+    "unit": "date",
+    "spec": "sources/gemini-api.md",
+    "enabled": true
+  },
+  {
     "id": "antigravity",
     "name": "Antigravity",
     "fetcher": "bin/fetch-antigravity",
