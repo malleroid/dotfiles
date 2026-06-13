@@ -82,6 +82,14 @@
     "notes": "changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
   },
   {
+    "id": "copilot-cli",
+    "name": "GitHub Copilot CLI",
+    "fetcher": "bin/fetch-copilot-cli",
+    "unit": "version",
+    "spec": "sources/copilot-cli.md",
+    "enabled": true
+  },
+  {
     "id": "opencode",
     "name": "opencode",
     "fetcher": "bin/fetch-opencode",

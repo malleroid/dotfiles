@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-copilot-cli — fetch GitHub Copilot CLI (github/copilot-cli) releases from the last N days,
+# normalized to the shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-copilot-cli [days]      (defaults to 1)
+# Output: [ { version, date, published_at, url, change_count, changes[] } ]   (one per release)
+#
+# Source: GitHub Releases via gh api. Prereleases (e.g. v1.0.62-1) are excluded; the stable
+# releases carry the consolidated notes. Bodies use bold category labels (**Added**/**Improved**
+# /**Fixed**) or a flat bullet list, handled by the parser.
+# Portability: gh + python3, runs standalone (cron) where gh auth is present.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+gh api "repos/github/copilot-cli/releases?per_page=100" \
+  | python3 "$here/parse-copilot-cli.py" --days $days
