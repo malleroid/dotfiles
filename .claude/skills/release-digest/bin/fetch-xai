@@ -1,0 +1,21 @@
+#!/usr/bin/env fish
+#
+# fetch-xai — fetch the xAI / Grok API release notes from the last N days, normalized to the
+# shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-xai [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per dated entry)
+#
+# Source: docs.x.ai/docs/release-notes (server-rendered Next.js, no .md/RSS). Month headings
+# carry the year only for past years ("June 2025"); the current year is bare and inferred from
+# the page's "Last updated: ..., YYYY" line. Per-entry "Month Day" date cells give day precision.
+# x.ai/news (consumer) stays 403 behind Cloudflare and is out of scope.
+# Portability: pure curl + python3, so it runs standalone (cron). --compressed for gzip.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL --compressed https://docs.x.ai/docs/release-notes \
+  | python3 "$here/parse-xai.py" --days $days

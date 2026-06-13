@@ -64,6 +64,15 @@
     "enabled": true
   },
   {
+    "id": "xai",
+    "name": "xAI / Grok",
+    "fetcher": "bin/fetch-xai",
+    "unit": "date",
+    "spec": "sources/xai.md",
+    "enabled": true,
+    "notes": "docs.x.ai は月見出しに当年の年を持たず Last updated から推定する。x.ai/news (消費者向け) は Cloudflare 403 で対象外"
+  },
+  {
     "id": "antigravity",
     "name": "Antigravity",
     "fetcher": "bin/fetch-antigravity",
