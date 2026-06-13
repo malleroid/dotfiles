@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-gemini-app — fetch the Gemini app (consumer) release notes from the last N days,
+# normalized to the shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-gemini-app [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per date)
+#
+# Source: gemini.google/release-notes/ is server-rendered with content inline. It localizes by
+# region (ignores Accept-Language), so ?hl=en pins English for a consistent source. CSS-module
+# class names are hashed, so the parser matches on stable semantic prefixes (_featureTitle etc).
+# Portability: pure curl + python3, so it runs standalone (cron). --compressed for gzip.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL --compressed "https://gemini.google/release-notes/?hl=en" \
+  | python3 "$here/parse-gemini-app.py" --days $days

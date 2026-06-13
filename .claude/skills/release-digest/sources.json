@@ -48,6 +48,14 @@
     "enabled": true
   },
   {
+    "id": "gemini-app",
+    "name": "Gemini App",
+    "fetcher": "bin/fetch-gemini-app",
+    "unit": "date",
+    "spec": "sources/gemini-app.md",
+    "enabled": true
+  },
+  {
     "id": "antigravity",
     "name": "Antigravity",
     "fetcher": "bin/fetch-antigravity",
