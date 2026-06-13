@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+#
+# fetch-vertex — fetch the Vertex AI (Generative AI) release notes from the last N days,
+# normalized to the shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-vertex [days]      (defaults to 1)
+# Output: [ { unit, date, url, change_count, changes[] } ]   (one element per dated entry)
+#
+# Source: a real Atom feed (cleanest of all sources). The envelope gives ISO <updated> dates and
+# per-entry deep-link anchors; the parser splits each entry's HTML body on <h3> category headings
+# (Feature/Deprecated/Announcement/Change), which double as classification hints.
+# Portability: pure curl + python3, so it runs standalone (cron). --compressed for gzip.
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+curl -sL --compressed https://docs.cloud.google.com/feeds/generative-ai-on-vertex-ai-release-notes.xml \
+  | python3 "$here/parse-vertex.py" --days $days

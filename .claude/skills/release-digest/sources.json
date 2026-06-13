@@ -48,6 +48,14 @@
     "enabled": true
   },
   {
+    "id": "vertex",
+    "name": "Vertex AI",
+    "fetcher": "bin/fetch-vertex",
+    "unit": "date",
+    "spec": "sources/vertex.md",
+    "enabled": true
+  },
+  {
     "id": "gemini-app",
     "name": "Gemini App",
     "fetcher": "bin/fetch-gemini-app",
