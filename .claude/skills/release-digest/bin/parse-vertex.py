@@ -18,6 +18,7 @@ import json
 import argparse
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
+from _window import cutoff_date, jst_date
 from html.parser import HTMLParser
 
 ATOM = "{http://www.w3.org/2005/Atom}"
@@ -128,14 +129,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
-    cutoff = datetime.now(timezone.utc).date() - timedelta(days=args.days)
+    cutoff = cutoff_date(args.days)
 
     root = ET.fromstring(sys.stdin.buffer.read())
     out = []
     for entry in root.findall(f"{ATOM}entry"):
         updated = entry.findtext(f"{ATOM}updated", "")
         try:
-            date = datetime.fromisoformat(updated).date()
+            date = jst_date(datetime.fromisoformat(updated))
         except ValueError:
             continue
         if date < cutoff:

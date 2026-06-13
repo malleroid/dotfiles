@@ -17,6 +17,7 @@ import re
 import json
 import argparse
 from datetime import datetime, timedelta, timezone
+from _window import cutoff_date, jst_date
 
 REPO_URL = "https://github.com/github/copilot-cli"
 BOLD_LABEL = re.compile(r"^\*\*(.+?)\*\*$")
@@ -48,7 +49,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
-    cutoff = datetime.now(timezone.utc).date() - timedelta(days=args.days)
+    cutoff = cutoff_date(args.days)
 
     releases = json.load(sys.stdin)
     out = []
@@ -57,7 +58,7 @@ def main():
             continue
         published = r.get("published_at", "")
         try:
-            date = datetime.fromisoformat(published.replace("Z", "+00:00")).date()
+            date = jst_date(datetime.fromisoformat(published.replace("Z", "+00:00")))
         except ValueError:
             continue
         if date < cutoff:

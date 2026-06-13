@@ -27,6 +27,7 @@ import html
 import argparse
 from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
+from _window import cutoff_date
 
 PAGE_URL = "https://ai.google.dev/gemini-api/docs/changelog"
 BASE = "https://ai.google.dev"
@@ -145,7 +146,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
-    cutoff = datetime.now(timezone.utc).date() - timedelta(days=args.days)
+    cutoff = cutoff_date(args.days)
 
     p = Parser(cutoff)
     p.feed(sys.stdin.read())

@@ -26,6 +26,7 @@ import html
 import argparse
 from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
+from _window import cutoff_date
 
 PAGE_URL = "https://docs.x.ai/docs/release-notes"
 BASE = "https://docs.x.ai"
@@ -161,7 +162,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
-    cutoff = datetime.now(timezone.utc).date() - timedelta(days=args.days)
+    cutoff = cutoff_date(args.days)
 
     text = sys.stdin.read()
     m = re.search(r"Last updated:[^<]*?(\d{4})", text)

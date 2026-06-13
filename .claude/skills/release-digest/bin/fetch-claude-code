@@ -13,12 +13,14 @@
 #   - reuse gh's existing login for auth (5,000/hr authenticated vs 60/hr for anon curl)
 #
 # Portability: date math uses BSD `date -v`, i.e. macOS local only.
-#   When moving to Linux / CI (cron), switch to GNU date: `date -u -d "$days days ago"`.
+#   When moving to Linux / CI (cron), switch to GNU date: `TZ=Asia/Tokyo date -d "$days days ago" +%Y-%m-%d`.
+# Window basis: JST calendar date (consistent with all other sources via bin/_window.py); the
+# jq filter (normalize.jq) compares each published_at converted to its JST date against it.
 
 set -l days $argv[1]
 test -z "$days"; and set days 1
 
-set -l cutoff (date -u -v-$days"d" +%Y-%m-%dT%H:%M:%SZ)
+set -l cutoff (env TZ=Asia/Tokyo date -v-$days"d" +%Y-%m-%d)
 set -l here (dirname (status filename))
 
 gh api "repos/anthropics/claude-code/releases?per_page=100" \

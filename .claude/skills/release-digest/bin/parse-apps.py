@@ -21,6 +21,7 @@ import re
 import json
 import argparse
 from datetime import datetime, timedelta, timezone
+from _window import cutoff_date
 
 PAGE_URL = "https://support.claude.com/en/articles/12138966-release-notes"
 BASE = "https://support.claude.com"
@@ -39,7 +40,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
-    cutoff = datetime.now(timezone.utc).date() - timedelta(days=args.days)
+    cutoff = cutoff_date(args.days)
 
     sections = []  # [{date, entries: [[line, ...], ...]}]
     cur = None     # current section (or None when outside the window)

@@ -20,6 +20,7 @@ import argparse
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timedelta, timezone
+from _window import cutoff_date, jst_date
 
 CONTENT = "{http://purl.org/rss/1.0/modules/content/}"
 
@@ -44,14 +45,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
-    cutoff = datetime.now(timezone.utc).date() - timedelta(days=args.days)
+    cutoff = cutoff_date(args.days)
 
     root = ET.fromstring(sys.stdin.buffer.read())
     out = []
     for item in root.iter("item"):
         pub = item.findtext("pubDate") or ""
         try:
-            date = parsedate_to_datetime(pub).date()
+            date = jst_date(parsedate_to_datetime(pub))
         except (TypeError, ValueError):
             continue
         if date < cutoff:
