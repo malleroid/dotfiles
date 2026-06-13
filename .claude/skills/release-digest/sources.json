@@ -40,6 +40,15 @@
     "enabled": true
   },
   {
+    "id": "antigravity",
+    "name": "Antigravity",
+    "fetcher": "bin/fetch-antigravity",
+    "unit": "version",
+    "spec": "sources/antigravity.md",
+    "enabled": true,
+    "notes": "changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
+  },
+  {
     "id": "chatgpt",
     "name": "ChatGPT",
     "fetcher": null,

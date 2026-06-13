@@ -1,0 +1,31 @@
+#!/usr/bin/env fish
+#
+# fetch-antigravity — fetch the Antigravity changelog (Engine + IDE) from the last N days,
+# normalized to the shared schema. Deterministic fetch layer of the release-digest skill.
+#
+# Usage:  fetch-antigravity [days]      (defaults to 1)
+# Output: [ { unit, date, version, section, url, change_count, changes[] } ]
+#
+# Source: antigravity.google is a client-rendered SPA with the changelog embedded in its
+# main JS bundle. Resolve the hash-named bundle from /changelog, then parse it. This is the
+# most fragile source; the parser fails loud on shape changes. Disable in sources.json if it
+# breaks and isn't worth fixing immediately.
+# Portability: pure curl + python3 (parser auto-gunzips), so it runs standalone (cron).
+
+set -l days $argv[1]
+test -z "$days"; and set days 1
+
+set -l here (dirname (status filename))
+
+# The site serves gzip-encoded HTML even to unnegotiated clients, so --compressed is
+# required for the shell. The bundle may arrive gzip-encoded or as literal gzip bytes;
+# --compressed handles the former and the parser auto-gunzips the latter.
+set -l shell (curl -sL --compressed https://antigravity.google/changelog)
+set -l bundle (string match -r 'main-[A-Za-z0-9]+\.js' -- $shell)
+if test -z "$bundle"
+    echo "fetch-antigravity: could not locate main-*.js bundle in /changelog" >&2
+    exit 1
+end
+
+curl -sL --compressed "https://antigravity.google/$bundle[1]" \
+  | python3 "$here/parse-antigravity.py" --days $days
