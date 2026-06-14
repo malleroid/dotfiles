@@ -1,0 +1,55 @@
+# Codex command rules.
+
+# Existing Codex approvals.
+prefix_rule(pattern = ["chezmoi", "diff"], decision = "allow")
+prefix_rule(pattern = ["copilot"], decision = "allow")
+prefix_rule(pattern = ["git", "add"], decision = "allow")
+prefix_rule(pattern = ["git", "commit"], decision = "allow")
+prefix_rule(pattern = ["nix", ["eval", "search", "shell"]], decision = "allow")
+prefix_rule(pattern = ["opencode", ["agent", "debug"]], decision = "allow")
+
+# Read-only network and package metadata commands imported from Claude Code.
+prefix_rule(pattern = ["aws", "pricing"], decision = "allow")
+prefix_rule(
+    pattern = ["brew", ["cat", "deps", "doctor", "info", "leaves", "list", "outdated", "search", "uses"]],
+    decision = "allow",
+)
+prefix_rule(pattern = ["docker", "compose", ["logs", "ps"]], decision = "allow")
+prefix_rule(pattern = ["ghq", ["list", "root"]], decision = "allow")
+prefix_rule(pattern = ["git", "fetch"], decision = "allow")
+prefix_rule(
+    pattern = ["mise", ["activate", "backends", "cfg", "config", "doctor", "env", "ls", "plugins", "settings", "where", "which"]],
+    decision = "allow",
+)
+prefix_rule(pattern = ["npm", ["info", "search", "view"]], decision = "allow")
+prefix_rule(pattern = ["terraform", "validate"], decision = "allow")
+
+# GitHub read operations. Keep write operations interactive below.
+prefix_rule(pattern = ["gh", "api", "-X", "GET"], decision = "allow")
+prefix_rule(pattern = ["gh", "api", "--method", "GET"], decision = "allow")
+prefix_rule(pattern = ["gh", "issue", ["list", "status", "view"]], decision = "allow")
+prefix_rule(pattern = ["gh", "pr", ["checks", "diff", "list", "status", "view"]], decision = "allow")
+prefix_rule(pattern = ["gh", "release", ["list", "view"]], decision = "allow")
+prefix_rule(pattern = ["gh", "repo", ["list", "view"]], decision = "allow")
+prefix_rule(pattern = ["gh", "run", ["list", "view", "watch"]], decision = "allow")
+prefix_rule(pattern = ["gh", "workflow", ["list", "view"]], decision = "allow")
+
+# Preserve Claude Code's ask rules for remote or history-changing operations.
+prefix_rule(pattern = ["gh", "api", "-X", ["DELETE", "PATCH", "POST", "PUT"]], decision = "prompt")
+prefix_rule(pattern = ["gh", "api", "--method", ["DELETE", "PATCH", "POST", "PUT"]], decision = "prompt")
+prefix_rule(pattern = ["gh", "pr", "create"], decision = "prompt")
+prefix_rule(pattern = ["gh", "release", ["create", "delete", "upload"]], decision = "prompt")
+prefix_rule(pattern = ["gh", "repo", ["archive", "delete", "rename", "transfer", "unarchive"]], decision = "prompt")
+prefix_rule(pattern = ["gh", "run", "rerun"], decision = "prompt")
+prefix_rule(pattern = ["gh", ["secret", "variable"], ["delete", "set"]], decision = "prompt")
+prefix_rule(pattern = ["gh", "workflow", ["disable", "enable", "run"]], decision = "prompt")
+prefix_rule(pattern = ["git", "commit", ["--allow-empty", "--amend", "--no-verify"]], decision = "prompt")
+prefix_rule(pattern = ["git", "push"], decision = "prompt")
+prefix_rule(pattern = ["git", "reset"], decision = "prompt")
+
+# Preserve Claude Code's deny rule.
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "forbidden",
+    justification = "Merge pull requests manually after reviewing the final state.",
+)
