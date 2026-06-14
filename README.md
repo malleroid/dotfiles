@@ -1,7 +1,7 @@
 # dotfiles
 
 ## Overview
-- Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/) with Nix (CLI packages) and Homebrew (macOS GUI apps).
+- Personal dotfiles managed by [chezmoi](https://www.chezmoi.io/) with Nix and Homebrew.
 - Targets: macOS, Ubuntu, Arch Linux, devcontainers, EC2.
 - Defaults: fish shell + Starship prompt, Neovim editor, Ghostty terminal + Zellij multiplexer.
 
@@ -35,6 +35,7 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 | What | Manager | File |
 |------|---------|------|
 | CLI tools (70 packages) | Nix | `flake.nix` |
+| macOS system-integrated CLI tools | Homebrew | `Brewfile.formulae` |
 | macOS GUI apps (58 casks) | Homebrew | `Brewfile.casks` |
 | Language runtimes & dev tools | mise | `dot_config/mise/config.toml` |
 
@@ -46,6 +47,7 @@ dotfiles/
 ├── .chezmoiignore              # files excluded from deployment
 ├── flake.nix                   # CLI packages for Nix (flake bundle)
 ├── flake.lock                  # Pinned nixpkgs revisions
+├── Brewfile.formulae           # macOS system-integrated CLI tools
 ├── Brewfile.casks              # macOS GUI apps for Homebrew
 ├── dot_gitconfig                # → ~/.gitconfig
 ├── dot_gitignore                # → ~/.gitignore
@@ -69,17 +71,19 @@ dotfiles/
 ├── dot_agents/skills/           # → ~/.agents/skills/
 ├── dot_copilot/                 # → ~/.copilot/
 ├── dot_codex/                   # → ~/.codex/ (create_ prefix: no overwrite)
-└── run_*                        # chezmoi setup scripts (9 total)
+└── run_*                        # chezmoi setup scripts
 ```
 
 ## Operations
 
 For detailed Nix flake workflow (updates, pinning, recovery), see [docs/nix-flake-operations.md](docs/nix-flake-operations.md).
+For the Apple container development-environment PoC, see [docs/apple-container.md](docs/apple-container.md).
 
 - **Add/remove a Nix package**: Edit `flake.nix` paths, then `chezmoi apply` (triggers `run_onchange`). Run `nix build . --dry-run` first to confirm cache hit.
 - **Update Nix packages**: `nix-update-bundle` (auto-backs up lock, runs `nix flake update`, reports cache misses).
 - **Check pin candidates**: `nix-check-pins` (test if any extra `nixpkgs-*` input can be dropped).
 - **Cleanup**: `nix profile wipe-history --older-than 30d` and `nix-collect-garbage -d` periodically.
+- **Add a macOS system-integrated CLI**: Add to `Brewfile.formulae`, then `chezmoi apply`.
 - **Add a macOS cask**: Add to `Brewfile.casks`, then `chezmoi apply`.
 - **Update dotfiles**: Edit `dot_*` files, then `chezmoi apply` to deploy.
 - **Sync from home**: `chezmoi re-add <file>` to pull changes back from `~/`.

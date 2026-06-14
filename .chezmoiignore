@@ -2,6 +2,7 @@
 # Scratch dir for temp files (the ./tmp/ mandated by CLAUDE.md)
 tmp/**
 README.md
+Brewfile.formulae
 Brewfile.casks
 flake.nix
 flake.lock

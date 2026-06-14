@@ -1,0 +1,3 @@
+# macOS system-integrated CLI tools managed by Homebrew
+
+brew "container" # Apple container runtime and system services
