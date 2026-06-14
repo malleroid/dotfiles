@@ -10,6 +10,9 @@ tmp/
 __pycache__/
 *.pyc
 
+# release-digest runtime state (dedup seen-store)
+.claude/skills/release-digest/state/
+
 # Fisher generated files
 dot_config/fish/completions/
 dot_config/fish/conf.d/
