@@ -1,5 +1,4 @@
 {
-  "model": "claude-opus-4-6",
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "95",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
@@ -200,6 +199,7 @@
       "Bash(git reset *)"
     ]
   },
+  "model": "claude-opus-4-6",
   "hooks": {
     "Notification": [
       {
