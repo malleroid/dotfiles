@@ -30,6 +30,9 @@ set -x EDITOR nvim
 
 # git
 set -g theme_display_git_master_branch yes
+if type -q gh
+    set -gx GITHUB_TOKEN (gh auth token)
+end
 
 # header
 set -g theme_title_display_user no
