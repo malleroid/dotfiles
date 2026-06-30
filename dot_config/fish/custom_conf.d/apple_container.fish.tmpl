@@ -1,0 +1,5 @@
+{{ if eq .chezmoi.os "darwin" -}}
+if type -q container
+    container system start
+end
+{{ end -}}
