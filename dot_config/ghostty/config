@@ -9,9 +9,8 @@ mouse-hide-while-typing = true
 copy-on-select = clipboard
 
 # --- Font ---
-# 要確認: ghostty +list-fonts | grep -i hackgen
-# font-family = HackGen35 Nerd Console
-# font-size = 14
+font-family = HackGen35 Console NF
+font-size = 14
 font-thicken = true
 
 # --- Window ---
