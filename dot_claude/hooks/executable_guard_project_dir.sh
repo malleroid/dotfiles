@@ -32,6 +32,12 @@ while IFS= read -r FILE_PATH; do
     continue
   fi
 
+  # Allow cross-repo feedback collection to dotfiles CLAUDE.md
+  DOTFILES_CLAUDE_MD="${HOME}/ghq/github.com/malleroid/dotfiles/dot_claude/CLAUDE.md"
+  if [[ "$FILE_PATH" == "$DOTFILES_CLAUDE_MD" ]]; then
+    continue
+  fi
+
   if [[ "$FILE_PATH" != "$PROJECT_DIR/"* && "$FILE_PATH" != "$PROJECT_DIR" ]]; then
     echo "🚫 Blocked: File operation outside project directory" >&2
     echo "File: $FILE_PATH" >&2
