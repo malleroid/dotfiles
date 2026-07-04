@@ -61,6 +61,7 @@ verbose = false
 "pipx:pyright" = "latest"
 "pipx:mlx-whisper" = "latest"
 "pipx:mlx-qwen3-asr" = { version = "latest", extras = "aligner" }
+"pipx:toot-tooi" = "latest"
 
 # Rust
 "github:rust-lang/rust-analyzer" = "latest"
