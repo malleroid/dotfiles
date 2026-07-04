@@ -87,7 +87,6 @@
           ffmpeg # Play, record, convert, and stream audio and video
           pkgsYtDlp.yt-dlp # Download video/audio/subtitles from YouTube and other sites (pinned via nixpkgs-yt-dlp input)
           spotify-player # Command driven spotify player (brew: spotify_player)
-          tut # TUI for Mastodon with vim inspired keys
 
           # ## MCP
           mcp-grafana # MCP server for Grafana
