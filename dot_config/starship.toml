@@ -1,17 +1,17 @@
 format = """
 $battery\
 $time\
-[░▒▓](#a3aed2)\
-[ $os](bg:#a3aed2 fg:#090c0c)\
-[](bg:#769ff0 fg:#a3aed2)\
+[░▒▓](#00ffcc)\
+[ $os](bg:#00ffcc fg:#0d0221)\
+[](bg:#2e6b5f fg:#00ffcc)\
 $directory\
-[](fg:#769ff0 bg:#394260)\
+[](fg:#2e6b5f bg:#2b1451)\
 $git_branch\
 $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
-[](fg:#394260 bg:#212736)\
+[](fg:#2b1451 bg:#150530)\
 $aws\
 $docker_context\
 $package\
@@ -23,10 +23,10 @@ $golang\
 $lua\
 $terraform\
 $container\
-[](fg:#212736 bg:#1d2230)\
+[](fg:#150530 bg:#0d0221)\
 $memory_usage\
 $cmd_duration\
-[ ](fg:#1d2230)\
+[ ](fg:#0d0221)\
 $line_break\
 $character"""
 
@@ -44,35 +44,35 @@ error_symbol = "[✖](bold red) "
 
 [cmd_duration]
 min_time = 1
-format = "[[ ⏱ $duration](fg:#a0a9cb bg:#1d2230)]($style)"
-style = "bg:#1d2230"
+format = "[[ ⏱ $duration](fg:#8d73af bg:#0d0221)]($style)"
+style = "bg:#0d0221"
 
 [directory]
 truncation_length = 5
-style = "fg:#e3e5e5 bg:#769ff0"
+style = "fg:#00ffcc bg:#2e6b5f"
 format = "[$path ]($style)[$lock_symbol]($lock_style)"
 
 [docker_context]
-format = '[[ 🐳 ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[ 🐳 ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 detect_files = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml"]
 
 [git_branch]
-format = "[[ $symbol$branch ](fg:#769ff0 bg:#394260)]($style)"
-style = "bold yellow bg:#394260"
+format = "[[ $symbol$branch ](fg:#00ffcc bg:#2b1451)]($style)"
+style = "bold yellow bg:#2b1451"
 
 [git_commit]
 commit_hash_length = 8
-style = "bold white bg:#394260"
+style = "bold white bg:#2b1451"
 
 [git_state]
-format = '[[\($state( $progress_current of $progress_total)\)](fg:#769ff0 bg:#394260)]($style) '
-style = "bg:#394260"
+format = '[[\($state( $progress_current of $progress_total)\)](fg:#ff79c6 bg:#2b1451)]($style) '
+style = "bg:#2b1451"
 
 [git_metrics]
 format = '([+$added ]($added_style))([-$deleted ]($deleted_style))'
-added_style = 'bold green bg:#394260'
-deleted_style = 'bold red bg:#394260'
+added_style = 'bold green bg:#2b1451'
+deleted_style = 'bold red bg:#2b1451'
 disabled = false
 
 [git_status]
@@ -86,12 +86,12 @@ modified = "📝×${count} "
 staged = "🗃️ ×${count} "
 renamed = "📛 ×${count} "
 deleted = "🗑️ ×${count} "
-style = "bright-white bg:#394260"
-format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+style = "bright-white bg:#2b1451"
+format = '[[($all_status$ahead_behind )](fg:#00ffcc bg:#2b1451)]($style)'
 
 [golang]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [hostname]
 ssh_only = true
@@ -100,48 +100,48 @@ trim_at = "-"
 style = "bold dimmed white"
 
 [lua]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [memory_usage]
-format = "[$symbol[${ram}( | ${swap}) ](fg:#a0a9cb bg:#1d2230)]($style)"
+format = "[$symbol[${ram}( | ${swap}) ](fg:#8d73af bg:#0d0221)]($style)"
 threshold = 70
-style = "bold dimmed white bg:#1d2230"
+style = "bold dimmed white bg:#0d0221"
 disabled = false
 
 [nodejs]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [os]
-style = "bg:#a3aed2 fg:#090c0c"
+style = "bg:#00ffcc fg:#0d0221"
 disabled = false
 
 [os.symbols]
 Macos = ""
 
 [package]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [python]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [ruby]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [rust]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [terraform]
-format = '[[$symbol$version ](bold fg:#769ff0 bg:#212736)]($style)'
-style = "bg:#212736"
+format = '[[$symbol$version ](bold fg:#00ffcc bg:#150530)]($style)'
+style = "bg:#150530"
 
 [time]
 time_format = "%T"
-style = "bg:#1d2230"
-format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+style = "bg:#0d0221"
+format = '[[  $time ](fg:#8d73af bg:#0d0221)]($style)'
 disabled = false
