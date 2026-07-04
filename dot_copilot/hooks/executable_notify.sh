@@ -15,6 +15,21 @@ if [ -n "${ZELLIJ_PANE_ID:-}" ]; then
   [ -n "$pane_label" ] && pane_label="$pane_label "
 fi
 
+# Agent state tracking via state files
+STATE_DIR="/tmp/agent-state"
+if [ -n "${ZELLIJ_SESSION_NAME:-}" ] && [ -n "${ZELLIJ_PANE_ID:-}" ]; then
+  mkdir -p "$STATE_DIR"
+  STATE_FILE="$STATE_DIR/${ZELLIJ_SESSION_NAME}_${ZELLIJ_PANE_ID}.json"
+  case "$notification_type" in
+    permission_prompt)
+      echo '{"agent":"copilot","status":"asking_permissions","ts":'$(date +%s)'}' > "$STATE_FILE"
+      ;;
+    agent_idle)
+      rm -f "$STATE_FILE"
+      ;;
+  esac
+fi
+
 case "$notification_type" in
   permission_prompt)
     message="${pane_label}check"

@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
-# Claude Code notification with voice and tab info
+# Claude Code notification with voice and agent state tracking
 
 INPUT=$(cat)
-# Notification events carry notification_type; Stop events only hook_event_name
 EVENT=$(echo "$INPUT" | jq -r '.notification_type // .hook_event_name // "unknown"')
 
-# Zellij pane identification: "<session> <tab name> <pane title>" (zellij 0.44+)
-# Pane title carries the Claude Code session name via OSC; strip the
-# spinner/status glyphs Claude prepends so `say` reads names only.
 PANE_LABEL=""
 if [ -n "$ZELLIJ_PANE_ID" ]; then
   PANE_LABEL=$(zellij action list-panes -t -j 2>/dev/null | jq -r \
@@ -20,16 +16,35 @@ if [ -n "$ZELLIJ_PANE_ID" ]; then
   [ -n "$PANE_LABEL" ] && PANE_LABEL="$PANE_LABEL "
 fi
 
-# Short English messages for speed
+# Agent state tracking via state files
+STATE_DIR="/tmp/agent-state"
+if [ -n "${ZELLIJ_SESSION_NAME:-}" ] && [ -n "${ZELLIJ_PANE_ID:-}" ]; then
+  mkdir -p "$STATE_DIR"
+  STATE_FILE="$STATE_DIR/${ZELLIJ_SESSION_NAME}_${ZELLIJ_PANE_ID}.json"
+  case "$EVENT" in
+    permission_prompt)
+      echo '{"agent":"claude","status":"asking_permissions","ts":'$(date +%s)'}' > "$STATE_FILE"
+      ;;
+    elicitation_dialog)
+      echo '{"agent":"claude","status":"waiting_user_answers","ts":'$(date +%s)'}' > "$STATE_FILE"
+      ;;
+    Stop)
+      rm -f "$STATE_FILE"
+      ;;
+  esac
+fi
+
 case "$EVENT" in
   permission_prompt)
+    MSG="${PANE_LABEL}check"
+    ;;
+  elicitation_dialog)
     MSG="${PANE_LABEL}check"
     ;;
   Stop)
     MSG="${PANE_LABEL}complete"
     ;;
   idle_prompt)
-    # Stop hook already announced completion; stay silent
     exit 0
     ;;
   *)

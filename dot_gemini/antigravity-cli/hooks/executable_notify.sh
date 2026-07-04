@@ -13,6 +13,12 @@ if [ -n "${ZELLIJ_PANE_ID:-}" ]; then
   [ -n "$pane_label" ] && pane_label="$pane_label "
 fi
 
+# Agent state tracking via state files — Stop only (Antigravity has no permission hook)
+STATE_DIR="/tmp/agent-state"
+if [ -n "${ZELLIJ_SESSION_NAME:-}" ] && [ -n "${ZELLIJ_PANE_ID:-}" ]; then
+  rm -f "$STATE_DIR/${ZELLIJ_SESSION_NAME}_${ZELLIJ_PANE_ID}.json"
+fi
+
 message="${pane_label}complete"
 
 if [ "${AGY_NOTIFY_DRY_RUN:-}" = "1" ]; then

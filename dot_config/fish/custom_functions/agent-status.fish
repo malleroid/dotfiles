@@ -5,6 +5,12 @@ function agent-status -d "Show AI agent status across all Zellij sessions"
         return 1
     end
 
+    # Clean stale state files (older than 3 minutes)
+    set -l state_dir /tmp/agent-state
+    if test -d $state_dir
+        find $state_dir -name '*.json' -mmin +1440 -delete 2>/dev/null
+    end
+
     set -l found 0
 
     for sess in $sessions
@@ -13,7 +19,7 @@ function agent-status -d "Show AI agent status across all Zellij sessions"
             continue
         end
 
-        set -l agents (echo $json | jq -r '
+        set -l agents (echo $json | jq -r --arg sess "$sess" --arg state_dir "$state_dir" '
             .[] |
             select(.is_plugin == false) |
             select(
@@ -23,6 +29,8 @@ function agent-status -d "Show AI agent status across all Zellij sessions"
                 (.pane_command // "" | test("opencode")) or
                 (.pane_command // "" | test("aider"))
             ) |
+            .id as $pane_id |
+            ($state_dir + "/" + $sess + "_" + ($pane_id | tostring) + ".json") as $state_file |
             {
                 agent: (
                     if .pane_command == "claude" then "claude"
@@ -35,24 +43,17 @@ function agent-status -d "Show AI agent status across all Zellij sessions"
                 ),
                 tab: .tab_name,
                 title: .title,
-                state: (
+                pane_id: $pane_id,
+                title_state: (
                     if (.title | startswith("✳")) then "idle"
                     elif (.title | contains("| process")) then "working"
                     elif (.title | contains("| idle")) then "idle"
                     elif (.title | contains("| waiting")) then "blocked"
                     else "working"
                     end
-                ),
-                icon: (
-                    if (.title | startswith("✳")) then "🟠"
-                    elif (.title | contains("| process")) then "🟢"
-                    elif (.title | contains("| idle")) then "🟠"
-                    elif (.title | contains("| waiting")) then "🔴"
-                    else "🟢"
-                    end
                 )
             } |
-            "\(.icon) \(.agent)\t\(.tab)\t\(.title)"
+            "\(.agent)\t\(.tab)\t\(.title)\t\(.pane_id)\t\(.title_state)"
         ' 2>/dev/null)
 
         if test -n "$agents"
@@ -64,8 +65,27 @@ function agent-status -d "Show AI agent status across all Zellij sessions"
                 echo "── $sess ──"
             end
             for line in $agents
-                echo $line | read -d \t icon_agent tab title
-                printf "%-13s %-14s %s\n" "$icon_agent" "$tab" "$title"
+                echo $line | read -d \t agent tab title pane_id title_state
+
+                # Check hook-written state file for blocked detection
+                set -l state_file "$state_dir/"$sess"_"$pane_id".json"
+                set -l final_state $title_state
+                if test -f $state_file
+                    set final_state blocked
+                end
+
+                switch $final_state
+                    case blocked
+                        set icon 🔴
+                    case working
+                        set icon 🟢
+                    case idle
+                        set icon 🟠
+                    case '*'
+                        set icon 🟢
+                end
+
+                printf "%-13s %-14s %s\n" "$icon $agent" "$tab" "$title"
             end
             set found (math $found + 1)
         end

@@ -16,6 +16,21 @@ if [ -n "${ZELLIJ_PANE_ID:-}" ]; then
   [ -n "$pane_label" ] && pane_label="$pane_label "
 fi
 
+# Agent state tracking via state files
+STATE_DIR="/tmp/agent-state"
+if [ -n "${ZELLIJ_SESSION_NAME:-}" ] && [ -n "${ZELLIJ_PANE_ID:-}" ]; then
+  mkdir -p "$STATE_DIR"
+  STATE_FILE="$STATE_DIR/${ZELLIJ_SESSION_NAME}_${ZELLIJ_PANE_ID}.json"
+  case "$event_name" in
+    PermissionRequest | permission_prompt)
+      echo '{"agent":"codex","status":"asking_permissions","ts":'$(date +%s)'}' > "$STATE_FILE"
+      ;;
+    Stop)
+      rm -f "$STATE_FILE"
+      ;;
+  esac
+fi
+
 case "$event_name" in
   PermissionRequest | permission_prompt)
     message="${pane_label}check"
