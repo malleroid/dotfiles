@@ -8,15 +8,11 @@ pane_label=""
 if [ -n "${ZELLIJ_PANE_ID:-}" ]; then
   pane_label=$(zellij action list-panes -t -j 2>/dev/null | jq -r \
     --argjson id "$ZELLIJ_PANE_ID" \
-    --arg session "${ZELLIJ_SESSION_NAME:-zellij}" \
     '.[] | select((.is_plugin | not) and .id == $id)
-     | "\($session) \(.tab_name) \(.title)"
+     | .title
+     | gsub("^\\s+|\\s+$"; "")
      | gsub("\\s+"; " ")' 2>/dev/null || true)
-  if [ -n "$pane_label" ]; then
-    pane_label="${pane_label% } "
-  else
-    pane_label="${ZELLIJ_SESSION_NAME:-zellij} pane${ZELLIJ_PANE_ID} "
-  fi
+  [ -n "$pane_label" ] && pane_label="$pane_label "
 fi
 
 case "$notification_type" in

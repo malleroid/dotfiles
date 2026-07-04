@@ -13,14 +13,11 @@ if [ -n "$ZELLIJ_PANE_ID" ]; then
   PANE_LABEL=$(zellij action list-panes -t -j 2>/dev/null | jq -r \
     --argjson id "$ZELLIJ_PANE_ID" \
     '.[] | select((.is_plugin | not) and .id == $id)
-     | "\(env.ZELLIJ_SESSION_NAME) \(.tab_name) \(.title)"
+     | .title
      | gsub("[⠀-⣿✳✶✻✽✢]"; "")
+     | gsub("^\\s+|\\s+$"; "")
      | gsub("\\s+"; " ")')
-  if [ -n "$PANE_LABEL" ]; then
-    PANE_LABEL="${PANE_LABEL% } "
-  else
-    PANE_LABEL="${ZELLIJ_SESSION_NAME} pane${ZELLIJ_PANE_ID} "
-  fi
+  [ -n "$PANE_LABEL" ] && PANE_LABEL="$PANE_LABEL "
 fi
 
 # Short English messages for speed
