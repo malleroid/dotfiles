@@ -42,6 +42,14 @@
 - すべての端末で **fish shell 5.x** を使用。
 - dotfiles により `fish_add_path` 等を設定済み。Claude は fish 前提でコマンドを提示する。
 
+### 🐳 開発環境は Docker コンテナ内
+
+- ローカルマシンに言語ランタイム（Node.js, Ruby, Python 等）の開発環境はない。
+- `npm`, `npx`, `yarn`, `pnpm`, `bundle`, `gem install`, `rails`, `rake`, `pip install`, `poetry`, `cargo build`, `cargo run`, `go build`, `go run` 等の言語固有コマンドを **ローカルで直接実行しないこと**。
+- これらのコマンドが必要な場合は `docker compose exec` や `docker exec` 経由で実行する。
+- 各リポジトリの `compose.yaml` / `Dockerfile` を確認し、適切なサービス名・コンテナ名を使うこと。
+- 例外: `npm info`, `npm search`, `npm view`, `gem search` 等のレジストリ検索系コマンドはローカル実行可。
+
 ---
 
 ## Code Style (Placeholder) ✏️
