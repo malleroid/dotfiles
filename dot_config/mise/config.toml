@@ -18,11 +18,10 @@ verbose = false
 [tools]
 # Global tool versions
 "node" = "lts"
-# Pin Python to the patch version because pipx-managed venvs keep an absolute
-# interpreter symlink. A floating minor version can break pipx tools after
-# `mise upgrade` removes the previous patch release.
-"python" = "3.14.5"
-"ruby" = "3.4"
+# Pin Python to minor: pipx venvs symlink to python/3.14/ which mise
+# keeps pointing at the current patch. A major/minor bump breaks venvs.
+"python" = "3.14"
+"ruby" = "latest"
 "rust" = "latest"
 "go" = "latest"
 "terraform" = "latest"
