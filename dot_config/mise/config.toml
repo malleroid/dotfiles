@@ -25,8 +25,8 @@ verbose = false
 "ruby" = "3.4"
 "rust" = "latest"
 "go" = "latest"
-"terraform" = "1.9"
-"uv" = "0.9"
+"terraform" = "latest"
+"uv" = "latest"
 
 # MCP Servers
 "npm:@upstash/context7-mcp" = "latest"
