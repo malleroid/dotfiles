@@ -18,9 +18,7 @@ verbose = false
 [tools]
 # Global tool versions
 "node" = "lts"
-# Pin Python to minor: pipx venvs symlink to python/3.14/ which mise
-# keeps pointing at the current patch. A major/minor bump breaks venvs.
-"python" = "3.14"
+"python" = "latest"
 "ruby" = "latest"
 "rust" = "latest"
 "go" = "latest"
