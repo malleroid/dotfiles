@@ -127,7 +127,7 @@ abbr -a cmd 'chezmoi diff'
 # ai agents
 abbr -a cl 'claude'
 abbr -a f 'agent-status'
-abbr -a fw 'zellij action new-pane --floating --pinned true --name agents --width 16% --height 20% -x 84% -y 0 -- fish -c \'while true; agent-status; sleep 2; clear; end\''
+abbr -a fw 'zellij action new-pane --floating --pinned true --name agents --width 16% --height 20% -x 84% -y 0 -- hwatch -n 2 -t --no-help-banner -s "fish -N -c {COMMAND}" "source ~/.config/fish/custom_functions/agent-status.fish; agent-status"'
 
 # nvim
 abbr -a v 'nvim'
