@@ -8,6 +8,11 @@
     "transport": "http",
     "url": "https://knowledge-mcp.global.api.aws"
   },
+  "figma": {
+    "transport": "http",
+    "url": "https://mcp.figma.com/mcp",
+    "auth": "oauth"
+  },
   "whimsical": {
     "transport": "http",
     "url": "https://mcp.whimsical.com/mcp",
