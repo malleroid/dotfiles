@@ -38,6 +38,7 @@ verbose = false
 
 # Development Tools
 "carapace" = "latest"
+"npm:hunkdiff" = "latest"
 "aqua:supabase/cli" = "latest"
 "npm:@antiwork/shortest" = "latest"
 "npm:@devcontainers/cli" = "latest"
