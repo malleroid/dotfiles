@@ -6,6 +6,11 @@
 
 existing=$(cat)
 
+if ! command -v jq >/dev/null 2>&1; then
+  printf '%s' "$existing"
+  exit 0
+fi
+
 if [ -z "$existing" ] || ! printf '%s' "$existing" | jq empty >/dev/null 2>&1; then
   existing='{}'
 fi
