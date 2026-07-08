@@ -1,0 +1,25 @@
+# hunk configuration
+# https://github.com/modem-dev/hunk
+
+mode = "split"
+line_numbers = true
+wrap_lines = true
+menu_bar = true
+agent_notes = true
+transparent_background = true
+
+theme = "custom"
+
+[custom_theme]
+base = "github-dark-default"
+label = "Emerald Synth"
+accent = "#ff79c6"
+panel = "#150530"
+noteBorder = "#d964a8"
+
+[custom_theme.syntax]
+keyword = "#8b9cf7"
+string = "#ff79c6"
+comment = "#6a5585"
+operator = "#00ffcc"
+variable = "#4dd0e1"
