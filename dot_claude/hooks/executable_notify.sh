@@ -13,7 +13,10 @@ if [ -n "$ZELLIJ_PANE_ID" ]; then
      | gsub("[⠀-⣿✳✶✻✽✢]"; "")
      | gsub("^\\s+|\\s+$"; "")
      | gsub("\\s+"; " ")')
-  [ -n "$PANE_LABEL" ] && PANE_LABEL="$PANE_LABEL "
+  if [ -z "$PANE_LABEL" ] || [ ${#PANE_LABEL} -gt 20 ]; then
+    PANE_LABEL="claude"
+  fi
+  PANE_LABEL="$PANE_LABEL "
 fi
 
 # Agent state tracking via state files
