@@ -67,6 +67,12 @@ function agent-status -d "Show AI agent status across all Zellij sessions"
             for line in $agents
                 echo $line | read -d \t agent tab title pane_id title_state
 
+                # Strip spinner chars and truncate long auto-generated titles
+                set -l clean_title (string replace -ra '[⠀-⣿✳✶✻✽✢]' '' -- $title | string trim)
+                if test (string length -- "$clean_title") -gt 20
+                    set title "$agent"
+                end
+
                 # Check hook-written state file for blocked detection
                 set -l state_file "$state_dir/"$sess"_"$pane_id".json"
                 set -l final_state $title_state
