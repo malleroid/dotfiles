@@ -66,6 +66,7 @@ verbose = false
 
 # Go
 "go:golang.org/x/tools/gopls" = "latest"
+"go:github.com/d-kuro/gwq/cmd/gwq" = "latest"
 
 # Lua
 "github:LuaLS/lua-language-server" = "latest"
