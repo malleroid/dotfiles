@@ -11,5 +11,6 @@ if ! command -v nix >/dev/null 2>&1; then
 fi
 
 echo "Updating dotfiles flake bundle..."
+nix build "path:{{ .chezmoi.sourceDir }}" --no-link
 nix profile remove dotfiles 2>/dev/null || true
 nix profile add "path:{{ .chezmoi.sourceDir }}"
