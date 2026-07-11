@@ -53,3 +53,4 @@ prefix_rule(
     decision = "forbidden",
     justification = "Merge pull requests manually after reviewing the final state.",
 )
+prefix_rule(pattern=["git", "switch"], decision="allow")
