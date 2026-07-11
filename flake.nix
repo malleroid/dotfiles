@@ -4,9 +4,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # 2026-04-29: yt-dlp が deno/rusty-v8 を引き込み、最新 unstable では aarch64-darwin で未キャッシュ。
-    # 既存 profile で動作確認済みの revision に固定して cache 命中を確保する。
-    nixpkgs-yt-dlp.url = "github:NixOS/nixpkgs/b86751bc4085f48661017fa226dee99fab6c651b";
+    # yt-dlp が deno/rusty-v8 を引き込み、unstable revision によっては aarch64-darwin で未キャッシュ。
+    # cache 命中確認済みの revision に固定する。更新時は cache 有無を要確認。
+    nixpkgs-yt-dlp.url = "github:NixOS/nixpkgs/9e92285f211dad236540fd617d7e30e0b99bc0e1";
   };
 
   outputs = { nixpkgs, nixpkgs-yt-dlp, ... }:
