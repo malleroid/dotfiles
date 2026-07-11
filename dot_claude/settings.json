@@ -352,5 +352,6 @@
   "effortLevel": "xhigh",
   "theme": "dark-ansi",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false
+  "agentPushNotifEnabled": false,
+  "skipWorkflowUsageWarning": true
 }
