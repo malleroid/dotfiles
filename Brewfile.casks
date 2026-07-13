@@ -3,7 +3,8 @@
 ## AI
 cask "block-goose"                # Open-source AI agent by Block
 cask "aqua-voice"                 # Voice AI interface
-cask "chatgpt"                    # OpenAI's ChatGPT desktop app
+cask "chatgpt"                    # OpenAI's unified Chat, Work, and Codex desktop app
+cask "chatgpt-classic"            # OpenAI's previous ChatGPT desktop app
 cask "claude"                     # Anthropic's Claude AI desktop app
 cask "github-copilot-app"         # GitHub's agent-driven development desktop app
 cask "whispering"                 # Audio transcription that works with local and cloud models
