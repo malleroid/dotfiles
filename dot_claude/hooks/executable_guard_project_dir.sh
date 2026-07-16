@@ -38,6 +38,19 @@ while IFS= read -r FILE_PATH; do
     continue
   fi
 
+  # Allow files inside git worktrees registered to the project repo (gwq / EnterWorktree)
+  WORKTREE_MATCH=0
+  while IFS= read -r WT_DIR; do
+    [ -z "$WT_DIR" ] && continue
+    if [[ "$FILE_PATH" == "$WT_DIR/"* || "$FILE_PATH" == "$WT_DIR" ]]; then
+      WORKTREE_MATCH=1
+      break
+    fi
+  done < <(git -C "$PROJECT_DIR" worktree list --porcelain 2>/dev/null | sed -n 's/^worktree //p')
+  if [ "$WORKTREE_MATCH" = 1 ]; then
+    continue
+  fi
+
   if [[ "$FILE_PATH" != "$PROJECT_DIR/"* && "$FILE_PATH" != "$PROJECT_DIR" ]]; then
     echo "🚫 Blocked: File operation outside project directory" >&2
     echo "File: $FILE_PATH" >&2
