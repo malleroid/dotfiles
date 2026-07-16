@@ -79,6 +79,20 @@ Edit ツールで「Learned Feedback」セクション末尾に追記する。
 記録フォーマット: `- 簡潔な 1 行ルール`（日付不要、行動指針として読める形）
 重複する学びは追加せず、既存エントリの補強に留める。
 
+### worktree 運用（gwq）
+
+worktree での作業を指示されたら、EnterWorktree の新規作成モード（`.claude/worktrees/` 配下に自動作成）は使わず、以下の手順にする:
+
+1. `gwq add` で worktree を作成する（配置: `~/worktrees/<host>/<owner>/<repo>/<branch>`、gwq のデフォルト設定のまま）
+2. `EnterWorktree(path: <worktreeのパス>)` でセッションごと worktree に移動する（cd やセッション再起動はしない）
+3. 元のリポジトリへ戻るときは `ExitWorktree(action: "keep")` を使う
+4. **worktree の削除は自動で行わない**（途中作業の揮発防止）。削除はユーザーが明示的に指示したときに `gwq remove` で行う
+
+補足:
+
+- `EnterWorktree(path)` の条件は「そのパスが現リポジトリの `git worktree list` に載っていること」。gwq は内部で `git worktree add` を使うので満たされる
+- gwq worktree 間の直接ホッピングは不可（`path` 同士の切替は `.claude/worktrees/` 配下限定）。一度 `ExitWorktree(keep)` で戻ってから次に入る
+
 ---
 
 ## 応答ラベリング 🏷️
