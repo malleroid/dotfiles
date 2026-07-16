@@ -268,7 +268,7 @@
       "Bash(git reset *)"
     ]
   },
-  "model": "claude-opus-4-6",
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "Notification": [
       {
@@ -350,8 +350,8 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false,
-  "skipWorkflowUsageWarning": true
+  "agentPushNotifEnabled": false
 }
