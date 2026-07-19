@@ -15,6 +15,10 @@ ruby.github_attestations = true
 # Use shorter paths for better readability
 verbose = false
 
+[env]
+# Disable Slack CLI self-update; updates are managed by mise (aqua backend)
+SLACK_SKIP_UPDATE = "1"
+
 [tools]
 # Global tool versions
 "node" = "lts"
@@ -37,6 +41,7 @@ verbose = false
 "npm:tweakcc" = "latest"
 
 # Development Tools
+"aqua:slackapi/slack-cli" = "latest"
 "carapace" = "latest"
 "npm:hunkdiff" = "latest"
 "aqua:supabase/cli" = "latest"
