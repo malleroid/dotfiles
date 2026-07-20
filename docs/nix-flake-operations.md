@@ -1,36 +1,40 @@
 # Nix Flake Operations
 
-Day-to-day operations for the Nix CLI bundle. The source of truth is `flake.nix` (package list) and `flake.lock` (pinned input revisions). Installation is automated via the chezmoi script `run_onchange_after_10-nix-packages.sh.tmpl`.
+Day-to-day operations for the Nix CLI bundle. The source of truth is `flake.nix` (package list) and `flake.lock` (pinned input revisions). `package-versions.json` is a generated manifest (package → version) committed alongside the lock so that lock bumps produce human-readable diffs; regenerate it with `scripts/bump-flake.sh`, never edit it by hand. Installation is automated via the chezmoi script `run_onchange_after_10-nix-packages.sh.tmpl`.
+
+Policy: the bundle never builds locally — a revision is only accepted when every package is available from the binary cache. `scripts/bump-flake.sh` enforces this with `nix build --max-jobs 0`.
 
 ## Adding a package
 
 ```sh
 # 1. Edit flake.nix — add the package to paths in the appropriate `## Category`
-# 2. Verify cache hit before applying
-nix build . --dry-run
-# Look for "will be built" — empty means full cache hit
+# 2. Verify cache hit and regenerate the version manifest
+scripts/bump-flake.sh   # no args: no lock change, verify + regenerate only
 
 # 3. Re-install bundle
 chezmoi apply
 
 # 4. Verify and commit
 which <pkg>
-git add flake.nix flake.lock  # flake.lock not always changed
+git add flake.nix flake.lock package-versions.json  # flake.lock not always changed
 git commit -m ":heavy_plus_sign: add <pkg> to nix bundle"
 ```
 
-If `nix build . --dry-run` shows "will be built" entries, the package isn't cached for `aarch64-darwin` at the current pinned revision. See [Cache miss handling](#cache-miss-handling).
+If `scripts/bump-flake.sh` fails the cache check, the package isn't cached for `aarch64-darwin` at the current pinned revision. See [Cache miss handling](#cache-miss-handling).
 
 ## Removing a package
 
 ```sh
 # 1. Edit flake.nix — delete the package line
-# 2. Apply (bundle re-installs without it)
+# 2. Regenerate the version manifest
+scripts/bump-flake.sh
+
+# 3. Apply (bundle re-installs without it)
 chezmoi apply
 
-# 3. Verify removed
+# 4. Verify removed
 which <pkg>   # should fail
-git add flake.nix
+git add flake.nix package-versions.json
 git commit -m ":heavy_minus_sign: remove <pkg> from nix bundle"
 ```
 
@@ -38,39 +42,38 @@ The new bundle does not include the package, so it is removed from `~/.nix-profi
 
 ## Regular updates
 
-Recommended cadence: monthly, or whenever new package versions are needed.
+Recommended cadence: monthly, or whenever new package versions are needed. Updates are manual and always go through `scripts/bump-flake.sh`:
 
 ```sh
-nix-update-bundle
+scripts/bump-flake.sh latest    # move nixpkgs input to newest nixpkgs-unstable
+scripts/bump-flake.sh <rev>     # pin nixpkgs input to an exact revision
 ```
 
-This wraps the workflow:
-1. Backs up `flake.lock`
-2. Runs `nix flake update`
-3. Reports cache state via `nix build . --dry-run`
-4. Suggests next steps (commit / revert / pin)
+The script:
+1. Updates (or pins) the `nixpkgs` input in `flake.lock`
+2. Verifies binary cache coverage with `nix build --max-jobs 0` — fails hard if anything would build locally
+3. Regenerates `package-versions.json`
+4. Shows the per-package version diff for human review, then stops (no commit)
 
-After accepting:
+After reviewing the diff:
 ```sh
-rm flake.lock.bak
-git add flake.lock
+git add flake.lock package-versions.json
 git commit -m ":up: bump nixpkgs lockfile"
 chezmoi apply   # re-install bundle with new revisions
 ```
 
+Note: the former fish function `nix-update-bundle` was removed in favor of this script; the deployed copy is cleaned up from machines via `.chezmoiremove`.
+
 ## Cache miss handling
 
-When `nix-update-bundle` reports source builds, you have three options:
-
-### Accept and build
-Acceptable for small packages or when time permits. Just `rm flake.lock.bak` and proceed. The build runs once, then the result is cached locally.
+When `scripts/bump-flake.sh` fails the cache check (some packages would need a local build), you have three options:
 
 ### Revert update
-Most conservative. The current `flake.lock` is fine; just throw away the update.
+Most conservative. The current committed `flake.lock` is fine; just throw away the update.
 ```sh
-mv flake.lock.bak flake.lock
+git restore flake.lock
 ```
-Try again later — the cache may catch up.
+Try again later — the cache may catch up. Or try a slightly older revision with `scripts/bump-flake.sh <rev>` until the check passes.
 
 ### Pin the offender separately
 For packages that consistently lag on `aarch64-darwin` (e.g., `yt-dlp` chains in `deno`/`rusty-v8`), pin them to a known-cached revision in a dedicated input.
@@ -103,7 +106,7 @@ Finding a cached revision: try the previous `flake.lock` revision, or use [lazam
 After editing:
 ```sh
 nix flake update         # picks up the new input
-nix build . --dry-run    # verify cache hit now
+scripts/bump-flake.sh    # verify cache hit + regenerate manifest
 chezmoi apply
 ```
 
@@ -123,7 +126,7 @@ To merge back:
    - Remove `pkgs<Pkg> = import nixpkgs-<pkg> ...` from `let`
    - Remove `inputs.nixpkgs-<pkg>` and the corresponding `outputs` argument
 2. `nix flake update` (drops the orphan input from lock)
-3. `nix build . --dry-run` (verify still cached)
+3. `scripts/bump-flake.sh` (verify still cached + regenerate manifest)
 4. Commit
 
 ## Garbage collection
@@ -155,11 +158,11 @@ nix profile add "path:$HOME/ghq/github.com/malleroid/dotfiles"
 ```
 
 ### Update broke something
-Revert `flake.lock` to the previous commit:
+Revert `flake.lock` (and the manifest that goes with it) to the previous commit:
 ```sh
-git checkout HEAD~1 -- flake.lock
+git checkout HEAD~1 -- flake.lock package-versions.json
 chezmoi apply
-git add flake.lock
+git add flake.lock package-versions.json
 git commit -m ":rewind: revert nixpkgs lockfile"
 ```
 

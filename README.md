@@ -34,7 +34,7 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 
 | What | Manager | File |
 |------|---------|------|
-| CLI tools (70 packages) | Nix | `flake.nix` |
+| CLI tools (76 packages) | Nix | `flake.nix` (versions: `package-versions.json`) |
 | macOS system-integrated CLI tools | Homebrew | `Brewfile.formulae` |
 | macOS GUI apps (58 casks) | Homebrew | `Brewfile.casks` |
 | Language runtimes & dev tools | mise | `dot_config/mise/config.toml` |
@@ -45,8 +45,11 @@ sh -c "$(curl -fsLS get.chezmoi.io/lb)"
 dotfiles/
 ├── .chezmoi.toml.tmpl          # chezmoi config (env_type prompt)
 ├── .chezmoiignore              # files excluded from deployment
+├── .chezmoiremove              # target files to delete on apply
 ├── flake.nix                   # CLI packages for Nix (flake bundle)
 ├── flake.lock                  # Pinned nixpkgs revisions
+├── package-versions.json       # Generated per-package version manifest
+├── scripts/                    # Repo maintenance scripts (bump-flake.sh)
 ├── Brewfile.formulae           # macOS system-integrated CLI tools
 ├── Brewfile.casks              # macOS GUI apps for Homebrew
 ├── dot_gitconfig                # → ~/.gitconfig
@@ -79,8 +82,8 @@ dotfiles/
 For detailed Nix flake workflow (updates, pinning, recovery), see [docs/nix-flake-operations.md](docs/nix-flake-operations.md).
 For the Apple container development-environment PoC, see [docs/apple-container.md](docs/apple-container.md).
 
-- **Add/remove a Nix package**: Edit `flake.nix` paths, then `chezmoi apply` (triggers `run_onchange`). Run `nix build . --dry-run` first to confirm cache hit.
-- **Update Nix packages**: `nix-update-bundle` (auto-backs up lock, runs `nix flake update`, reports cache misses).
+- **Add/remove a Nix package**: Edit `flake.nix` paths, run `scripts/bump-flake.sh` (verifies cache hit, regenerates `package-versions.json`), then `chezmoi apply` (triggers `run_onchange`).
+- **Update Nix packages**: `scripts/bump-flake.sh latest` (or `scripts/bump-flake.sh <rev>` to pin). Rejects revisions not fully covered by the binary cache (`--max-jobs 0`), regenerates `package-versions.json`, and shows the per-package version diff for review.
 - **Check pin candidates**: `nix-check-pins` (test if any extra `nixpkgs-*` input can be dropped).
 - **Cleanup**: `nix profile wipe-history --older-than 30d` and `nix-collect-garbage -d` periodically.
 - **Add a macOS system-integrated CLI**: Add to `Brewfile.formulae`, then `chezmoi apply`.
