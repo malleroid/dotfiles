@@ -1,0 +1,5 @@
+# Files removed from source that should also be deleted from target machines
+# (chezmoi apply does not remove targets when their source disappears)
+
+# Superseded by scripts/bump-flake.sh (repo-side, not deployed)
+.config/fish/custom_functions/nix-update-bundle.fish
