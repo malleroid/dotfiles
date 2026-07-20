@@ -14,11 +14,7 @@
       system = "aarch64-darwin";
       pkgs = import nixpkgs { inherit system; };
       pkgsYtDlp = import nixpkgs-yt-dlp { inherit system; };
-    in
-    {
-      packages.${system}.default = pkgs.buildEnv {
-        name = "dotfiles-cli";
-        paths = with pkgs; [
+      cliPaths = with pkgs; [
           # ## AI
           aichat # All-in-one AI-Powered CLI Chat & Copilot
           tgpt # AI Chatbots in terminal without needing API keys
@@ -129,7 +125,18 @@
 
           # ## Util
           gnused # GNU implementation of the famous stream editor (brew: gnu-sed)
-        ];
+      ];
+    in
+    {
+      packages.${system}.default = pkgs.buildEnv {
+        name = "dotfiles-cli";
+        paths = cliPaths;
       };
+
+      # Per-package version manifest for the bundle above. flake.lock only
+      # records input revisions, so scripts/bump-flake.sh dumps this into
+      # package-versions.json to make lock bumps reviewable per package.
+      packageVersions.${system} = builtins.listToAttrs
+        (map (p: { name = p.pname or p.name; value = p.version or "unknown"; }) cliPaths);
     };
 }

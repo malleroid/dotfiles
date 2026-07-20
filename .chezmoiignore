@@ -6,6 +6,8 @@ Brewfile.formulae
 Brewfile.casks
 flake.nix
 flake.lock
+package-versions.json
+scripts/**
 .editorconfig
 link.sh
 setup.sh
