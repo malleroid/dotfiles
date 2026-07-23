@@ -1,3 +1,6 @@
 **/.claude/settings.local.json
 **/.claude/worktrees/
 .serena/
+
+# Per-repo local scripts/config kept out of git (e.g. worktree-config.sh)
+scripts/local/
