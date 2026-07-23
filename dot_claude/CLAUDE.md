@@ -79,14 +79,16 @@ Edit ツールで「Learned Feedback」セクション末尾に追記する。
 記録フォーマット: `- 簡潔な 1 行ルール`（日付不要、行動指針として読める形）
 重複する学びは追加せず、既存エントリの補強に留める。
 
-### worktree 運用（gwq）
+### worktree 運用（gwq / worktree-new）
 
 worktree での作業を指示されたら、EnterWorktree の新規作成モード（`.claude/worktrees/` 配下に自動作成）は使わず、以下の手順にする:
 
-1. `gwq add` で worktree を作成する（配置: `~/worktrees/<host>/<owner>/<repo>/<branch>`、gwq のデフォルト設定のまま）
+1. worktree の作成（配置: `~/worktrees/<host>/<owner>/<repo>/<branch>`、gwq のデフォルト設定のまま）:
+   - リポジトリに `scripts/local/worktree-config.sh` がある場合は `worktree-new [-b] <branch>` を使う（内部で gwq add し、リポジトリ固有の worktree セットアップまで行う）
+   - 無いリポジトリでは従来どおり `gwq add` で作成する
 2. `EnterWorktree(path: <worktreeのパス>)` でセッションごと worktree に移動する（cd やセッション再起動はしない）
 3. 元のリポジトリへ戻るときは `ExitWorktree(action: "keep")` を使う
-4. **worktree の削除は自動で行わない**（途中作業の揮発防止）。削除はユーザーが明示的に指示したときに `gwq remove` で行う
+4. **worktree の削除は自動で行わない**（途中作業の揮発防止）。削除はユーザーが明示的に指示したときに、config があるリポジトリでは `worktree-remove <branch>`、無いリポジトリでは `gwq remove` で行う
 
 補足:
 
