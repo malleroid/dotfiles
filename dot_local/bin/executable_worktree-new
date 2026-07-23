@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# Generic engine to create a per-slot worktree.
+# Repo-specific provisioning lives in <repo>/scripts/local/worktree-config.sh
+# (example: ~/.local/share/worktree/config.example.sh)
+# Usage: worktree-new [-b] <branch>   (-b: create a new branch)
+set -euo pipefail
+
+CONFIG_REL_PATH="scripts/local/worktree-config.sh"
+EXAMPLE_PATH="$HOME/.local/share/worktree/config.example.sh"
+
+usage() {
+  echo "usage: worktree-new [-b] <branch>" >&2
+  exit 1
+}
+
+# No rollback on failure by design: leave the worktree as-is and tell the user
+# how to recover.
+on_error() {
+  echo "" >&2
+  echo "error: worktree-new failed" >&2
+  if [ -n "${WT:-}" ] && [ -d "${WT:-}" ]; then
+    echo "       the worktree remains at: $WT" >&2
+    echo "       fix the cause, then run 'worktree-remove $BRANCH' and retry" >&2
+  fi
+}
+trap on_error ERR
+
+NEW_BRANCH_FLAG=""
+if [ "${1:-}" = "-b" ]; then
+  NEW_BRANCH_FLAG="-b"
+  shift
+fi
+BRANCH="${1:-}"
+[ -n "$BRANCH" ] || usage
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+if [ ! -d .git ]; then
+  echo "error: run from the main repository (not from a worktree)" >&2
+  exit 1
+fi
+
+# --- Locate and source the repo config ---
+CONFIG_PATH="$REPO_ROOT/$CONFIG_REL_PATH"
+if [ ! -f "$CONFIG_PATH" ]; then
+  echo "error: worktree config not found: $CONFIG_PATH" >&2
+  echo "       create one based on the example: $EXAMPLE_PATH" >&2
+  exit 1
+fi
+# shellcheck source=/dev/null
+source "$CONFIG_PATH"
+
+# --- Validate the config contract ---
+: "${MAX_SLOT:?MAX_SLOT must be set in worktree-config.sh}"
+if ! declare -f setup_worktree >/dev/null; then
+  echo "error: function setup_worktree() is not defined in worktree-config.sh" >&2
+  echo "       see the example for the contract: $EXAMPLE_PATH" >&2
+  exit 1
+fi
+
+# --- Find a free slot (engine-owned bookkeeping) ---
+# Each worktree's slot number lives in its git admin dir
+# (.git/worktrees/<name>/slot): invisible to git status, and deleted together
+# with the worktree.
+git worktree prune
+used_slots=""
+for slot_file in .git/worktrees/*/slot; do
+  [ -f "$slot_file" ] || continue
+  used_slots="$used_slots $(cat "$slot_file")"
+done
+
+SLOT=""
+for n in $(seq 1 "$MAX_SLOT"); do
+  case " $used_slots " in
+    *" $n "*) ;;
+    *) SLOT=$n; break ;;
+  esac
+done
+if [ -z "$SLOT" ]; then
+  echo "error: no free slot (wt1..wt${MAX_SLOT} are all in use)" >&2
+  exit 1
+fi
+
+echo "==> assigning slot wt${SLOT} to: $BRANCH"
+
+# --- Create the worktree ---
+if [ -n "$NEW_BRANCH_FLAG" ]; then
+  gwq add -b "$BRANCH"
+else
+  gwq add "$BRANCH"
+fi
+WT=$(gwq get "$BRANCH")
+if [ -z "$WT" ] || [ ! -d "$WT" ]; then
+  echo "error: could not resolve the worktree path" >&2
+  exit 1
+fi
+echo "==> worktree: $WT"
+
+# --- Record the slot assignment ---
+ADMIN_DIR=$(git -C "$WT" rev-parse --absolute-git-dir)
+case "$ADMIN_DIR" in
+  */.git/worktrees/*) ;;
+  *)
+    echo "error: unexpected git dir for worktree: $ADMIN_DIR" >&2
+    exit 1
+    ;;
+esac
+echo "$SLOT" > "$ADMIN_DIR/slot"
+
+# --- Delegate provisioning to the config hook ---
+export SLOT WT BRANCH REPO_ROOT
+setup_worktree
+
+echo ""
+echo "==> done: $WT (slot wt${SLOT})"

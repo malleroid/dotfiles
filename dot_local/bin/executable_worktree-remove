@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# Generic engine to remove a worktree created by worktree-new.
+# Repo-specific cleanup lives in <repo>/scripts/local/worktree-config.sh
+# (example: ~/.local/share/worktree/config.example.sh)
+# Usage: worktree-remove <branch>
+set -euo pipefail
+
+CONFIG_REL_PATH="scripts/local/worktree-config.sh"
+EXAMPLE_PATH="$HOME/.local/share/worktree/config.example.sh"
+
+# No rollback on failure by design: keep the worktree and tell the user to
+# inspect manually.
+on_error() {
+  echo "" >&2
+  echo "error: worktree-remove failed" >&2
+  if [ -n "${WT:-}" ] && [ -d "${WT:-}" ]; then
+    echo "       the worktree is kept at: $WT" >&2
+    echo "       inspect and clean up manually" >&2
+  fi
+}
+trap on_error ERR
+
+BRANCH="${1:-}"
+if [ -z "$BRANCH" ]; then
+  echo "usage: worktree-remove <branch>" >&2
+  exit 1
+fi
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+if [ ! -d .git ]; then
+  echo "error: run from the main repository (not from a worktree)" >&2
+  exit 1
+fi
+
+# --- Locate and source the repo config ---
+CONFIG_PATH="$REPO_ROOT/$CONFIG_REL_PATH"
+if [ ! -f "$CONFIG_PATH" ]; then
+  echo "error: worktree config not found: $CONFIG_PATH" >&2
+  echo "       create one based on the example: $EXAMPLE_PATH" >&2
+  exit 1
+fi
+# shellcheck source=/dev/null
+source "$CONFIG_PATH"
+
+# --- Validate the config contract (same as worktree-new) ---
+: "${MAX_SLOT:?MAX_SLOT must be set in worktree-config.sh}"
+if ! declare -f setup_worktree >/dev/null; then
+  echo "error: function setup_worktree() is not defined in worktree-config.sh" >&2
+  echo "       see the example for the contract: $EXAMPLE_PATH" >&2
+  exit 1
+fi
+
+WT=$(gwq get "$BRANCH")
+if [ -z "$WT" ] || [ ! -d "$WT" ]; then
+  echo "error: worktree not found: $BRANCH" >&2
+  exit 1
+fi
+if [ "$WT" = "$REPO_ROOT" ]; then
+  echo "error: refusing to remove the main repository" >&2
+  exit 1
+fi
+
+# --- Dirty check: abort on uncommitted changes (prevents losing work) ---
+if [ -n "$(git -C "$WT" status --porcelain)" ]; then
+  echo "error: uncommitted changes found, aborting: $WT" >&2
+  git -C "$WT" status --short >&2
+  exit 1
+fi
+
+# --- Cleanup leftovers (delegated if the config defines cleanup_before_remove) ---
+export WT BRANCH REPO_ROOT
+if declare -f cleanup_before_remove >/dev/null; then
+  echo "==> cleaning up worktree leftovers"
+  cleanup_before_remove
+fi
+
+# The slot number recorded in the worktree's git admin dir is deleted together
+# with the worktree, which frees the slot.
+echo "==> removing worktree: $WT"
+gwq remove "$BRANCH"
+
+echo "==> done"
