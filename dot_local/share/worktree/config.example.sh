@@ -3,8 +3,8 @@
 # Setup:
 #   1. Copy this file into the target repository as scripts/local/worktree-config.sh
 #      cp ~/.local/share/worktree/config.example.sh <repo>/scripts/local/worktree-config.sh
-#   2. To keep it out of git, add scripts/local/ to .git/info/exclude
-#   3. Adjust the variables and functions to match the repository
+#   2. Adjust the variables and functions to match the repository
+#      (scripts/local/ is already ignored via the global gitignore)
 #
 # Contract with the engine:
 #   - This file is sourced by the engine (bash), so it must be valid bash
