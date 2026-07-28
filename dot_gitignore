@@ -1,6 +1,7 @@
 **/.claude/settings.local.json
 **/.claude/worktrees/
 .serena/
+.playwright-mcp/
 
 # Per-repo local scripts/config kept out of git (e.g. worktree-config.sh)
 scripts/local/
