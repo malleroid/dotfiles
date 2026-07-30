@@ -30,6 +30,6 @@ Arguments: $ARGUMENTS
 2. Commit template path が空でなければ Read ツールでそのファイルを読み、コミットフォーマットを把握する
 3. 上記ルールに従ったコミットメッセージを生成し、ユーザーに提示する
 4. Arguments が `preview` の場合はここで終了する
-5. Arguments が `preview` でない場合は AskUserQuestion ツールで確認する（選択肢:「コミットする」「修正する」）。承認されたらコミットを実行し、修正を求められた場合はメッセージを修正して再度 AskUserQuestion で確認する
+5. Arguments が `preview` でない場合は AskUserQuestion ツールで確認する（選択肢:「コミットする」「修正する」）。**「コミットする」の option には `preview` フィールドで生成したコミットメッセージ全文（subject + body）を必ず添えること**（ダイアログ表示中は直前のテキストが見えないため、preview 内で確認できるようにする）。承認されたらコミットを実行し、修正を求められた場合はメッセージを修正して再度 AskUserQuestion で確認する
 
 コミット実行時は複数のツールを1レスポンスで呼び出すこと。`git commit -m` を使い、body がある場合は `-m` を複数指定すること。
