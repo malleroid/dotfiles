@@ -65,6 +65,14 @@
 コードレビューを行う場合は `code-reviewer` sub-agent を使うこと。レビュー基準・出力フォーマットの詳細はそちらに定義されている。
 親コンテキストで差分取得（git fetch/diff, gh pr diff等）やベースブランチの推測を行わず、ユーザーの原文メッセージをそのまま sub-agent の prompt に渡すこと。リクエストの書き換え・補足・解釈を加えない。
 
+追加ルール（tier と検証）:
+
+- **軽量 tier**: 依頼文言が軽さを示す場合（「軽く」「さくっと」等）、Agent tool の model パラメータに sonnet を指定して起動する。判断材料はユーザーの文言のみ（親が diff を見て判断しない）
+- **検証（batch verifier）**: ユーザーが明示的に依頼した場合のみ（「検証込み」「しっかり」等）、レビュー完了後にその指摘リスト全文を code-reviewer の検証モード（agent 定義参照）に渡して 2 段目を起動する。指摘リストは書き換えずそのまま渡す。親からの検証の提案・自動起動はしない
+- **ReportFindings 出力**: code-reviewer の結果受領後、指摘を ReportFindings で報告する（重大度順・1:1 転記で言い換えや取捨選択は禁止・検証済みなら verdict 付き）。指摘はテキストで繰り返さず、判定・概要・テスト観点など指摘以外のセクションのみテキストで提示する
+- **深掘り会話**: code-reviewer は name 付きで起動する（例: review-<PR番号|ブランチ>）。レビュー結果への追加質問・深掘りは新規起動せず SendMessage で同じ agent に原文のまま送る。検証モードは独立性のため常に新規起動する
+- ユーザーがレビュー完了を明示したら（「レビュー終わり」「worktree 消していい」等）、SendMessage で完了を伝え、agent に後片付けさせる
+
 ### フィードバック自動収集
 
 会話中に以下のシグナルを検知したら、dotfiles の CLAUDE.md 末尾「Learned Feedback」セクションに 1 行追記すること:
@@ -90,7 +98,7 @@ worktree での作業を指示されたら、EnterWorktree の新規作成モー
 2. `EnterWorktree(path: <worktreeのパス>)` でセッションごと worktree に移動する（cd やセッション再起動はしない）
 3. 元のリポジトリへ戻るときは `ExitWorktree(action: "keep")` を使う
 4. **worktree の削除は自動で行わない**（途中作業の揮発防止）。削除はユーザーが明示的に指示したときに、config があるリポジトリでは `worktree-remove <branch>`、無いリポジトリでは `gwq remove` で行う
-   - **例外**: レビュー目的でそのセッション（sub-agent 含む）自身が作成した worktree は、working tree が clean であることを確認した上で、レビュー完了後に `gwq remove` で削除してよい。既存 worktree を再利用した場合は削除しない
+   - **例外**: レビュー目的でそのセッション（sub-agent 含む）自身が作成した worktree は、working tree が clean であることを確認した上で、ユーザーがレビュー完了を明示したときに `gwq remove` で削除する。既存 worktree を再利用した場合は削除しない
 
 補足:
 
