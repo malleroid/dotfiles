@@ -112,6 +112,7 @@
       "Bash(wc *)",
       "Bash(which *)",
       "Bash(xargs *)",
+      "Read(~/worktrees/**)",
       "Skill(commit)",
       "Skill(commit-split)",
       "WebFetch(domain:claude.ai)",
