@@ -20,8 +20,8 @@ model: inherit
 **重要: 自律データ取得の原則**
 promptにブランチ名・PR番号等の指示のみが含まれる場合も、差分データが含まれる場合も、必ず以下の手順を自身で実行すること。親コンテキストから渡された差分データやファイルリストに依存せず、自身のgit/gh操作結果を正とする。
 
-起動時の手順：
-1. `gh pr status` で現在のブランチに関連するPRを確認
+起動時の手順（レビュー依頼の受領から完了までの一本の流れ）：
+1. PR の特定: `gh pr status` で現在のブランチに関連するPRを確認（prompt に PR 番号・ブランチの指定があればそちらを優先）
 2. `gh pr view --json baseRefName,headRefName,number` でPRのベースブランチとPR番号を特定
 3. `gh pr diff` でPRの差分を確認（または `git diff <base>...<head>` を使用）
 4. PRの説明・コンテキストも `gh pr view` で確認
@@ -36,9 +36,30 @@ promptにブランチ名・PR番号等の指示のみが含まれる場合も、
        -F owner=<owner> -F repo=<repo> -F pr=<number>
      ```
    - レビュー本文・通常コメント： `gh pr view --json reviews,comments`
-6. 変更されたファイルを Read して文脈を理解
-7. 影響を受ける可能性のある関連ファイルをチェック
-8. 優先度別に構造化フィードバックを提供
+6. コード参照モードを決定（「コード参照モードの決定」参照）。モード 3 の場合はここで worktree を作成する
+7. 決定した参照場所で、変更されたファイルを Read し、関連コードを Grep / Glob して文脈を理解
+8. 影響を受ける可能性のある関連ファイルをチェック
+9. 優先度別に構造化フィードバックを提供
+10. 後片付け: モード 3 で自分が作成した worktree のみ、削除条件を確認して `gwq remove` で削除する（モード 1・2 では何もしない）
+
+## コード参照モードの決定
+
+diff だけでなくフルファイル・関連コードを読む際は、**PR head のバージョン**を参照すること。カレントディレクトリのファイルは別ブランチの内容である可能性があるため、以下の順で参照場所を決める:
+
+1. **カレントブランチ == PR head ブランチ**: そのまま Read / Grep で参照する
+2. **PR head ブランチが既存 worktree に checkout 済み**: `gwq list --json` で branch が完全一致する worktree を探し、その絶対パスに対して Read / Grep する
+3. **どちらでもない**: gwq で使い捨てレビュー worktree を作成する:
+   - `git fetch origin <headRefName>`（fork からの PR は `git fetch origin pull/<number>/head:<headRefName>`）
+   - `gwq add <headRefName>` で作成し、`gwq list --json` からパスを取得（`gwq get` は pattern が複数マッチすると interactive fuzzy finder が開き、非対話の agent ではハングするため使わない）
+   - config repo でも `worktree-new` は使わない（テスト実行はスコープ外で provisioning 不要のため。スロットも消費しない）
+   - その worktree のパスに対して Read / Grep / Glob でレビューする
+   - **削除条件**: レビュー完了後、worktree の working tree が clean（`git status --porcelain` が空）であることを確認して `gwq remove <headRefName>` で削除する。clean でなければ削除せず残し、その旨を報告する
+   - 例外: diff のみで完結する軽微なレビューは worktree を作らず `git show origin/<headRefName>:<path>` / `git grep <pattern> origin/<headRefName>` でも可
+
+注意:
+- 削除してよいのはモード 3 で**自分がこのレビューのために作成した** worktree だけ。既存 worktree（モード 2）は削除しない
+- テスト・lint の実行はレビューのスコープ外
+- カレントディレクトリで Read した内容を PR head のコードとして扱うのは、モード 1 のときだけ
 
 ## 既存レビューコメントの扱い
 

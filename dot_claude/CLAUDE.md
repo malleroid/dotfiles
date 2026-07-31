@@ -86,9 +86,11 @@ worktree での作業を指示されたら、EnterWorktree の新規作成モー
 1. worktree の作成（配置: `~/worktrees/<host>/<owner>/<repo>/<branch>`、gwq のデフォルト設定のまま）:
    - リポジトリに `scripts/local/worktree-config.sh` がある場合は `worktree-new [-b] <branch>` を使う（内部で gwq add し、リポジトリ固有の worktree セットアップまで行う）
    - 無いリポジトリでは従来どおり `gwq add` で作成する
+   - **例外**: レビュー目的の使い捨て worktree は、config の有無に関わらず plain `gwq add` で作成する（read-only で provisioning 不要のため。手順の詳細は code-reviewer agent 定義側）
 2. `EnterWorktree(path: <worktreeのパス>)` でセッションごと worktree に移動する（cd やセッション再起動はしない）
 3. 元のリポジトリへ戻るときは `ExitWorktree(action: "keep")` を使う
 4. **worktree の削除は自動で行わない**（途中作業の揮発防止）。削除はユーザーが明示的に指示したときに、config があるリポジトリでは `worktree-remove <branch>`、無いリポジトリでは `gwq remove` で行う
+   - **例外**: レビュー目的でそのセッション（sub-agent 含む）自身が作成した worktree は、working tree が clean であることを確認した上で、レビュー完了後に `gwq remove` で削除してよい。既存 worktree を再利用した場合は削除しない
 
 補足:
 
