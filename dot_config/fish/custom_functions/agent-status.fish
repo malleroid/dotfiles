@@ -28,14 +28,13 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     # 1. Claude Code native probes
     for f in ~/.claude/sessions/*.json
         test -f $f; or continue
-        set -l data (jq -r '[.pid, .status // "busy", .name // "claude", .cwd // "", .waitingFor // "", .kind // "interactive"] | @tsv' $f 2>/dev/null)
+        set -l data (jq -r '[.pid, .status // "busy", .name // "claude", .cwd // "", .waitingFor // ""] | @tsv' $f 2>/dev/null)
         test -n "$data"; or continue
-        echo $data | read -d \t pid st name cwd wf kind
+        echo $data | read -d \t pid st name cwd wf
         # skip probes left behind by dead processes
         kill -0 $pid 2>/dev/null; or continue
         set -l repo -
         test -n "$cwd"; and set repo (path basename -- $cwd)
-        test "$kind" != interactive; and set name "$name [$kind]"
         set -l icon $g_bolt
         set -l color (set_color green)
         switch $st
