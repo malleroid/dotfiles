@@ -50,6 +50,7 @@ SLACK_SKIP_UPDATE = "1"
 "npm:@e2b/cli" = "latest"
 "npm:@github/copilot" = "latest"
 "npm:@openai/codex" = "latest"
+"npm:@openai/codex-security" = "latest"
 "npm:aicommit2" = "latest"
 
 # Language Servers for Neovim LSP
