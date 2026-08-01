@@ -10,13 +10,13 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
 
     # Nerd Font glyphs built from codepoints (raw PUA chars in source are
     # fragile — editors/LLMs corrupt them silently)
-    set -l g_bolt (printf '\uf0e7') # busy
-    set -l g_term (printf '\uf120') # shell: agent idle but local bash running
+    set -l g_bolt (printf '\U0000f0e7') # busy
+    set -l g_term (printf '\U0000f120') # shell: agent idle but local bash running
     set -l g_zzz (printf '\U000f04b2') # idle (md-sleep)
-    set -l g_lock (printf '\uf023') # waiting: permission prompt
-    set -l g_quest (printf '\uf059') # waiting: input needed
-    set -l g_cube (printf '\uf1b2') # waiting: sandbox request
-    set -l g_win (printf '\uf2d0') # waiting: dialog open
+    set -l g_lock (printf '\U0000f023') # waiting: permission prompt
+    set -l g_quest (printf '\U0000f059') # waiting: input needed
+    set -l g_cube (printf '\U0000f1b2') # waiting: sandbox request
+    set -l g_win (printf '\U0000f2d0') # waiting: dialog open
     set -l g_robot (printf '\U000f06a9') # worker request / non-claude agents
     set -l reset (set_color normal)
 
