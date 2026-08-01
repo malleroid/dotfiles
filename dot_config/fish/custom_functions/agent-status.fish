@@ -34,6 +34,7 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     #   3. one ps pass : presence of non-claude agents that have no state file
     set -l state_dir /tmp/agent-state
     set -l rows
+    set -l probe_sessions
 
     # Budget: 36 cols. The floating pane is 17% wide, so the narrowest terminal
     # in use (237 cols) still gives 40 cols minus its 2-col frame.
@@ -62,11 +63,12 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     # 1. Claude Code native probes
     for f in ~/.claude/sessions/*.json
         test -f $f; or continue
-        set -l data (jq -r '[.pid, .status // "busy", .name // "", .cwd // "", .waitingFor // ""] | @tsv' $f 2>/dev/null)
+        set -l data (jq -r '[.pid, .sessionId // "", .status // "busy", .name // "", .cwd // "", .waitingFor // ""] | @tsv' $f 2>/dev/null)
         test -n "$data"; or continue
-        echo $data | read -d \t pid st name cwd wf
+        echo $data | read -d \t pid sid st name cwd wf
         # skip probes left behind by dead processes
         kill -0 $pid 2>/dev/null; or continue
+        set -a probe_sessions $sid
         set -l repo -
         test -n "$cwd"; and set repo (path basename -- $cwd)
         set -l icon $g_bolt
@@ -112,11 +114,12 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     set -l hooked_agents
     for f in $state_dir/*.json
         test -f $f; or continue
-        set -l data (jq -r '[.agent // "?", .status // "?"] | @tsv' $f 2>/dev/null)
+        set -l data (jq -r '[.agent // "?", .status // "?", .sessionId // ""] | @tsv' $f 2>/dev/null)
         test -n "$data"; or continue
-        echo $data | read -d \t agent st
+        echo $data | read -d \t agent st hook_sid
         set -a hooked_agents $agent
-        # claude blocked states come from probes too; hook file adds pane location
+        # a probe already reported this session, so the hook row would be a duplicate
+        test -n "$hook_sid"; and contains -- $hook_sid $probe_sessions; and continue
         set -l where (path basename -- $f | string replace -r '\.json$' '')
         # keep the tail: the pane id is what actually locates the agent
         set where (string shorten -m $w_where --left -- $where)

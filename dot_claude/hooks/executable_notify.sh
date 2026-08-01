@@ -3,6 +3,7 @@
 
 INPUT=$(cat)
 EVENT=$(echo "$INPUT" | jq -r '.notification_type // .hook_event_name // "unknown"')
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // ""')
 
 PANE_LABEL=""
 if [ -n "$ZELLIJ_PANE_ID" ]; then
@@ -26,10 +27,10 @@ if [ -n "${ZELLIJ_SESSION_NAME:-}" ] && [ -n "${ZELLIJ_PANE_ID:-}" ]; then
   STATE_FILE="$STATE_DIR/${ZELLIJ_SESSION_NAME}_${ZELLIJ_PANE_ID}.json"
   case "$EVENT" in
     permission_prompt)
-      echo '{"agent":"claude","status":"asking_permissions","ts":'$(date +%s)'}' > "$STATE_FILE"
+      echo '{"agent":"claude","sessionId":"'"$SESSION_ID"'","status":"asking_permissions","ts":'$(date +%s)'}' > "$STATE_FILE"
       ;;
     elicitation_dialog)
-      echo '{"agent":"claude","status":"waiting_user_answers","ts":'$(date +%s)'}' > "$STATE_FILE"
+      echo '{"agent":"claude","sessionId":"'"$SESSION_ID"'","status":"waiting_user_answers","ts":'$(date +%s)'}' > "$STATE_FILE"
       ;;
     Stop)
       rm -f "$STATE_FILE"
