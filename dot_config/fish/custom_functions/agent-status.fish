@@ -152,7 +152,7 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
                         set label perm
                 end
         end
-        set -a rows (printf '%s%s%s %s %s %s %s' $color $icon $reset (_agent_status_icon claude) (_agent_status_cell "$name" $w_name) (_agent_status_cell "$repo" $w_where) $label)
+        set -a rows (printf '%s%s%s %s %s %s %s%s%s' $color $icon $reset (_agent_status_icon claude) (_agent_status_cell "$name" $w_name) (_agent_status_cell "$repo" $w_where) $color $label $reset)
     end
 
     # 2. Hook state files: lifecycle status, one row per session when available
@@ -202,7 +202,7 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
             case '*'
                 set label (string shorten -m $w_state -- $st)
         end
-        set -a rows (printf '%s%s%s %s %s %s %s' $color $icon $reset (_agent_status_icon $agent) (_agent_status_cell "$name" $w_name) (_agent_status_cell "$where" $w_where) $label)
+        set -a rows (printf '%s%s%s %s %s %s %s%s%s' $color $icon $reset (_agent_status_icon $agent) (_agent_status_cell "$name" $w_name) (_agent_status_cell "$where" $w_where) $color $label $reset)
     end
 
     # 3. Other running agents without state files
@@ -217,7 +217,8 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
             set -e hooked_agents[$covered_index]
             continue
         end
-        set -a rows (printf '%s%s%s %s %s %s %s' (set_color green) $g_bolt $reset (_agent_status_icon $agent) (_agent_status_cell - $w_name) (_agent_status_cell - $w_where) running)
+        set -l color (set_color green)
+        set -a rows (printf '%s%s%s %s %s %s %s%s%s' $color $g_bolt $reset (_agent_status_icon $agent) (_agent_status_cell - $w_name) (_agent_status_cell - $w_where) $color running $reset)
     end
 
     if test (count $rows) -eq 0
