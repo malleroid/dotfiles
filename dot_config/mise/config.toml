@@ -39,6 +39,7 @@ SLACK_SKIP_UPDATE = "1"
 "npm:claudekit" = "latest"
 "npm:tdd-guard" = "latest"
 "npm:tweakcc" = "latest"
+"npm:@newrelic/preflight" = "latest"
 
 # Development Tools
 "aqua:slackapi/slack-cli" = "latest"
