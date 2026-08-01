@@ -25,6 +25,48 @@ function _agent_status_cell -a text width
     string pad -r -w $width -- "$cell"
 end
 
+function _agent_status_codex_db
+    if set -q CODEX_STATE_DB
+        test -f "$CODEX_STATE_DB"; and printf '%s\n' "$CODEX_STATE_DB"
+        return
+    end
+
+    set -l best_db
+    set -l best_version -1
+    for db in ~/.codex/state_*.sqlite
+        test -f "$db"; or continue
+        set -l db_version (path basename "$db" | string replace -r '^state_([0-9]+)\.sqlite$' '$1')
+        string match -qr '^[0-9]+$' -- "$db_version"; or continue
+        if test "$db_version" -gt "$best_version"
+            set best_version "$db_version"
+            set best_db "$db"
+        end
+    end
+    test -n "$best_db"; and printf '%s\n' "$best_db"
+end
+
+function _agent_status_codex_name -a db session_id
+    string match -qr '^[A-Za-z0-9._-]+$' -- "$session_id"; or return
+
+    # Codex CLI /rename writes the user-facing name to session_index.jsonl.
+    set -l session_index ~/.codex/session_index.jsonl
+    set -q CODEX_SESSION_INDEX; and set session_index "$CODEX_SESSION_INDEX"
+    if test -f "$session_index"
+        set -l thread_name (jq -rs --arg sid "$session_id" \
+            'map(select(.id == $sid)) | last | .thread_name // empty' \
+            "$session_index" 2>/dev/null | string replace -ra '[[:cntrl:]]' '')
+        if test -n "$thread_name"
+            printf '%s\n' "$thread_name"
+            return
+        end
+    end
+
+    test -f "$db"; or return
+    sqlite3 -readonly -noheader "$db" \
+        "SELECT REPLACE(REPLACE(REPLACE(COALESCE(NULLIF(name, ''), NULLIF(title, ''), NULLIF(preview, ''), ''), char(10), ' '), char(13), ' '), char(9), ' ') FROM threads WHERE id = '$session_id' LIMIT 1;" \
+        2>/dev/null | string replace -ra '[[:cntrl:]]' ''
+end
+
 function agent-status -d "Show AI agent status from state files (no zellij polling)"
     # Sources, cheapest first — no multiplexer round-trips:
     #   1. ~/.claude/sessions/<pid>.json  : written by Claude Code itself (v2.1.119+),
@@ -36,6 +78,7 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     set -q CODEX_AGENT_STATE_DIR; and set state_dir "$CODEX_AGENT_STATE_DIR"
     set -l rows
     set -l probe_sessions
+    set -l codex_db (_agent_status_codex_db)
 
     # Budget: 36 cols. The floating pane is 17% wide, so the narrowest terminal
     # in use (237 cols) still gives 40 cols minus its 2-col frame.
@@ -123,6 +166,11 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
         test -n "$hook_sid"; and contains -- $hook_sid $probe_sessions; and continue
 
         set -a hooked_agents $agent
+        set -l name -
+        if test "$agent" = codex; and test -n "$hook_sid"; and test -n "$codex_db"
+            set -l resolved_name (_agent_status_codex_name "$codex_db" "$hook_sid")
+            test -n "$resolved_name"; and set name "$resolved_name"
+        end
         set -l where -
         test -n "$hook_cwd"; and set where (path basename -- "$hook_cwd")
         if test "$where" = -; and test -n "$zellij_session"
@@ -154,7 +202,7 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
             case '*'
                 set label (string shorten -m $w_state -- $st)
         end
-        set -a rows (printf '%s%s%s %s %s %s %s' $color $icon $reset (_agent_status_icon $agent) (_agent_status_cell - $w_name) (_agent_status_cell "$where" $w_where) $label)
+        set -a rows (printf '%s%s%s %s %s %s %s' $color $icon $reset (_agent_status_icon $agent) (_agent_status_cell "$name" $w_name) (_agent_status_cell "$where" $w_where) $label)
     end
 
     # 3. Other running agents without state files
