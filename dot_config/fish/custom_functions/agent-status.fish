@@ -29,10 +29,11 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     # Sources, cheapest first — no multiplexer round-trips:
     #   1. ~/.claude/sessions/<pid>.json  : written by Claude Code itself (v2.1.119+),
     #      authoritative status: busy / shell / idle / waiting (+ waitingFor detail)
-    #   2. /tmp/agent-state/<session>_<pane>.json : written by notify hooks on
-    #      permission prompts (claude/codex/...), removed on Stop
+    #   2. /tmp/agent-state/*.json : written by lifecycle hooks. Codex keeps one
+    #      file per session and resolves its title from the local state database.
     #   3. one ps pass : presence of non-claude agents that have no state file
     set -l state_dir /tmp/agent-state
+    set -q CODEX_AGENT_STATE_DIR; and set state_dir "$CODEX_AGENT_STATE_DIR"
     set -l rows
     set -l probe_sessions
 
@@ -55,9 +56,10 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     set -l g_robot (printf '\U000f06a9') # waiting: worker request
     set -l reset (set_color normal)
 
-    # GC hook files older than 1 day
+    # GC hook files left behind by crashed clients. Normal Codex shutdown removes
+    # its file through SessionEnd; ps remains as a fallback after GC.
     if test -d $state_dir
-        find $state_dir -name '*.json' -mmin +1440 -delete 2>/dev/null
+        find $state_dir -name '*.json' -mmin +10080 -delete 2>/dev/null
     end
 
     # 1. Claude Code native probes
@@ -110,29 +112,45 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
         set -a rows (printf '%s%s%s %s %s %s %s' $color $icon $reset (_agent_status_icon claude) (_agent_status_cell "$name" $w_name) (_agent_status_cell "$repo" $w_where) $label)
     end
 
-    # 2. Hook state files: agents waiting on permission/user input
+    # 2. Hook state files: lifecycle status, one row per session when available
     set -l hooked_agents
     for f in $state_dir/*.json
         test -f $f; or continue
-        set -l data (jq -r '[.agent // "?", .status // "?", .sessionId // ""] | @tsv' $f 2>/dev/null)
+        set -l data (jq -r '[.agent // "?", .status // "?", .sessionId // "", .cwd // "", .zellijSession // "", .paneId // ""] | @tsv' $f 2>/dev/null)
         test -n "$data"; or continue
-        echo $data | read -d \t agent st hook_sid
-        set -a hooked_agents $agent
+        echo $data | read -d \t agent st hook_sid hook_cwd zellij_session pane_id
         # a probe already reported this session, so the hook row would be a duplicate
         test -n "$hook_sid"; and contains -- $hook_sid $probe_sessions; and continue
-        set -l where (path basename -- $f | string replace -r '\.json$' '')
-        # keep the tail: the pane id is what actually locates the agent
-        set where (string shorten -m $w_where --left -- $where)
-        set -l icon $g_lock
-        set -l color (set_color red)
-        set -l label perm
+
+        set -a hooked_agents $agent
+        set -l where -
+        test -n "$hook_cwd"; and set where (path basename -- "$hook_cwd")
+        if test "$where" = -; and test -n "$zellij_session"
+            set where "$zellij_session"
+            test -n "$pane_id"; and set where "$where:$pane_id"
+        end
+        if test "$where" = -
+            set where (path basename -- $f | string replace -r '\.json$' '')
+        end
+
+        set -l icon $g_bolt
+        set -l color (set_color green)
+        set -l label busy
         switch $st
-            case asking_permissions
-                # same event as a native "waiting" probe, so same icon/label
+            case asking_permissions waiting
+                set icon $g_lock
+                set color (set_color red)
+                set label perm
             case waiting_user_answers
                 set icon $g_quest
                 set color (set_color magenta)
                 set label input
+            case idle
+                set icon $g_zzz
+                set color (set_color brblack)
+                set label idle
+            case busy running
+                # defaults above
             case '*'
                 set label (string shorten -m $w_state -- $st)
         end
@@ -144,7 +162,13 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
         set -l m (string match -r '^\s*\d+\s+(?:\S*/)?(codex|copilot|opencode|aider)(\s|$)' -- $line)
         test -n "$m"; or continue
         set -l agent $m[2]
-        contains $agent $hooked_agents; and continue
+        # Each state row covers one process. Remove only one matching entry so a
+        # second Codex session still gets an anonymous fallback row.
+        set -l covered_index (contains -i -- $agent $hooked_agents)
+        if test -n "$covered_index"
+            set -e hooked_agents[$covered_index]
+            continue
+        end
         set -a rows (printf '%s%s%s %s %s %s %s' (set_color green) $g_bolt $reset (_agent_status_icon $agent) (_agent_status_cell - $w_name) (_agent_status_cell - $w_where) running)
     end
 
