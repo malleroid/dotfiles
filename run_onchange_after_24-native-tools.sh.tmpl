@@ -27,3 +27,9 @@ fi
 # beads (always run to keep up-to-date)
 echo "Installing/updating beads..."
 curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+
+# terminal-browser (kitty graphics protocol browser; run in kitty, not zellij)
+if ! command -v terminal-browser >/dev/null 2>&1; then
+  echo "Installing terminal-browser..."
+  curl -fsSl https://terminal-browser.sh/install | bash
+fi
