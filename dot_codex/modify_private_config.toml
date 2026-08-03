@@ -34,7 +34,7 @@ command = "context7-mcp"
 
 [mcp_servers.playwright-mcp]
 command = "playwright-mcp"
-args = ["--headless"]
+args = ["--headless", "--browser", "chromium"]
 
 [mcp_servers.rails-mcp-server]
 command = "rails-mcp-server"
