@@ -46,13 +46,6 @@
       "args": [],
       "env": {}
     },
-    "atlassian-rovo": {
-      "type": "http",
-      "url": "https://mcp.atlassian.com/v1/mcp",
-      "tools": [
-        "*"
-      ]
-    },
     "awslabs-aws-knowledge-mcp-server": {
       "type": "http",
       "url": "https://knowledge-mcp.global.api.aws",
@@ -70,6 +63,20 @@
     "figma": {
       "type": "http",
       "url": "https://mcp.figma.com/mcp",
+      "tools": [
+        "*"
+      ]
+    },
+    "atlassian-confluence": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "tools": [
+        "*"
+      ]
+    },
+    "atlassian-jira": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp",
       "tools": [
         "*"
       ]

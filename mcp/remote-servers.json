@@ -1,5 +1,10 @@
 {
-  "atlassian-rovo": {
+  "atlassian-confluence": {
+    "transport": "http",
+    "url": "https://mcp.atlassian.com/v1/mcp",
+    "auth": "oauth"
+  },
+  "atlassian-jira": {
     "transport": "http",
     "url": "https://mcp.atlassian.com/v1/mcp",
     "auth": "oauth"
