@@ -16,11 +16,6 @@
     "args": ["--headless", "--browser", "chromium"],
     "env": {}
   },
-  "chrome-devtools-mcp": {
-    "command": "chrome-devtools-mcp",
-    "args": ["--headless=true", "--isolated=true"],
-    "env": {}
-  },
   "context7": {
     "command": "context7-mcp",
     "args": [],

@@ -31,6 +31,8 @@ SLACK_SKIP_UPDATE = "1"
 
 # MCP Servers
 "npm:@upstash/context7-mcp" = "latest"
+# Not registered as an MCP server. Restore it in mcp/servers.json when
+# front-end performance work needs lighthouse / trace / heapsnapshot.
 "npm:chrome-devtools-mcp" = "latest"
 "npm:notion-mcp-server" = "latest"
 "npm:@playwright/mcp" = "latest"

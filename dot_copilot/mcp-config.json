@@ -9,14 +9,6 @@
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
     },
-    "chrome-devtools-mcp": {
-      "command": "chrome-devtools-mcp",
-      "args": [
-        "--headless=true",
-        "--isolated=true"
-      ],
-      "env": {}
-    },
     "playwright-mcp": {
       "command": "playwright-mcp",
       "args": [

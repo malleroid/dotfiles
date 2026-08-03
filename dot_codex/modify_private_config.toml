@@ -25,10 +25,6 @@ args = ["awslabs.aws-documentation-mcp-server@latest"]
 [mcp_servers.awslabs-aws-documentation-mcp-server.env]
 FASTMCP_LOG_LEVEL = "ERROR"
 
-[mcp_servers.chrome-devtools-mcp]
-command = "chrome-devtools-mcp"
-args = ["--headless=true", "--isolated=true"]
-
 [mcp_servers.context7]
 command = "context7-mcp"
 
