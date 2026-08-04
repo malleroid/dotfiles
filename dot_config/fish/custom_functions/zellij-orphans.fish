@@ -51,18 +51,28 @@ function zellij-orphans --description "Detect (and kill) orphaned zellij servers
             continue
         end
 
-        # safety: refuse auto-kill if any child is not an idle shell / hwatch
+        # safety: refuse auto-kill if ANY descendant (not just direct children)
+        # is more than an idle shell / hwatch — a pane fish can hold a claude
+        # grandchild that dies with the server
         set -l safe 1
-        set -l kids (pgrep -P $pid)
-        for k in $kids
+        set -l descendants
+        set -l queue (pgrep -P $pid)
+        while test (count $queue) -gt 0
+            set -l cur $queue[1]
+            set -e queue[1]
+            set -a descendants $cur
+            set -a queue (pgrep -P $cur)
+        end
+        for k in $descendants
             set -l cmd (ps -o command= -p $k | string trim)
-            string match -qr '^(-?fish|fish |hwatch)' -- $cmd
+            test -n "$cmd"; or continue
+            string match -qr '^(-?fish|fish$|fish |hwatch)' -- $cmd
             or begin
                 set safe 0
-                printf "  ⚠ orphan %-8s pid=%-7s child pid=%s runs: %s\n" $session $pid $k $cmd
+                printf "  ⚠ orphan %-8s pid=%-7s descendant pid=%s runs: %s\n" $session $pid $k $cmd
             end
         end
-        printf "  ORPHAN  %-9s pid=%-7s up %-12s children=%d %s\n" $session $pid $age (count $kids) (test $safe -eq 1; and echo "(safe to kill)"; or echo "(HAS ACTIVE WORK — skipped)")
+        printf "  ORPHAN  %-9s pid=%-7s up %-12s descendants=%d %s\n" $session $pid $age (count $descendants) (test $safe -eq 1; and echo "(safe to kill)"; or echo "(HAS ACTIVE WORK — skipped)")
         set -a orphans $pid
         set -a orphan_safe $safe
     end
