@@ -25,8 +25,8 @@ args = ["awslabs.aws-documentation-mcp-server@latest"]
 [mcp_servers.awslabs-aws-documentation-mcp-server.env]
 FASTMCP_LOG_LEVEL = "ERROR"
 
-[mcp_servers.context7]
-command = "context7-mcp"
+[mcp_servers.mintlify-index]
+url = "https://index.mintlify.com/mcp"
 
 [mcp_servers.playwright-mcp]
 command = "playwright-mcp"
