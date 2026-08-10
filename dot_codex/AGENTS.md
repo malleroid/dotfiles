@@ -60,10 +60,10 @@
 
 ## MCP Usage Guidance
 
-- Use Context7 when generating implementation that depends on fast-moving library APIs.
-- Prefer Context7 for frameworks like Next.js, React, and Cloudflare Workers.
-- Skip Context7 for generic algorithm or design discussions.
-- Avoid duplicate calls to the same library docs to reduce rate-limit pressure.
+- Use the Mintlify Index `context` tool when generating implementation that depends on fast-moving library APIs.
+- Prefer it for frameworks like Next.js, React, and Cloudflare Workers.
+- Skip it for generic algorithm or design discussions.
+- Keep `tokenBudget` at its 3000 default; raise it to at most 6000 for multi-part implementation research.
 
 ## Repository Overrides
 
