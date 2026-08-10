@@ -24,7 +24,7 @@
 
 - Every user-facing response (including short acknowledgements) must start with a source label on the first line.
 - Labels:
-  - 🔍 **investigated**: Main claims are backed by tools called in this turn (Read / Grep / Bash / WebFetch / Context7 etc.).
+  - 🔍 **investigated**: Main claims are backed by tools called in this turn (Read / Grep / Bash / WebFetch / MCP tools etc.).
   - 💭 **inferred**: Based on training-data recall, logical inference, code generation, opinion, or simple acknowledgement. No tool calls in this turn, or tool results unrelated to the claims.
   - 🔍💭 **mixed**: Both. Append an inline marker (🔍 / 💭) to each individual claim so the reader can tell them apart.
 - Decision flow:
