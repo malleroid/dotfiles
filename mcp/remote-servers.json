@@ -18,6 +18,10 @@
     "url": "https://mcp.figma.com/mcp",
     "auth": "oauth"
   },
+  "mintlify-index": {
+    "transport": "http",
+    "url": "https://index.mintlify.com/mcp"
+  },
   "whimsical": {
     "transport": "http",
     "url": "https://mcp.whimsical.com/mcp",
