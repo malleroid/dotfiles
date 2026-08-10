@@ -35,11 +35,6 @@
       ],
       "env": {}
     },
-    "context7": {
-      "command": "context7-mcp",
-      "args": [],
-      "env": {}
-    },
     "awslabs-aws-knowledge-mcp-server": {
       "type": "http",
       "url": "https://knowledge-mcp.global.api.aws",
@@ -71,6 +66,13 @@
     "atlassian-jira": {
       "type": "http",
       "url": "https://mcp.atlassian.com/v1/mcp",
+      "tools": [
+        "*"
+      ]
+    },
+    "mintlify-index": {
+      "type": "http",
+      "url": "https://index.mintlify.com/mcp",
       "tools": [
         "*"
       ]
