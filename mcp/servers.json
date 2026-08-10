@@ -16,11 +16,6 @@
     "args": ["--headless", "--browser", "chromium"],
     "env": {}
   },
-  "context7": {
-    "command": "context7-mcp",
-    "args": [],
-    "env": {}
-  },
   "rails-mcp-server": {
     "command": "rails-mcp-server",
     "args": [],
