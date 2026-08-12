@@ -4,4 +4,33 @@
 # nix.sh requires both HOME and USER; Ghostty's --noprofile --norc may not set USER.
 export USER="${USER:-$(id -un)}"
 . /nix/var/nix/profiles/default/etc/profile.d/nix.sh 2>/dev/null
+
+# Reap zellij servers orphaned by client respawn races (safe ones only;
+# zellij-orphans skips servers that still hold a live agent underneath).
+# A server wedged right now only becomes an orphan after `zellij attach`
+# below spawns its replacement, so run a second check in the background
+# once that has settled; its findings go to the log.
+ORPHAN_LOG="${HOME}/.local/state/zellij-orphans.log"
+orphan_check() {
+  command -v fish >/dev/null 2>&1 || return 0
+  fish -N -c 'source ~/.config/fish/custom_functions/zellij-orphans.fish
+zellij-orphans --kill' 2>&1
+}
+out=$(orphan_check)
+case "$out" in
+*"HAS ACTIVE WORK"*)
+  # keep the trapped-session warning on screen long enough to read
+  printf '%s\n' "$out"
+  sleep 3
+  ;;
+*ORPHAN*)
+  printf '%s\n' "$out"
+  ;;
+esac
+{
+  sleep 20
+  mkdir -p "${HOME}/.local/state"
+  printf '=== %s ===\n%s\n' "$(date)" "$(orphan_check)" >>"$ORPHAN_LOG"
+} &
+
 exec zellij attach --create personal
