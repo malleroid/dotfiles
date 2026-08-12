@@ -51,9 +51,11 @@ function zellij-orphans --description "Detect (and kill) orphaned zellij servers
             continue
         end
 
-        # safety: refuse auto-kill if ANY descendant (not just direct children)
-        # is more than an idle shell / hwatch — a pane fish can hold a claude
-        # grandchild that dies with the server
+        # safety gate over the WHOLE subtree (a pane fish can hold a claude
+        # grandchild that dies with the server). A trapped claude that is
+        # idle/waiting can never receive input again and its transcript is
+        # persisted, so it is killable — emit a resume hint instead. A busy
+        # claude may be mid tool-call (half-done side effects), so skip.
         set -l safe 1
         set -l descendants
         set -l queue (pgrep -P $pid)
@@ -63,7 +65,41 @@ function zellij-orphans --description "Detect (and kill) orphaned zellij servers
             set -a descendants $cur
             set -a queue (pgrep -P $cur)
         end
+
+        # pass 1: judge claude processes by their own status probe; their
+        # subtrees (MCP servers etc.) inherit the verdict
+        set -l resolved
         for k in $descendants
+            set -l cmd (ps -o command= -p $k | string trim)
+            string match -qr '^claude( |$)' -- $cmd; or continue
+            set -l st ""
+            set -l pname ""
+            set -l psid ""
+            if test -f ~/.claude/sessions/$k.json
+                set -l pdata (jq -r '[.status // "", .name // "", .sessionId // ""] | @tsv' ~/.claude/sessions/$k.json 2>/dev/null)
+                echo $pdata | read -d \t st pname psid
+            end
+            switch $st
+                case idle waiting
+                    test -n "$psid"
+                    and printf "  resume with: claude -n '%s' -r %s\n" "$pname" $psid
+                case '*'
+                    set safe 0
+                    printf "  ⚠ orphan %-8s pid=%-7s claude pid=%s is '%s' — possibly mid tool-call, not killing\n" $session $pid $k (test -n "$st"; and echo $st; or echo unknown)
+            end
+            set -a resolved $k (pgrep -P $k)
+            set -l sub (pgrep -P $k)
+            while test (count $sub) -gt 0
+                set -l cur $sub[1]
+                set -e sub[1]
+                contains -- $cur $resolved; or set -a resolved $cur
+                set -a sub (pgrep -P $cur)
+            end
+        end
+
+        # pass 2: anything else must be an idle shell / hwatch
+        for k in $descendants
+            contains -- $k $resolved; and continue
             set -l cmd (ps -o command= -p $k | string trim)
             test -n "$cmd"; or continue
             string match -qr '^(-?fish|fish$|fish |hwatch)' -- $cmd
