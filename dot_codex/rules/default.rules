@@ -54,3 +54,9 @@ prefix_rule(
     justification = "Merge pull requests manually after reviewing the final state.",
 )
 prefix_rule(pattern=["git", "switch"], decision="allow")
+prefix_rule(pattern=["gh", "pr", "edit"], decision="allow")
+prefix_rule(pattern=["gh", "label", "list"], decision="allow")
+prefix_rule(pattern=["docker", "compose", "build"], decision="allow")
+prefix_rule(pattern=["docker", "compose", "run"], decision="allow")
+prefix_rule(pattern=["docker", "image", "inspect"], decision="allow")
+prefix_rule(pattern=["gh", "search", "prs"], decision="allow")
