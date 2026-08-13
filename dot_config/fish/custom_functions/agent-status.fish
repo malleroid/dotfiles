@@ -108,9 +108,12 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     # 1. Claude Code native probes
     for f in ~/.claude/sessions/*.json
         test -f $f; or continue
-        set -l data (jq -r '[.pid, .sessionId // "", .status // "busy", .name // "", .cwd // "", .waitingFor // ""] | @tsv' $f 2>/dev/null)
+        set -l data (jq -r '[.pid, .sessionId // "", .status // "busy", .name // "", .cwd // "", .waitingFor // "", .kind // "interactive"] | @tsv' $f 2>/dev/null)
         test -n "$data"; or continue
-        echo $data | read -d \t pid sid st name cwd wf
+        echo $data | read -d \t pid sid st name cwd wf kind
+        # only sessions the user can act on; bg/daemon subagent processes
+        # (background-by-default since Claude Code 2.1.197) are not actionable
+        test "$kind" = interactive; or continue
         # skip probes left behind by dead processes
         kill -0 $pid 2>/dev/null; or continue
         set -a probe_sessions $sid
