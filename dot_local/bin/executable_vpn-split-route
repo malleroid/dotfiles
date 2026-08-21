@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+# Route only selected domains through a split-tunnelled VPN.
+#
+# macOS routes by IP, so "per-domain VPN" means: resolve the configured domains
+# and pin host routes for the resulting addresses to the VPN interface, leaving
+# the default route alone. The kernel drops those routes together with the VPN
+# interface, so this has to run after every connect -- hence the `connect`
+# subcommand, which connects and syncs in one step.
+#
+# Usage: vpn-split-route <connect|sync|status|disconnect>
+# Config: ~/.config/vpn-split-route/config
+#         (example: ~/.local/share/vpn-split-route/config.example)
+set -euo pipefail
+
+CONFIG_PATH="${VPN_SPLIT_ROUTE_CONFIG:-$HOME/.config/vpn-split-route/config}"
+EXAMPLE_PATH="$HOME/.local/share/vpn-split-route/config.example"
+CONNECT_TIMEOUT=30
+
+# Only route(8) needs root. Starting the VPN goes through networksetup, which
+# resolves the credentials the same way the GUI does (see cmd_connect).
+SUDO=""
+if [ "$(id -u)" -ne 0 ]; then
+  SUDO="sudo"
+fi
+
+usage() {
+  echo "usage: vpn-split-route <connect|sync|status|disconnect>" >&2
+  exit 1
+}
+
+# --- Config ---------------------------------------------------------------
+# Parsed as data, never sourced: the config is user-writable while route
+# changes run as root, so it must not be able to inject shell code.
+
+SERVICE=""
+DOMAINS=""
+
+load_config() {
+  if [ ! -f "$CONFIG_PATH" ]; then
+    echo "error: config not found: $CONFIG_PATH" >&2
+    echo "       create one based on the example: $EXAMPLE_PATH" >&2
+    exit 1
+  fi
+
+  local key="" val=""
+  while read -r key val _ || [ -n "$key" ]; do
+    case "$key" in
+      '' | \#*) continue ;;
+      service) SERVICE="$val" ;;
+      domain) DOMAINS="$DOMAINS $val" ;;
+      *) echo "warn: ignoring unknown config key: $key" >&2 ;;
+    esac
+  done <"$CONFIG_PATH"
+
+  if [ -z "$SERVICE" ]; then
+    echo "error: no 'service' set in $CONFIG_PATH" >&2
+    exit 1
+  fi
+  if [ -z "${DOMAINS// /}" ]; then
+    echo "error: no 'domain' entries in $CONFIG_PATH" >&2
+    exit 1
+  fi
+
+  # Reject anything that is not a plain hostname before it reaches route(8).
+  local d
+  for d in $DOMAINS; do
+    case "$d" in
+      *[!A-Za-z0-9.-]* | -* | *-)
+        echo "error: invalid domain in config: $d" >&2
+        exit 1
+        ;;
+    esac
+  done
+}
+
+# --- VPN state ------------------------------------------------------------
+
+# Read in full and trim rather than piping to head(1): closing the pipe early
+# would leave scutil killed by SIGPIPE, which pipefail turns into a failure.
+vpn_status() {
+  local out=""
+  out=$(scutil --nc status "$SERVICE" 2>/dev/null || true)
+  printf '%s\n' "${out%%$'\n'*}"
+}
+
+# The interface is resolved from the service, not hardcoded: with a second VPN
+# already up this service can land on ppp1 instead of ppp0.
+vpn_interface() {
+  local out=""
+  out=$(scutil --nc status "$SERVICE" 2>/dev/null || true)
+  printf '%s\n' "$out" | awk '/InterfaceName/ { print $3; exit }'
+}
+
+require_connected() {
+  if [ "$(vpn_status)" != "Connected" ]; then
+    echo "error: VPN '$SERVICE' is not connected" >&2
+    echo "       run: vpn-split-route connect" >&2
+    exit 1
+  fi
+}
+
+# Resolve through the system resolver so mDNSResponder's cache is honoured.
+# dig(1) would bypass it and send every query to the VPN-pushed nameservers,
+# which are themselves reachable only over the tunnel.
+resolve() {
+  dscacheutil -q host -a name "$1" | awk '/^ip_address:/ { print $2 }'
+}
+
+current_iface_for() {
+  route -n get "$1" 2>/dev/null | awk '/interface:/ { print $2; exit }'
+}
+
+# --- Subcommands ----------------------------------------------------------
+
+cmd_sync() {
+  require_connected
+
+  local iface
+  iface=$(vpn_interface)
+  if [ -z "$iface" ]; then
+    echo "error: could not resolve the interface for '$SERVICE'" >&2
+    exit 1
+  fi
+
+  echo "==> syncing routes via $iface"
+
+  local domain ips ip cur added=0 kept=0
+  for domain in $DOMAINS; do
+    ips=$(resolve "$domain" || true)
+    if [ -z "$ips" ]; then
+      echo "warn: $domain did not resolve, skipping" >&2
+      continue
+    fi
+
+    for ip in $ips; do
+      # dscacheutil also reports AAAA records; host routes here are IPv4 only.
+      case "$ip" in
+        *:*) continue ;;
+      esac
+
+      cur=$(current_iface_for "$ip")
+      if [ "$cur" = "$iface" ]; then
+        kept=$((kept + 1))
+        continue
+      fi
+
+      $SUDO route add -host "$ip" -interface "$iface" >/dev/null
+      echo "    + $ip ($domain)"
+      added=$((added + 1))
+    done
+  done
+
+  echo "==> done: $added added, $kept already routed"
+}
+
+cmd_connect() {
+  if [ "$(vpn_status)" = "Connected" ]; then
+    echo "==> $SERVICE is already connected"
+  else
+    echo "==> connecting $SERVICE"
+    # networksetup, not `scutil --nc start`: the L2TP password and the IPSec
+    # shared secret live in /Library/Keychains/System.keychain, and scutil
+    # fails to resolve them even under sudo ("IPSec 共有シークレットが見つかり
+    # ません"). networksetup takes the same path the GUI does and needs no
+    # privileges. Despite the name, the PPPoE verbs drive PPP-based VPNs too.
+    networksetup -connectpppoeservice "$SERVICE"
+
+    local waited=0
+    while [ "$waited" -lt "$CONNECT_TIMEOUT" ]; do
+      sleep 1
+      waited=$((waited + 1))
+      if [ "$(vpn_status)" = "Connected" ]; then
+        break
+      fi
+    done
+
+    if [ "$(vpn_status)" != "Connected" ]; then
+      echo "error: '$SERVICE' did not connect within ${CONNECT_TIMEOUT}s" >&2
+      exit 1
+    fi
+    echo "==> connected after ${waited}s"
+  fi
+
+  cmd_sync
+}
+
+cmd_disconnect() {
+  networksetup -disconnectpppoeservice "$SERVICE"
+  echo "==> disconnecting $SERVICE (routes are dropped with the interface)"
+}
+
+cmd_status() {
+  local st
+  st=$(vpn_status)
+  echo "service : $SERVICE"
+  echo "status  : ${st:-unknown}"
+
+  if [ "$st" != "Connected" ]; then
+    return 0
+  fi
+
+  local iface
+  iface=$(vpn_interface)
+  echo "iface   : ${iface:-unknown}"
+  echo ""
+  printf '%-32s %-16s %s\n' "DOMAIN" "ADDRESS" "ROUTE"
+
+  local domain ip cur state
+  for domain in $DOMAINS; do
+    for ip in $(resolve "$domain" || true); do
+      case "$ip" in
+        *:*) continue ;;
+      esac
+      cur=$(current_iface_for "$ip")
+      if [ "$cur" = "$iface" ]; then
+        state="via $iface"
+      else
+        state="NOT ROUTED (via ${cur:-?})"
+      fi
+      printf '%-32s %-16s %s\n' "$domain" "$ip" "$state"
+    done
+  done
+}
+
+# --- Main -----------------------------------------------------------------
+
+case "${1:-}" in
+  connect)
+    load_config
+    cmd_connect
+    ;;
+  sync)
+    load_config
+    cmd_sync
+    ;;
+  status)
+    load_config
+    cmd_status
+    ;;
+  disconnect)
+    load_config
+    cmd_disconnect
+    ;;
+  *) usage ;;
+esac

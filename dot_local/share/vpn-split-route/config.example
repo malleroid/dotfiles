@@ -1,0 +1,27 @@
+# Example config for vpn-split-route.
+#
+# Setup:
+#   1. Copy this file to ~/.config/vpn-split-route/config
+#      mkdir -p ~/.config/vpn-split-route
+#      cp ~/.local/share/vpn-split-route/config.example ~/.config/vpn-split-route/config
+#   2. Fill in the VPN service name and the domains to route through it
+#
+# Keep the real config out of any git repository. It names internal hosts, and
+# "these hosts sit behind a VPN allowlist" is useful to an attacker even when
+# the names themselves resolve publicly.
+#
+# Format: one "key value" pair per line, '#' starts a comment. The file is
+# parsed as data, never sourced, so shell syntax has no effect here.
+
+# service: the VPN service name exactly as `scutil --nc list` prints it.
+service example-vpn
+
+# domain: hosts to pin to the VPN interface. One entry per line.
+#         Everything not listed keeps using the normal default route, which is
+#         the point: only this traffic is pushed onto the corporate network.
+#
+#         Suited to hosts that are reachable only from the VPN's egress IP.
+#         Each domain is re-resolved on every run, so load-balanced targets
+#         whose addresses rotate are picked up again by `sync`.
+domain stg.example.com
+domain internal-tool.example.com
