@@ -141,6 +141,15 @@ abbr -a ytsubs 'yt-dlp --skip-download --write-subs --write-auto-subs --sub-lang
 abbr -a ytaudio 'yt-dlp -x --audio-format m4a'
 abbr -a ytaudiojp 'yt-dlp -x --audio-format wav'
 
+# vpn-split-route
+{{ if eq .chezmoi.os "darwin" -}}
+abbr -a vpn 'vpn-split-route'
+abbr -a vpnc 'vpn-split-route connect'
+abbr -a vpnd 'vpn-split-route disconnect'
+abbr -a vpns 'vpn-split-route sync'
+abbr -a vpnst 'vpn-split-route status'
+{{ end -}}
+
 # secure
 abbr -a mv 'mv -i'
 abbr -a rm 'rm -i'
