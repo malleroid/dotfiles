@@ -372,5 +372,6 @@
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false
+  "agentPushNotifEnabled": false,
+  "tui": "fullscreen"
 }
