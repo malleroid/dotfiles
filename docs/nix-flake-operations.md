@@ -78,7 +78,7 @@ git restore flake.lock
 Try again later — the cache may catch up. Or try a slightly older revision with `scripts/bump-flake.sh <rev>` until the check passes.
 
 ### Pin the offender separately
-For packages that consistently lag on `aarch64-darwin` (e.g., `yt-dlp` chains in `deno`/`rusty-v8`), pin them to a known-cached revision in a dedicated input.
+For packages that lag on `aarch64-darwin` (currently `mise`, which chains in `usage`; previously `yt-dlp`, which chains in `deno`/`rusty-v8`), pin them to a known-cached revision in a dedicated input.
 
 ```nix
 # flake.nix

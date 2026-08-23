@@ -4,16 +4,17 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # yt-dlp が deno/rusty-v8 を引き込み、unstable revision によっては aarch64-darwin で未キャッシュ。
-    # cache 命中確認済みの revision に固定する。更新時は cache 有無を要確認。
-    nixpkgs-yt-dlp.url = "github:NixOS/nixpkgs/9e92285f211dad236540fd617d7e30e0b99bc0e1";
+    # 2026-08-23: mise pulls in `usage`, whose cargo vendor derivation is not
+    # cached for aarch64-darwin on recent unstable revisions. Pin to a revision
+    # with a verified cache hit; re-check with nix-check-pins later.
+    nixpkgs-mise.url = "github:NixOS/nixpkgs/9e92285f211dad236540fd617d7e30e0b99bc0e1";
   };
 
-  outputs = { nixpkgs, nixpkgs-yt-dlp, ... }:
+  outputs = { nixpkgs, nixpkgs-mise, ... }:
     let
       system = "aarch64-darwin";
       pkgs = import nixpkgs { inherit system; };
-      pkgsYtDlp = import nixpkgs-yt-dlp { inherit system; };
+      pkgsMise = import nixpkgs-mise { inherit system; };
       cliPaths = with pkgs; [
           # ## AI
           aichat # All-in-one AI-Powered CLI Chat & Copilot
@@ -43,7 +44,7 @@
           act # Run your GitHub Actions locally
           code2prompt # CLI tool to convert your codebase into a single LLM prompt
           jira-cli-go # Feature-rich interactive Jira command-line (brew: jira-cli)
-          mise # Polyglot runtime manager (asdf rust clone)
+          pkgsMise.mise # Polyglot runtime manager (asdf rust clone) (pinned via nixpkgs-mise input)
           neovim # Ambitious Vim-fork focused on extensibility and agility
           scc # Fast and accurate code counter with complexity and COCOMO estimates
           tree-sitter # Parser generator CLI (required by nvim-treesitter main branch)
@@ -81,7 +82,7 @@
 
           # ## Media
           ffmpeg # Play, record, convert, and stream audio and video
-          pkgsYtDlp.yt-dlp # Download video/audio/subtitles from YouTube and other sites (pinned via nixpkgs-yt-dlp input)
+          yt-dlp # Download video/audio/subtitles from YouTube and other sites
           spotify-player # Command driven spotify player (brew: spotify_player)
 
           # ## MCP
