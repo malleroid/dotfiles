@@ -2,7 +2,9 @@
 
 Day-to-day operations for the Nix CLI bundle. The source of truth is `flake.nix` (package list) and `flake.lock` (pinned input revisions). `package-versions.json` is a generated manifest (package → version) committed alongside the lock so that lock bumps produce human-readable diffs; regenerate it with `scripts/bump-flake.sh`, never edit it by hand. Installation is automated via the chezmoi script `run_onchange_after_10-nix-packages.sh.tmpl`.
 
-Policy: the bundle never builds locally — a revision is only accepted when every package is available from the binary cache. `scripts/bump-flake.sh` enforces this with `nix build --max-jobs 0`.
+Policy: no package ever builds locally — a revision is only accepted when every package in the bundle is available from the binary cache. `scripts/bump-flake.sh` enforces this with `nix build --max-jobs 0 --dry-run`.
+
+The one derivation exempt from the check is the top-level `dotfiles-cli` buildEnv. It is a symlink farm over the package list, so its hash changes with every lock bump and it is never in the public cache; it is always realised locally (cheaply) when the bundle is installed. Checking it like a package would fail every update, so `scripts/bump-flake.sh` excludes it by name.
 
 ## Adding a package
 
@@ -51,7 +53,7 @@ scripts/bump-flake.sh <rev>     # pin nixpkgs input to an exact revision
 
 The script:
 1. Updates (or pins) the `nixpkgs` input in `flake.lock`
-2. Verifies binary cache coverage with `nix build --max-jobs 0` — fails hard if anything would build locally
+2. Verifies binary cache coverage with `nix build --max-jobs 0 --dry-run` — fails hard if any package would build locally, listing the offending derivations
 3. Regenerates `package-versions.json`
 4. Shows the per-package version diff for human review, then stops (no commit)
 
