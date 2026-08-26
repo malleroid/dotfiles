@@ -1,35 +1,36 @@
-# リポジトリ専用ファイル (デプロイしない)
-# Scratch dir for temp files (the ./tmp/ mandated by CLAUDE.md)
-tmp/**
+# Repo-only files, never deployed
 README.md
-Brewfile.formulae
 Brewfile.casks
+Brewfile.formulae
 flake.nix
 flake.lock
 package-versions.json
-scripts/**
-.editorconfig
-link.sh
-setup.sh
-Brewfile
 docs/**
 mcp/**
-jira-cli/**
-raycast/**
-.ruby-lsp/**
-.claude/plans/**
-.claude/docs/**
-.claude/settings.local.json
+scripts/**
 .claude/setup.fish
 
-# Fisher/自動生成 (各ツールが管理)
+# Scratch dir for temp files (the ./tmp/ mandated by CLAUDE.md)
+tmp/**
+
+# Fisher and other generated fish state, owned by the tools themselves. These have no
+# source counterpart, so they guard against `chezmoi add`-ing them by accident. Keep
+# them even though `chezmoi ignored` never lists them.
 .config/fish/completions/**
 .config/fish/conf.d/**
 .config/fish/functions/**
 .config/fish/themes/**
 .config/fish/fish_variables
 
-# Ephemeral 環境で除外
+# OS-specific files: `<name>.<os>.fish` is deployed only to its own OS
+{{ if ne .chezmoi.os "darwin" }}
+.config/fish/custom_conf.d/*.darwin.fish
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.config/fish/custom_conf.d/*.linux.fish
+{{ end }}
+
+# Excluded on ephemeral machines
 {{ if .is_ephemeral }}
 .config/nvim/**
 .config/ghostty/**
