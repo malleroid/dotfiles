@@ -12,6 +12,7 @@
     "pr": ""
   },
   "permissions": {
+    "defaultMode": "auto",
     "allow": [
       "Bash(aws pricing *)",
       "Bash(brew cat *)",
