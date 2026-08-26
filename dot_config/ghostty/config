@@ -34,7 +34,7 @@ command = ~/.local/bin/start-zellij
 shell-integration = none
 
 # --- Scrollback ---
-# バイト単位 (10MB)。主要なスクロールバックは zellij 側 (100k lines) で管理
+# In bytes (10MB). Zellij owns the scrollback that matters (100k lines)
 scrollback-limit = 10000000
 
 # --- Keybindings ---
