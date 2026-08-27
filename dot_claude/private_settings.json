@@ -1,5 +1,4 @@
 {
-  "outputStyle": "Concise",
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "95",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
@@ -12,7 +11,6 @@
     "pr": ""
   },
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "Bash(aws pricing *)",
       "Bash(brew cat *)",
@@ -267,7 +265,8 @@
       "Bash(git commit --no-verify*)",
       "Bash(git push *)",
       "Bash(git reset *)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus[1m]",
   "hooks": {
@@ -369,11 +368,12 @@
       }
     }
   },
+  "outputStyle": "Concise",
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": false,
-  "tui": "fullscreen"
+  "agentPushNotifEnabled": false
 }
