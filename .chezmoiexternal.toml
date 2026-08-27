@@ -1,0 +1,15 @@
+# Skills maintained upstream. chezmoi fetches them, so the repo declares the pinned
+# version instead of vendoring the contents.
+#
+# Pin to a commit SHA, never a moving ref: with a branch tarball the skill contents can
+# change without leaving a trace in this repo's history. Updating is a deliberate one-line
+# edit. refreshPeriod is omitted on purpose — a SHA tarball is immutable, so the default
+# (cache forever) is correct.
+
+# github/gh-stack ships its agent skill in-repo. Pinned to main rather than the v0.1.0 tag
+# because the tag predates the split into references/.
+[".agents/skills/gh-stack"]
+    type = "archive"
+    url = "https://github.com/github/gh-stack/archive/5fe0a50cceb6835a6529d237b8141ae7907a8ebd.tar.gz"
+    stripComponents = 3
+    include = ["*/skills/gh-stack/**"]
