@@ -1,0 +1,23 @@
+# Tasks to run in the first interactive shell after a machine boot.
+#
+# Setup:
+#   cp ~/.config/fish/once_per_boot.local.fish.example \
+#      ~/.config/fish/once_per_boot.local.fish
+#   $EDITOR ~/.config/fish/once_per_boot.local.fish
+#
+# Keep the real file local; do not track it in dotfiles.
+#
+# The tasks run in the foreground, just before the first prompt is drawn, so they can
+# use anything the shell sets up (custom functions, abbreviations, mise, ssh-agent).
+# Leave this file absent, or the function undefined, to disable the mechanism.
+
+function once_per_boot_tasks
+    set -l repo "$HOME/ghq/github.com/<your-owner>/<your-repo>"
+
+    # Clear out anything left over from the previous boot, then start only what is needed.
+    compose-project-down $repo
+    compose-project-up $repo web sidekiq
+end
+
+# How long to wait for the Docker engine (seconds). Default: 180.
+# set -g docker_engine_timeout 180
