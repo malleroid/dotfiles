@@ -19,7 +19,9 @@ function __once_per_boot_claim --description 'Claim this boot; fail if another s
     test -n "$state_home"; or set state_home "$HOME/.local/state"
     set -l state "$state_home/once-per-boot"
 
-    set -l boot_id (sysctl -n kern.boottime | string match -rg '\bsec = (\d+)')
+    # Not kern.boottime: the kernel recomputes it on wake, so a sleep/wake cycle looks
+    # like a fresh boot and the tasks run again. This uuid is fixed for the boot.
+    set -l boot_id (sysctl -n kern.bootsessionuuid)
     test -n "$boot_id"; or return 1
 
     mkdir -p "$state"; or return 1
