@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":semanticCommits"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "timezone": "Asia/Tokyo",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.chezmoiexternal\\.toml$/"
+      ],
+      "matchStrings": [
+        "url = \"https://github\\.com/(?<depName>[^/\"]+/[^/\"]+)/archive/(?<currentDigest>[0-9a-f]{40})\\.tar\\.gz\""
+      ],
+      "currentValueTemplate": "main",
+      "packageNameTemplate": "https://github.com/{{{depName}}}",
+      "datasourceTemplate": "git-refs"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ Brewfile.formulae
 flake.nix
 flake.lock
 package-versions.json
+renovate.json
 docs/**
 mcp/**
 scripts/**
