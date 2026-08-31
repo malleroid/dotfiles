@@ -1,12 +1,6 @@
-function _tp_connect_link -d "Map a target to a TablePlus connection UUID via fzf, append to ids.fish"
+function _tp_connect_link -d "Map a target to a TablePlus connection UUID, matching on the forwarded local port"
     set -l target $argv[1]
     test -n "$target"; or return 1
-
-    set -l plist (_tp_connect_plist)
-    if test -z "$plist"
-        echo "tp-connect: TablePlus Connections.plist not found" >&2
-        return 1
-    end
 
     if not type -q jq
         echo "tp-connect: jq is required for --link" >&2
@@ -17,20 +11,35 @@ function _tp_connect_link -d "Map a target to a TablePlus connection UUID via fz
         return 1
     end
 
-    set -l line (plutil -convert json -o - "$plist" 2>/dev/null \
-        | jq -r '
-            [.. | objects | select(has("ID"))
-              | {
-                  id: .ID,
-                  name: (.ConnectionName // .Name // .name // "(unnamed)"),
-                  driver: (.DriverDisplayName // .Driver // .ConnectionType // "")
-                }
-            ]
-            | unique_by(.id)
-            | .[]
-            | "\(.id)\t\(.name)\t\(.driver)"
-        ' \
-        | fzf --delimiter=\t --with-nth=2,3 --prompt="TablePlus connection for $target> ")
+    set -l connections (_tp_connect_connections)
+    if test (count $connections) -eq 0
+        echo "tp-connect: no TablePlus connections found" >&2
+        return 1
+    end
+
+    set -l local_port (_tp_connect_lookup $target)
+    set -l candidates
+    if test -n "$local_port"
+        for connection in $connections
+            set -l fields (string split \t -- $connection)
+            test "$fields[4]" = "$local_port"; and set -a candidates $connection
+        end
+    end
+
+    set -l line
+    switch (count $candidates)
+        case 1
+            set line $candidates[1]
+            echo "tp-connect: port $local_port matches "(string split \t -- $line)[2]
+        case 0
+            test -n "$local_port"
+            and echo "tp-connect: no TablePlus connection listens on $local_port, showing all" >&2
+            set line (printf '%s\n' $connections \
+                | fzf --delimiter=\t --with-nth=2,3,4 --prompt="TablePlus connection for $target> ")
+        case '*'
+            set line (printf '%s\n' $candidates \
+                | fzf --delimiter=\t --with-nth=2,3 --prompt="TablePlus connection for $target (port $local_port)> ")
+    end
 
     test -n "$line"; or return 1
     set -l uuid (string split \t -- $line)[1]
