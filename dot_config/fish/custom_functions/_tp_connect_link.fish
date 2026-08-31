@@ -54,6 +54,8 @@ function _tp_connect_link -d "Map a target to a TablePlus connection UUID, match
     end
 
     set -l key _tp_id_(string replace -a '-' '_' $target)
+    string match -v -r "^set -g $key " <$ids_file >$ids_file.new
+    mv $ids_file.new $ids_file
     printf "set -g %s '%s'\n" $key $uuid >>$ids_file
 
     echo "tp-connect: linked $target -> $uuid"
