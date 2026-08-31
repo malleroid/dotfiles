@@ -22,7 +22,9 @@ function _tp_connect_id -d "Resolve the TablePlus connection UUID for a target"
     set -l matches
     for connection in (_tp_connect_connections)
         set -l fields (string split \t -- $connection)
-        test "$fields[4]" = "$local_port"; and set -a matches $fields[1]
+        test "$fields[4]" = "$local_port"; or continue
+        contains -- "$fields[5]" 127.0.0.1 localhost ::1; or continue
+        set -a matches $fields[1]
     end
 
     test (count $matches) -eq 1; or return 1

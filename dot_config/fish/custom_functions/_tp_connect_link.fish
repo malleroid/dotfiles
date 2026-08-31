@@ -22,7 +22,9 @@ function _tp_connect_link -d "Map a target to a TablePlus connection UUID, match
     if test -n "$local_port"
         for connection in $connections
             set -l fields (string split \t -- $connection)
-            test "$fields[4]" = "$local_port"; and set -a candidates $connection
+            test "$fields[4]" = "$local_port"; or continue
+            contains -- "$fields[5]" 127.0.0.1 localhost ::1; or continue
+            set -a candidates $connection
         end
     end
 
@@ -33,9 +35,9 @@ function _tp_connect_link -d "Map a target to a TablePlus connection UUID, match
             echo "tp-connect: port $local_port matches "(string split \t -- $line)[2]
         case 0
             test -n "$local_port"
-            and echo "tp-connect: no TablePlus connection listens on $local_port, showing all" >&2
+            and echo "tp-connect: no local TablePlus connection on port $local_port, showing all" >&2
             set line (printf '%s\n' $connections \
-                | fzf --delimiter=\t --with-nth=2,3,4 --prompt="TablePlus connection for $target> ")
+                | fzf --delimiter=\t --with-nth=2,3,4,5 --prompt="TablePlus connection for $target> ")
         case '*'
             set line (printf '%s\n' $candidates \
                 | fzf --delimiter=\t --with-nth=2,3 --prompt="TablePlus connection for $target (port $local_port)> ")

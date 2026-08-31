@@ -1,4 +1,4 @@
-function _tp_connect_connections -d "List TablePlus saved connections as id<TAB>name<TAB>driver<TAB>port"
+function _tp_connect_connections -d "List TablePlus saved connections as id<TAB>name<TAB>driver<TAB>port<TAB>host"
     set -l plist (_tp_connect_plist)
     test -n "$plist"; or return 1
     type -q jq; or return 1
@@ -10,11 +10,12 @@ function _tp_connect_connections -d "List TablePlus saved connections as id<TAB>
                   id: .ID,
                   name: (.ConnectionName // .Name // .name // "(unnamed)"),
                   driver: (.DriverDisplayName // .Driver // .ConnectionType // ""),
-                  port: ((.DatabasePort // "") | tostring)
+                  port: ((.DatabasePort // "") | tostring),
+                  host: (.DatabaseHost // "")
                 }
             ]
             | unique_by(.id)
             | .[]
-            | "\(.id)\t\(.name)\t\(.driver)\t\(.port)"
+            | "\(.id)\t\(.name)\t\(.driver)\t\(.port)\t\(.host)"
         '
 end
