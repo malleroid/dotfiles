@@ -13,5 +13,9 @@ function _tp_connect_targets -d "List connect_db / connect_ec2 targets parsed fr
     end
 
     test -r $file; or return 1
-    string match -rg "'([^']+)'" <$file
+
+    # Only the hosts=( ... ) array holds targets; the surrounding _arguments
+    # and _values lines are quoted too and would otherwise be picked up.
+    awk '/hosts=\(/ { inside = 1; next } inside && /^[[:space:]]*\)/ { exit } inside' $file \
+        | string match -rag "'([^']+)'"
 end
