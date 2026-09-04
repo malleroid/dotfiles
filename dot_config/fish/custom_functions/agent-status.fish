@@ -167,6 +167,12 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
         echo $data | read -d \t agent st hook_sid hook_cwd zellij_session pane_id
         # a probe already reported this session, so the hook row would be a duplicate
         test -n "$hook_sid"; and contains -- $hook_sid $probe_sessions; and continue
+        # claude probes are authoritative: a claude hook file whose session has no
+        # live probe is a leftover (Stop never fires when a pane is killed mid-prompt)
+        if test "$agent" = claude; and test -n "$hook_sid"
+            rm -f $f
+            continue
+        end
 
         set -a hooked_agents $agent
         set -l name -
