@@ -43,6 +43,25 @@ function zellij-orphans --description "Detect (and kill) orphaned zellij servers
             end
             if test $own_fds -le 1 -a $max_other -ge 2
                 set verdict orphan
+            else if test $own_fds -le 1
+                # fd counts can't decide when no client is attached anywhere
+                # (both servers hold a single fd). Tiebreak: the socket file is
+                # recreated by the newest server at startup, so the owner's
+                # start time matches the socket mtime; an older sibling is an
+                # orphan.
+                set -l has_sibling 0
+                for j in (seq (count $pids))
+                    test $socks[$j] = $sock -a $pids[$j] != $pid; and set has_sibling 1
+                end
+                if test $has_sibling -eq 1
+                    set -l sock_mtime (stat -f %m $sock 2>/dev/null)
+                    set -l lstart (ps -o lstart= -p $pid | string replace -ra ' +' ' ' | string trim)
+                    set -l my_start (date -j -f "%a %b %d %T %Y" $lstart +%s 2>/dev/null)
+                    if test -n "$sock_mtime" -a -n "$my_start"
+                        and test (math "abs($sock_mtime - $my_start)") -gt 60
+                        set verdict orphan
+                    end
+                end
             end
         end
 
