@@ -29,6 +29,49 @@ function _register_http_server --argument-names name url transport
     end
 end
 
+# ── Helper: list the MCP server names stored in a client's JSON config ──
+function _mcp_names_from_json --argument-names file
+    if test -s "$file"
+        jq -r '.mcpServers // {} | keys[]' "$file" 2>/dev/null
+    end
+end
+
+# ── Helper: drop a server from every client ──
+# Clients with an MCP CLI are asked directly; the rest are edited as JSON.
+function _unregister_server --argument-names name
+    claude mcp remove --scope user $name 2>/dev/null
+    and echo "  ✅ Claude Code"
+    or  echo "  ⏭️  Claude Code (not registered)"
+
+    codex mcp remove $name 2>/dev/null
+    and echo "  ✅ Codex"
+    or  echo "  ⏭️  Codex (not registered)"
+
+    copilot mcp remove $name 2>/dev/null
+    and echo "  ✅ Copilot"
+    or  echo "  ⏭️  Copilot (not registered)"
+
+    _delete_from_json "$desktop_cfg" $name "Claude Desktop" desktop
+    _delete_from_json "$HOME/.gemini/config/mcp_config.json" $name "Antigravity CLI (agy)" agy
+end
+
+# ── Helper: delete one .mcpServers entry from a JSON config ──
+function _delete_from_json --argument-names file name label slug
+    if not test -s "$file"
+        echo "  ⏭️  $label (config not found)"
+        return
+    end
+    if not _mcp_names_from_json "$file" | string match -q -- $name
+        echo "  ⏭️  $label (not registered)"
+        return
+    end
+    jq --arg n $name 'del(.mcpServers[$n])' "$file" \
+        > "$script_dir/_tmp_$slug.json"
+    and mv "$script_dir/_tmp_$slug.json" "$file"
+    and echo "  ✅ $label"
+    or  echo "  ❌ $label (failed to update)"
+end
+
 # ── 1. stdio servers ──
 echo "=== stdio MCP servers ==="
 
@@ -162,6 +205,67 @@ else
         # OAuth servers need a one-time browser auth (cannot be scripted)
         if test "$auth" = oauth
             echo "  🔑 OAuth: run '/mcp auth $name' in Copilot on first use"
+        end
+    end
+end
+
+# ── 4. Prune servers that are registered but no longer in the config ──
+echo ""
+echo "=== Orphaned MCP servers ==="
+
+set desired
+for cfg in "$servers_config" "$local_config" "$remote_config"
+    if test -f "$cfg"
+        set desired $desired (jq -r 'keys[]' "$cfg")
+    end
+end
+
+set prune_names
+set prune_labels
+
+function _collect_orphans --argument-names label
+    for name in $argv[2..]
+        if contains -- $name $desired
+            continue
+        end
+        set idx (contains -i -- $name $prune_names)
+        if test -n "$idx"
+            set prune_labels[$idx] "$prune_labels[$idx], $label"
+        else
+            set -a prune_names $name
+            set -a prune_labels $label
+        end
+    end
+end
+
+_collect_orphans "Claude Code" (_mcp_names_from_json "$HOME/.claude.json")
+_collect_orphans "Claude Desktop" (_mcp_names_from_json "$desktop_cfg")
+_collect_orphans Copilot (_mcp_names_from_json "$HOME/.copilot/mcp-config.json")
+_collect_orphans Antigravity (_mcp_names_from_json "$HOME/.gemini/config/mcp_config.json")
+_collect_orphans Codex (codex mcp list --json 2>/dev/null | jq -r '.[].name' 2>/dev/null)
+
+if test (count $prune_names) -eq 0
+    echo "  ⏭️  None"
+else
+    echo "  These servers are registered but no longer in the config files:"
+    for i in (seq (count $prune_names))
+        echo "    - $prune_names[$i]  ($prune_labels[$i])"
+    end
+    echo ""
+
+    # Non-interactive runs (chezmoi, CI) must never delete without a human.
+    if not isatty stdin
+        echo "  ⏭️  Skipped: not a TTY. Re-run this script interactively to remove them."
+    else
+        read -P "  Remove them from every client? [y/N] " answer
+        if string match -qir '^y(es)?$' -- $answer
+            for name in $prune_names
+                echo ""
+                echo "  [$name]"
+                _unregister_server $name
+            end
+        else
+            echo "  ⏭️  Kept"
         end
     end
 end
