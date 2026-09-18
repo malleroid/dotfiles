@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Playwright pins a browser revision per release, so bumping playwright-mcp can
+# leave the cached build behind and the MCP server fails to launch. The bundled
+# CLI is used instead of npx so the install and the requirement always come from
+# the same playwright-core.
+#
+# The revision below is what makes this re-run: playwright-mcp tracks latest, so
+# no config file changes when it bumps, and a config hash would never fire.
+# It stays empty until playwright-mcp is installed, which costs one extra run on
+# a fresh machine.
+#
+# chromium revision: {{ output "sh" "-c" "jq -r '.browsers[]|select(.name==\"chromium\").revision' \"$HOME/.local/share/mise/installs/npm-playwright-mcp/latest/lib/node_modules/@playwright/mcp/node_modules/playwright-core/browsers.json\" 2>/dev/null || true" }}
+
+core="$HOME/.local/share/mise/installs/npm-playwright-mcp/latest/lib/node_modules/@playwright/mcp/node_modules/playwright-core"
+
+if [ ! -d "$core" ]; then
+  echo "playwright-mcp not installed, skipping"
+  exit 0
+fi
+
+revision=$(jq -r '.browsers[] | select(.name=="chromium") | .revision' "$core/browsers.json" 2>/dev/null)
+if [ -z "$revision" ] || [ "$revision" = null ]; then
+  echo "could not read the chromium revision, skipping"
+  exit 0
+fi
+
+if [ -d "$HOME/Library/Caches/ms-playwright/chromium-$revision" ]; then
+  exit 0
+fi
+
+echo "Installing Playwright chromium $revision..."
+node "$core/cli.js" install chromium chromium-headless-shell
