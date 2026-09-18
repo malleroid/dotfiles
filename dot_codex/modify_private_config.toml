@@ -30,7 +30,7 @@ url = "https://index.mintlify.com/mcp"
 
 [mcp_servers.playwright-mcp]
 command = "playwright-mcp"
-args = ["--headless", "--browser", "chromium"]
+args = ["--headless"]
 
 [mcp_servers.rails-mcp-server]
 command = "rails-mcp-server"

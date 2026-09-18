@@ -12,9 +12,7 @@
     "playwright-mcp": {
       "command": "playwright-mcp",
       "args": [
-        "--headless",
-        "--browser",
-        "chromium"
+        "--headless"
       ],
       "env": {}
     },
