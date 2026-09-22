@@ -5,3 +5,7 @@
 
 # Per-repo local scripts/config kept out of git (e.g. worktree-config.sh)
 scripts/local/
+
+# Scratch dir mandated by CLAUDE.md. Only affects untracked files, so repos that
+# already track something under tmp/ are unaffected.
+tmp/
