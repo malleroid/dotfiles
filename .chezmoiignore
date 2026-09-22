@@ -39,5 +39,4 @@ tmp/**
 .config/rails-mcp/**
 .copilot/**
 .codex/**
-.agents/**
 {{ end }}
