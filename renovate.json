@@ -18,11 +18,30 @@
         "/^\\.chezmoiexternal\\.toml$/"
       ],
       "matchStrings": [
-        "url = \"https://github\\.com/(?<depName>[^/\"]+/[^/\"]+)/archive/(?<currentDigest>[0-9a-f]{40})\\.tar\\.gz\""
+        "url = \"https://github\\.com/(?<depName>[^/\"]+/[^/\"]+)/archive/(?<currentDigest>[0-9a-f]{40})\\.tar\\.gz\"\\n"
       ],
       "currentValueTemplate": "main",
       "packageNameTemplate": "https://github.com/{{{depName}}}",
       "datasourceTemplate": "git-refs"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.chezmoiexternal\\.toml$/"
+      ],
+      "matchStrings": [
+        "url = \"https://github\\.com/(?<depName>[^/\"]+/[^/\"]+)/archive/(?<currentDigest>[0-9a-f]{40})\\.tar\\.gz\" # (?<currentValue>v\\S+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    }
+  ],
+  "packageRules": [
+    {
+      "groupName": "hunk",
+      "matchPackageNames": [
+        "hunkdiff",
+        "modem-dev/hunk"
+      ]
     }
   ]
 }
