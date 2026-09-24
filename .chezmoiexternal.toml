@@ -13,3 +13,11 @@
     url = "https://github.com/github/gh-stack/archive/2bd699a544a09cb5c45a013d03416e0894b0454e.tar.gz"
     stripComponents = 3
     include = ["*/skills/gh-stack/**"]
+
+# modem-dev/hunk bundles its agent skill in the npm package. Pinned to the commit of the
+# release tag noted after the URL, kept in lockstep with npm:hunkdiff in mise.
+[".agents/skills/hunk-review"]
+    type = "archive"
+    url = "https://github.com/modem-dev/hunk/archive/3fdfde2dd77eb93802c43304c8edd34d79ce81de.tar.gz" # v0.22.0
+    stripComponents = 5
+    include = ["*/packages/hunk/skills/hunk-review/**"]
