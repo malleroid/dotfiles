@@ -46,7 +46,7 @@ SLACK_SKIP_UPDATE = "1"
 "aqua:slackapi/slack-cli" = "latest"
 "carapace" = "latest"
 # Pinned: the hunk-review skill in .chezmoiexternal.toml must match this version
-"npm:hunkdiff" = "0.22.0"
+"npm:hunkdiff" = "0.23.0"
 "aqua:supabase/cli" = "latest"
 "npm:@antiwork/shortest" = "latest"
 "npm:@devcontainers/cli" = "latest"
