@@ -67,7 +67,7 @@ SLACK_SKIP_UPDATE = "1"
 # Python
 "pipx:pyright" = "latest"
 "pipx:mlx-whisper" = { version = "latest", python = "3.14" }
-"pipx:mlx-qwen3-asr" = { version = "latest", extras = "aligner" }
+"pipx:mlx-qwen3-asr" = { version = "latest", extras = "aligner", python = "3.14" }
 "pipx:toot-tooi" = "latest"
 
 # Rust
