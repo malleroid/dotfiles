@@ -10,7 +10,7 @@
 # because the tag predates the split into references/.
 [".agents/skills/gh-stack"]
     type = "archive"
-    url = "https://github.com/github/gh-stack/archive/29a36d314be664583705f18e41cebdf2b61ad514.tar.gz"
+    url = "https://github.com/github/gh-stack/archive/a644af6d538e63804ed93933d4b69a3432372fd2.tar.gz"
     stripComponents = 3
     include = ["*/skills/gh-stack/**"]
 
