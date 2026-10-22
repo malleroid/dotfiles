@@ -50,6 +50,7 @@ dotfiles/
 ├── flake.lock                  # Pinned nixpkgs revisions
 ├── package-versions.json       # Generated per-package version manifest
 ├── scripts/                    # Repo maintenance scripts (bump-flake.sh)
+├── mcp/                        # MCP server definitions + setup.fish (see mcp/README.md)
 ├── Brewfile.formulae           # macOS system-integrated CLI tools
 ├── Brewfile.casks              # macOS GUI apps for Homebrew
 ├── dot_gitconfig                # → ~/.gitconfig
