@@ -78,6 +78,7 @@ echo "=== stdio MCP servers ==="
 for name in (jq -r 'keys[]' "$servers_config")
     set cmd  (jq -r --arg n $name '.[$n].command' "$servers_config")
     set args (jq -r --arg n $name '.[$n].args[]'  "$servers_config")
+    set excluded (jq -r --arg n $name '.[$n].exclude_clients // [] | .[]' "$servers_config")
 
     # Build env flags per client
     set env_flags_claude
@@ -99,7 +100,9 @@ for name in (jq -r 'keys[]' "$servers_config")
     or  echo "  ❌ Claude Code (failed)"
 
     # Claude Desktop
-    if test -f "$desktop_cfg"
+    if contains -- desktop $excluded
+        echo "  ⏭️  Claude Desktop (excluded)"
+    else if test -f "$desktop_cfg"
         set mise_path "$HOME/.local/share/mise/shims"
         set default_path "$mise_path:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
         set entry (jq -c --arg n $name --arg path "$default_path" \
@@ -115,24 +118,32 @@ for name in (jq -r 'keys[]' "$servers_config")
     end
 
     # Copilot CLI
-    set copilot_cfg "$HOME/.copilot/mcp-config.json"
-    if not test -f "$copilot_cfg"
-        mkdir -p ~/.copilot
-        echo '{"mcpServers":{}}' > "$copilot_cfg"
+    if contains -- copilot $excluded
+        echo "  ⏭️  Copilot (excluded)"
+    else
+        set copilot_cfg "$HOME/.copilot/mcp-config.json"
+        if not test -f "$copilot_cfg"
+            mkdir -p ~/.copilot
+            echo '{"mcpServers":{}}' > "$copilot_cfg"
+        end
+        set entry (jq -c --arg n $name \
+            '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
+            "$servers_config")
+        jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$copilot_cfg" \
+            > "$script_dir/_tmp_copilot.json"
+        and mv "$script_dir/_tmp_copilot.json" "$copilot_cfg"
+        and echo "  ✅ Copilot"
+        or  echo "  ❌ Copilot (failed)"
     end
-    set entry (jq -c --arg n $name \
-        '{command: .[$n].command, args: .[$n].args, env: .[$n].env}' \
-        "$servers_config")
-    jq --arg n $name --argjson e $entry '.mcpServers[$n] = $e' "$copilot_cfg" \
-        > "$script_dir/_tmp_copilot.json"
-    and mv "$script_dir/_tmp_copilot.json" "$copilot_cfg"
-    and echo "  ✅ Copilot"
-    or  echo "  ❌ Copilot (failed)"
 
     # Codex CLI (writes through symlink to dotfiles/codex/config.toml)
-    codex mcp add $env_flags_codex $name -- $cmd $args 2>/dev/null
-    and echo "  ✅ Codex"
-    or  echo "  ⏭️  Codex (already exists or error)"
+    if contains -- codex $excluded
+        echo "  ⏭️  Codex (excluded)"
+    else
+        codex mcp add $env_flags_codex $name -- $cmd $args 2>/dev/null
+        and echo "  ✅ Codex"
+        or  echo "  ⏭️  Codex (already exists or error)"
+    end
 
     # Antigravity CLI (agy): write to ~/.gemini/config/mcp_config.json (global)
     # NOTE: agy creates this file empty on first run, so check size (-s) not just
