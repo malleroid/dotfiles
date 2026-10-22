@@ -27,5 +27,11 @@
     "env": {
       "FASTMCP_LOG_LEVEL": "ERROR"
     }
+  },
+  "grafana": {
+    "command": "mcp-grafana",
+    "args": [],
+    "env": {},
+    "exclude_clients": ["desktop", "copilot", "codex"]
   }
 }

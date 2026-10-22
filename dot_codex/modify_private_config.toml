@@ -25,6 +25,10 @@ args = ["awslabs.aws-documentation-mcp-server@latest"]
 [mcp_servers.awslabs-aws-documentation-mcp-server.env]
 FASTMCP_LOG_LEVEL = "ERROR"
 
+[mcp_servers.grafana]
+command = "mcp-grafana"
+env_vars = ["GRAFANA_URL", "GRAFANA_SERVICE_ACCOUNT_TOKEN"]
+
 [mcp_servers.mintlify-index]
 url = "https://index.mintlify.com/mcp"
 
