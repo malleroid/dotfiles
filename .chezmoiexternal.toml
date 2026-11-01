@@ -21,3 +21,30 @@
     url = "https://github.com/modem-dev/hunk/archive/9cca76fbf700217b574dfcdd4fe56c5b4388240b.tar.gz" # v0.24.1
     stripComponents = 5
     include = ["*/packages/hunk/skills/hunk-review/**"]
+
+# docker/skills: only the Dockerfile, Compose, and destructive-command guardrail skills.
+# Installing it as a plugin would pull in all skills and register the remote docker-docs
+# MCP server. All four entries share one URL, so chezmoi downloads the archive once.
+[".agents/skills/docker-project-foundations"]
+    type = "archive"
+    url = "https://github.com/docker/skills/archive/8afc2c6ef4e0ec2ea8e4ba024d0b884ea930b926.tar.gz" # v0.3.1
+    stripComponents = 3
+    include = ["*/skills/docker-project-foundations/**"]
+
+[".agents/skills/docker-build-strategies"]
+    type = "archive"
+    url = "https://github.com/docker/skills/archive/8afc2c6ef4e0ec2ea8e4ba024d0b884ea930b926.tar.gz" # v0.3.1
+    stripComponents = 3
+    include = ["*/skills/docker-build-strategies/**"]
+
+[".agents/skills/docker-compose-patterns"]
+    type = "archive"
+    url = "https://github.com/docker/skills/archive/8afc2c6ef4e0ec2ea8e4ba024d0b884ea930b926.tar.gz" # v0.3.1
+    stripComponents = 3
+    include = ["*/skills/docker-compose-patterns/**"]
+
+[".agents/skills/docker-destructive-guardrails"]
+    type = "archive"
+    url = "https://github.com/docker/skills/archive/8afc2c6ef4e0ec2ea8e4ba024d0b884ea930b926.tar.gz" # v0.3.1
+    stripComponents = 3
+    include = ["*/skills/docker-destructive-guardrails/**"]
