@@ -35,20 +35,15 @@ case "$target" in
 esac
 
 echo "==> Verifying binary cache coverage (local builds forbidden)..."
-# The bundle itself is a buildEnv symlink farm, so its hash changes with every
-# lock bump and it is never in the public cache. Only its inputs have to be
-# substitutable, hence the dry run plus the dotfiles-cli exclusion.
-if ! plan="$(nix build "path:." --no-link --max-jobs 0 --dry-run 2>&1)"; then
-  echo "$plan" >&2
+status=0
+uncached="$(scripts/check-flake-cache.sh)" || status=$?
+
+if [ "$status" -eq 2 ]; then
   echo "!! Evaluation failed; fix flake.nix before retrying." >&2
   exit 1
 fi
 
-uncached="$(printf '%s\n' "$plan" \
-  | grep -o '/nix/store/[^ ]*\.drv' \
-  | grep -v -- '-dotfiles-cli\.drv$' || true)"
-
-if [ -n "$uncached" ]; then
+if [ "$status" -ne 0 ]; then
   echo "!! Not in the binary cache for this revision:" >&2
   echo "$uncached" >&2
   echo "!! Pick another revision, or pin the offending package to a cached one" >&2

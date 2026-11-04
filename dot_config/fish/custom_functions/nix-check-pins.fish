@@ -23,12 +23,16 @@ function nix-check-pins --description "Check if pinned nixpkgs inputs can be mer
         set -l rev (jq -r ".nodes.\"$input\".locked.rev" flake.lock | string sub -l 12)
         echo "Checking $input (currently @ $rev)..."
 
-        set -l result (nix build .#default --override-input $input $main_url --dry-run 2>&1)
+        set -l uncached ($dotfiles/scripts/check-flake-cache.sh --override-input $input $main_url)
 
-        if string match -q "*will be built*" -- $result
-            echo "  ⚠ Still needs builds with main nixpkgs. Keep the pin."
-        else
-            echo "  ✓ Mergeable. Update flake.nix to use 'pkgs.<pkg>' and drop the '$input' input."
+        switch $status
+            case 0
+                echo "  ✓ Mergeable. Update flake.nix to use 'pkgs.<pkg>' and drop the '$input' input."
+            case 1
+                echo "  ⚠ Still needs builds with main nixpkgs. Keep the pin."
+                printf '    %s\n' $uncached
+            case '*'
+                echo "  ✗ Evaluation failed with main nixpkgs (see output above)."
         end
     end
 
