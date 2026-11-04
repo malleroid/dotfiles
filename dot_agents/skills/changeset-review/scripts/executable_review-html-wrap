@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Wrap a review body fragment with the fixed HTML head/style and footer.
+# Usage: review-html-wrap <fragment> <identifier>
+# Writes ./tmp/reviews/<identifier>-<YYYYMMDD-HHMMSS>.html (relative to cwd),
+# prints that path, and deletes the fragment on success.
+set -euo pipefail
+
+FRAGMENT="${1:-}"
+IDENTIFIER="${2:-}"
+if [ -z "$FRAGMENT" ] || [ -z "$IDENTIFIER" ]; then
+  echo "usage: review-html-wrap <fragment> <identifier>" >&2
+  exit 1
+fi
+if [ ! -s "$FRAGMENT" ]; then
+  echo "error: fragment is missing or empty: $FRAGMENT" >&2
+  exit 1
+fi
+
+# The fragment must be body content only; the shell owns these tags.
+if grep -qiE '<(!doctype|html|head|style|body|link)[[:space:]>]' "$FRAGMENT"; then
+  echo "error: fragment must not contain <!doctype>/<html>/<head>/<style>/<body>/<link>: $FRAGMENT" >&2
+  exit 1
+fi
+
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HEAD="$SKILL_DIR/assets/review-shell-head.html"
+FOOT="$SKILL_DIR/assets/review-shell-foot.html"
+
+SAFE_ID=$(printf '%s' "$IDENTIFIER" | tr '/' '-' | tr -c 'A-Za-z0-9._-' '-')
+OUT_DIR="./tmp/reviews"
+OUT="$OUT_DIR/$SAFE_ID-$(date '+%Y%m%d-%H%M%S').html"
+mkdir -p "$OUT_DIR"
+
+{
+  sed "s/{{IDENTIFIER}}/$SAFE_ID/" "$HEAD"
+  cat "$FRAGMENT"
+  cat "$FOOT"
+} > "$OUT"
+
+rm -f "$FRAGMENT"
+echo "$OUT"

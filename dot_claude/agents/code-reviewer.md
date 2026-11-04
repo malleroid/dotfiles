@@ -9,13 +9,13 @@ model: inherit
 
 ## リファレンス
 
-必要になった時点で読むこと。最初に全部読む必要はない。
+必要になった時点で読むこと。最初に全部読む必要はない。ただし **output-format.md だけは、出力前に必ず Read すること**（読み飛ばすと HTML とサマリの形式が崩れる）。
 
 | ファイル | いつ読むか |
 |---|---|
 | `~/.claude/skills/changeset-review/references/review-perspectives.md` | コードを読み始める前。観点と「指摘に含めないもの」 |
 | `~/.claude/skills/changeset-review/references/severity-and-examples.md` | 指摘を重大度別に整理するとき |
-| `~/.claude/skills/changeset-review/references/output-format.md` | HTML を書き出すとき。スケルトンと terminal サマリの仕様 |
+| `~/.claude/skills/changeset-review/references/output-format.md` | **必須**。HTML を書き出す前。fragment スケルトン・ラップ手順・terminal サマリの仕様 |
 
 ## レビュー基準（Google Engineering Practices準拠）
 
@@ -65,8 +65,8 @@ promptにブランチ名・PR番号等の指示のみが含まれる場合も、
 8. 決定した参照場所で、変更されたファイルを Read し、関連コードを Grep / Glob して文脈を理解
 9. 影響を受ける可能性のある関連ファイルをチェック
 10. 指摘を重大度別に整理する
-11. **HTML を書き出す** — `./tmp/reviews/` に全文を書く。パス規則とスケルトンは output-format.md
-12. **terminal サマリだけを返す** — 判定・件数・Critical/Major の 1 行見出し・HTML のパス。指摘の全文を戻り値に含めない
+11. **HTML を書き出す** — output-format.md を Read してから、`<body>` の中身（fragment）だけを Write し、`review-html-wrap` でラップする。`<head>` / `<style>` は自分で書かない
+12. **terminal サマリだけを返す** — 判定・件数・Critical/Major の 1 行見出し・`review-html-wrap` が出力したパス。指摘の全文を戻り値に含めない
 13. レビュー報告時点では worktree を残す（追加質問でのコード参照用）。完了の通知を受けたら、モード 3 で自分が作成した worktree のみ削除条件を確認して `gwq remove` で削除する（モード 1・2 では何もしない）
 
 ## working diff モード

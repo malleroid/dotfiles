@@ -2,15 +2,20 @@
 
 レビュー結果は **HTML ファイル**（全文）と **terminal サマリ**（親への戻り値）の 2 つに分けて出す。
 
-## 出力先
+## 書き出し手順
 
-```
-./tmp/reviews/<識別子>-<YYYYMMDD-HHMMSS>.html
-```
+HTML は **agent が全文を書かない**。`<head>` と `<style>` は固定ファイルが持ち、agent は `<body>` の中身（fragment）だけを書く。
 
-- 識別子: PR モードは `pr-<番号>`、working diff モードはブランチ名（`/` は `-` に置換）、ブランチが特定できなければ `working-diff`
-- パスは常に **cwd からの相対**。worktree をレビューしている場合も cwd（元のリポジトリ）に書く
-- `tmp/reviews/` が無ければ作る。global gitignore に `tmp/` があるので git status は汚れない
+1. fragment を Write する: `./tmp/reviews/<識別子>.fragment.html`
+2. ラップする（cwd = 元のリポジトリで実行）:
+   ```
+   ~/.claude/skills/changeset-review/scripts/review-html-wrap ./tmp/reviews/<識別子>.fragment.html <識別子>
+   ```
+3. stdout に出たパス（`./tmp/reviews/<識別子>-<YYYYMMDD-HHMMSS>.html`）を terminal サマリの最終行に使う。パスを自分で組み立てない
+
+- 識別子: PR モードは `pr-<番号>`、working diff モードはブランチ名、ブランチが特定できなければ `working-diff`
+- worktree をレビューしている場合も cwd（元のリポジトリ）で実行する
+- スクリプトがエラーで終了したら（fragment に `<html>` / `<head>` / `<style>` / `<body>` 等が入っていた等）、fragment を直して再実行する
 
 ## terminal サマリ
 
@@ -33,11 +38,10 @@ REQUEST CHANGES — Critical 2 / Major 3
 
 ### 要件
 
-- **自己完結**: CSS は `<style>` にインライン。外部 CSS / JS / フォント / 画像を一切参照しない（オフラインで開ける）
-- **テーマ追従**: `prefers-color-scheme` で light / dark 両対応。ターミナルと行き来するので必須
-- **検索はブラウザ任せ**: 独自の検索 UI や JS は書かない。JS 無しで完結させる
+- **fragment のみ**: `<!doctype>` / `<html>` / `<head>` / `<style>` / `<body>` は書かない。CSS（light / dark 対応済み）は `assets/review-shell-head.html` にある
+- **外部参照なし**: 外部 CSS / JS / フォント / 画像を一切参照しない（オフラインで開ける）
+- **JS なし**: 独自の検索 UI や JS は書かない。検索はブラウザ任せ
 - **折りたたみ**: Minor / Nit / Praise と、長い「既存指摘の状況」は `<details>` で畳む。Critical / Major は常に開いた状態
-- 日本語本文なので `<html lang="ja">`
 
 ### セクション構成
 
@@ -70,58 +74,11 @@ REQUEST CHANGES — Critical 2 / Major 3
 
 `sev-` は `critical` / `major` / `minor` / `nit` / `praise`。
 
-### スケルトン
+### fragment スケルトン
 
-これをベースに肉付けする。CSS はこのまま使ってよい。
+これをベースに肉付けする。`<header>` から書き始め、`</body>` は書かない。
 
 ```html
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>レビュー: {{対象}}</title>
-<style>
-:root{
-  --bg:#fff; --fg:#1a1a1a; --muted:#666; --border:#e0e0e0; --code-bg:#f6f8fa;
-  --critical:#d1242f; --major:#bc4c00; --minor:#0969da; --nit:#6e7781; --praise:#1a7f37;
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --border:#30363d; --code-bg:#161b22;
-    --critical:#ff7b72; --major:#ffa657; --minor:#79c0ff; --nit:#8b949e; --praise:#3fb950;
-  }
-}
-*{box-sizing:border-box}
-body{
-  margin:0 auto; padding:2rem 1.25rem 4rem; max-width:60rem;
-  background:var(--bg); color:var(--fg);
-  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
-}
-code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-pre{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;overflow-x:auto;font-size:.875rem;line-height:1.6}
-code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-size:.9em}
-pre code{background:none;padding:0;font-size:inherit}
-header{border-bottom:2px solid var(--border);padding-bottom:1rem;margin-bottom:2rem}
-h1{font-size:1.5rem;margin:0 0 .5rem}
-.verdict{display:inline-block;padding:.2em .7em;border-radius:999px;color:#fff;font-size:.8rem;font-weight:700;letter-spacing:.03em}
-.verdict.approve{background:var(--praise)} .verdict.changes{background:var(--critical)} .verdict.comment{background:var(--minor)}
-.meta{color:var(--muted);font-size:.85rem}
-h2{font-size:1.15rem;margin:2.5rem 0 .75rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
-.finding{border-left:4px solid var(--border);padding:.25rem 0 .25rem 1rem;margin:1.5rem 0}
-.finding h3{font-size:.95rem;margin:0 0 .5rem;font-weight:600}
-.finding p{margin:.5rem 0}
-.sev-critical{border-left-color:var(--critical)}
-.sev-major{border-left-color:var(--major)}
-.sev-minor{border-left-color:var(--minor)}
-.sev-nit{border-left-color:var(--nit)}
-.sev-praise{border-left-color:var(--praise)}
-.cat{color:var(--muted);font-size:.75rem;font-weight:400;margin-left:.5rem}
-.basis{color:var(--muted);font-size:.85rem}
-details{margin:1rem 0} summary{cursor:pointer;font-weight:600;padding:.4rem 0}
-</style>
-</head>
-<body>
 <header>
   <h1>レビュー: {{対象}}</h1>
   <p><span class="verdict changes">REQUEST CHANGES</span></p>
@@ -144,8 +101,6 @@ details{margin:1rem 0} summary{cursor:pointer;font-weight:600;padding:.4rem 0}
 <h2>テスト観点</h2>
 <h2>影響範囲</h2>
 <h2>人間が最終確認すべき観点</h2>
-</body>
-</html>
 ```
 
 ## 判定
