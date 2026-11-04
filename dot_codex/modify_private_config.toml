@@ -1,11 +1,11 @@
 #!/bin/sh
 # chezmoi modify_ script for ~/.codex/config.toml
-# Managed sections are overwritten; selected local tables are preserved from existing file.
+# Managed sections are overwritten; local and desktop-app-owned tables are preserved from existing file.
 
 existing=$(cat)
 
 # --- Managed base config ---
-cat << 'EOF'
+base=$(cat << 'EOF'
 model = "gpt-6.1-sol"
 personality = "pragmatic"
 model_reasoning_effort = "medium"
@@ -53,14 +53,34 @@ hooks = true
 status_line = ["model-with-reasoning", "thread-title", "current-dir", "git-branch", "context-used", "five-hour-limit", "weekly-limit"]
 terminal_title = ["activity", "project-name", "thread-title"]
 EOF
+)
 
-# --- Preserve local tables from existing file ---
+printf '%s\n' "$base"
+
+# [tui] is the last managed table, so a preserved key can be appended right after it.
+printf '%s' "$existing" | awk '
+  /^\[/ { in_tui = ($0 == "[tui]") }
+  in_tui && /^screen_reader_detection_done[[:space:]]*=/ { print }
+'
+
+# --- Preserve local and desktop-app-owned tables from existing file ---
+# Tables already defined in the managed base are skipped to avoid duplicates.
 preserved=$(
-  printf '%s' "$existing" | awk '
-    /^\[projects\./ { keep = 1 }
-    /^\[tui\.model_availability_nux\]/ { keep = 1 }
-    /^\[hooks\.state(\]|\.)/ { keep = 1 }
-    /^\[/ && !/^\[projects\./ && !/^\[tui\.model_availability_nux\]/ && !/^\[hooks\.state(\]|\.)/ { keep = 0 }
+  printf '%s' "$existing" | MANAGED_HEADERS=$(printf '%s\n' "$base" | grep '^\[') awk '
+    BEGIN {
+      n = split(ENVIRON["MANAGED_HEADERS"], headers, "\n")
+      for (i = 1; i <= n; i++) managed[headers[i]] = 1
+    }
+    /^\[/ {
+      keep = !($0 in managed) &&
+        ($0 ~ /^\[projects\./ ||
+         $0 ~ /^\[tui\.model_availability_nux\]/ ||
+         $0 ~ /^\[hooks\.state(\]|\.)/ ||
+         $0 ~ /^\[mcp_servers\.node_repl(\]|\.)/ ||
+         $0 ~ /^\[plugins\./ ||
+         $0 ~ /^\[marketplaces\./ ||
+         $0 ~ /^\[desktop(\]|\.)/)
+    }
     keep { print }
   '
 )
