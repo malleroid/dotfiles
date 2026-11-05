@@ -24,6 +24,12 @@ if ! command -v agy >/dev/null 2>&1; then
   curl -fsSL https://antigravity.google/cli/install.sh | bash
 fi
 
+# muse code (Meta); the launcher self-updates, so install only when missing
+if ! command -v muse >/dev/null 2>&1; then
+  echo "Installing Muse Code..."
+  curl -fsSL https://dev.meta.ai/install.sh | MUSE_NO_MODIFY_PATH=1 bash
+fi
+
 # beads (always run to keep up-to-date)
 echo "Installing/updating beads..."
 curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
