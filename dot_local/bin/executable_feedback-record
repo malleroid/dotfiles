@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Record one raw agent feedback case as a draft issue in the private
+# "Agent Feedback Inbox" project (created by scripts/setup-feedback-project.sh).
+# Usage: feedback-record <rejected|redirect|approved> <title> < body.md
+#   The body is read from stdin. Source Repo is taken from the current git remote
+#   (falls back to the directory name) and Host from `hostname -s`.
+set -euo pipefail
+
+PROJECT_TITLE="Agent Feedback Inbox"
+
+usage() {
+  echo "usage: feedback-record <rejected|redirect|approved> <title> < body.md" >&2
+  exit 1
+}
+
+SIGNAL="${1:-}"
+TITLE="${2:-}"
+[ -n "$SIGNAL" ] && [ -n "$TITLE" ] || usage
+case "$SIGNAL" in
+  rejected | redirect | approved) ;;
+  *) usage ;;
+esac
+
+BODY="$(cat)"
+if [ -z "$BODY" ]; then
+  echo "error: empty body on stdin" >&2
+  exit 1
+fi
+
+remote="$(git remote get-url origin 2>/dev/null || true)"
+if [ -n "$remote" ]; then
+  SOURCE_REPO="$(sed -E 's#^(git@[^:]+:|[a-z]+://[^/]+/)##; s#\.git$##' <<<"$remote")"
+else
+  SOURCE_REPO="$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")"
+fi
+HOST="$(hostname -s)"
+
+NUMBER="$(gh project list --owner "@me" --format json --limit 200 \
+  --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number")"
+if [ -z "$NUMBER" ]; then
+  echo "error: project not found: $PROJECT_TITLE (run scripts/setup-feedback-project.sh)" >&2
+  exit 1
+fi
+
+PROJECT_ID="$(gh project view "$NUMBER" --owner "@me" --format json --jq .id)"
+FIELDS="$(gh project field-list "$NUMBER" --owner "@me" --format json --limit 50)"
+
+field_id() {
+  jq -er --arg n "$1" '.fields[] | select(.name == $n) | .id' <<<"$FIELDS"
+}
+
+option_id() {
+  jq -er --arg n "$1" --arg o "$2" \
+    '.fields[] | select(.name == $n) | .options[] | select(.name == $o) | .id' <<<"$FIELDS"
+}
+
+ITEM_ID="$(gh project item-create "$NUMBER" --owner "@me" \
+  --title "$TITLE" --body "$BODY" --format json --jq .id)"
+
+edit() {
+  gh project item-edit --id "$ITEM_ID" --project-id "$PROJECT_ID" "$@" >/dev/null
+}
+
+edit --field-id "$(field_id Status)" --single-select-option-id "$(option_id Status Inbox)"
+edit --field-id "$(field_id Signal)" --single-select-option-id "$(option_id Signal "$SIGNAL")"
+edit --field-id "$(field_id "Source Repo")" --text "$SOURCE_REPO"
+edit --field-id "$(field_id Host)" --text "$HOST"
+
+echo "recorded: $TITLE ($SIGNAL, $SOURCE_REPO, $HOST)"
