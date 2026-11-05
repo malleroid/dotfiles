@@ -40,6 +40,7 @@ cask "zed"                        # High-performance code editor by ex-Atom team
 ## Dev
 cask "docker-desktop"             # Pack, ship and run any application as a lightweight container
 cask "tableplus"                  # Native GUI tool for relational databases
+cask "tabularis"                  # Open-source SQL workspace with a built-in MCP server
 cask "ghostty"                    # Fast, native terminal emulator
 cask "kitty"                      # GPU-based terminal emulator (sub terminal for terminal-browser / fallback)
 cask "tailscale-app"              # Mesh VPN based on WireGuard
