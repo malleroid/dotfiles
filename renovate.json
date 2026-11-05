@@ -33,6 +33,16 @@
         "url = \"https://github\\.com/(?<depName>[^/\"]+/[^/\"]+)/archive/(?<currentDigest>[0-9a-f]{40})\\.tar\\.gz\" # (?<currentValue>v\\S+)"
       ],
       "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/scan-external-skills\\.yml$/"
+      ],
+      "matchStrings": [
+        "git\\+https://github\\.com/(?<depName>[^/\"]+/[^/\"]+?)\\.git@(?<currentDigest>[0-9a-f]{40})\" # (?<currentValue>v\\S+)"
+      ],
+      "datasourceTemplate": "github-tags"
     }
   ],
   "packageRules": [
