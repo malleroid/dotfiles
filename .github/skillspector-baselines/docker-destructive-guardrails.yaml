@@ -1,0 +1,8 @@
+# Reviewed false positives for .agents/skills/docker-destructive-guardrails.
+# `message` must fully match the finding's matched text, so keep each pattern anchored.
+version: 2
+rules:
+  - id: "EA2"
+    path: "checks/verification.md"
+    message: "without confirmation"
+    reason: "Verification checklist that asserts no destructive command runs without confirmation"
