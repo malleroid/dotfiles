@@ -82,6 +82,7 @@ dotfiles/
 
 For detailed Nix flake workflow (updates, pinning, recovery), see [docs/nix-flake-operations.md](docs/nix-flake-operations.md).
 For the Apple container development-environment PoC, see [docs/apple-container.md](docs/apple-container.md).
+For how agent feedback is recorded and reviewed, see [docs/feedback-inbox.md](docs/feedback-inbox.md).
 
 - **Add/remove a Nix package**: Edit `flake.nix` paths, run `scripts/bump-flake.sh` (verifies cache hit, regenerates `package-versions.json`), then `chezmoi apply` (triggers `run_onchange`).
 - **Update Nix packages**: `scripts/bump-flake.sh latest` (or `scripts/bump-flake.sh <rev>` to pin). Rejects revisions not fully covered by the binary cache (`--max-jobs 0`), regenerates `package-versions.json`, and shows the per-package version diff for review.
