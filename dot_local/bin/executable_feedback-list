@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Print the cases in the private "Agent Feedback Inbox" project as a JSON array.
+# Usage: feedback-list [Inbox|Adopted|Rejected|all]   (default: Inbox)
+#   Archived items are never listed.
+set -euo pipefail
+
+PROJECT_TITLE="Agent Feedback Inbox"
+STATUS="${1:-Inbox}"
+case "$STATUS" in
+  Inbox | Adopted | Rejected | all) ;;
+  *)
+    echo "usage: feedback-list [Inbox|Adopted|Rejected|all]" >&2
+    exit 1
+    ;;
+esac
+
+NUMBER="$(gh project list --owner "@me" --format json --limit 200 \
+  --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number")"
+if [ -z "$NUMBER" ]; then
+  echo "error: project not found: $PROJECT_TITLE (run scripts/setup-feedback-project.sh)" >&2
+  exit 1
+fi
+
+gh api graphql -F number="$NUMBER" -f query='
+  query($number: Int!) {
+    viewer {
+      projectV2(number: $number) {
+        items(first: 100) {
+          nodes {
+            id
+            createdAt
+            isArchived
+            content { ... on DraftIssue { title body } }
+            status: fieldValueByName(name: "Status") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
+            signal: fieldValueByName(name: "Signal") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
+            destination: fieldValueByName(name: "Destination") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
+            sourceRepo: fieldValueByName(name: "Source Repo") { ... on ProjectV2ItemFieldTextValue { text } }
+            host: fieldValueByName(name: "Host") { ... on ProjectV2ItemFieldTextValue { text } }
+          }
+        }
+      }
+    }
+  }' | jq --arg status "$STATUS" '
+  [.data.viewer.projectV2.items.nodes[]
+    | select(.isArchived | not)
+    | {
+        id,
+        createdAt,
+        title: .content.title,
+        body: .content.body,
+        status: .status.name,
+        signal: .signal.name,
+        destination: .destination.name,
+        sourceRepo: .sourceRepo.text,
+        host: .host.text
+      }
+    | select($status == "all" or .status == $status)]
+  | sort_by(.createdAt)'

@@ -3,7 +3,7 @@
 # "Agent Feedback Inbox" project has piled up. Stays silent on any failure.
 #
 # The result is cached for the day in a single file that is overwritten on each
-# refresh, so nothing accumulates. /feedback-review deletes it after a review.
+# refresh, so nothing accumulates. feedback-update deletes it when a case is reviewed.
 
 PROJECT_TITLE="Agent Feedback Inbox"
 MIN_COUNT="${FEEDBACK_INBOX_MIN_COUNT:-15}"

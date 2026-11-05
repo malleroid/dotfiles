@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+# Update one case in the private "Agent Feedback Inbox" project.
+# Usage: feedback-update <item-id> [options]
+#   --title <text>                         replace the title
+#   --body-stdin                           replace the body with stdin
+#   --status <Inbox|Adopted|Rejected>      set Status
+#   --destination <hook|lint|skill|CLAUDE.md|memory|none>   set or clear Destination
+#   --archive                              archive the item (after the other updates)
+#   <item-id> is the PVTI_... id printed by feedback-list.
+#   Changing Status or archiving drops the reminder hook's daily cache.
+set -euo pipefail
+
+usage() {
+  sed -n '3,10p' "$0" | sed 's/^# \{0,1\}//' >&2
+  exit 1
+}
+
+ITEM_ID="${1:-}"
+case "$ITEM_ID" in
+  PVTI_*) shift ;;
+  *) usage ;;
+esac
+
+TITLE="" BODY_STDIN="" STATUS="" DESTINATION="" ARCHIVE=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --title) TITLE="${2:?}"; shift 2 ;;
+    --body-stdin) BODY_STDIN=1; shift ;;
+    --status) STATUS="${2:?}"; shift 2 ;;
+    --destination) DESTINATION="${2:?}"; shift 2 ;;
+    --archive) ARCHIVE=1; shift ;;
+    *) usage ;;
+  esac
+done
+[ -n "$TITLE$BODY_STDIN$STATUS$DESTINATION$ARCHIVE" ] || usage
+
+case "$STATUS" in "" | Inbox | Adopted | Rejected) ;; *) usage ;; esac
+case "$DESTINATION" in "" | hook | lint | skill | CLAUDE.md | memory | none) ;; *) usage ;; esac
+
+BODY=""
+if [ -n "$BODY_STDIN" ]; then
+  BODY="$(cat)"
+  if [ -z "$BODY" ]; then
+    echo "error: empty body on stdin" >&2
+    exit 1
+  fi
+fi
+
+ITEM="$(gh api graphql -f id="$ITEM_ID" -f query='
+  query($id: ID!) {
+    node(id: $id) {
+      ... on ProjectV2Item {
+        project { id number }
+        content { ... on DraftIssue { id } }
+      }
+    }
+  }' --jq '.data.node')"
+PROJECT_ID="$(jq -er .project.id <<<"$ITEM")"
+NUMBER="$(jq -er .project.number <<<"$ITEM")"
+DRAFT_ID="$(jq -er .content.id <<<"$ITEM")"
+
+if [ -n "$TITLE" ] || [ -n "$BODY_STDIN" ]; then
+  args=(--id "$DRAFT_ID")
+  [ -n "$TITLE" ] && args+=(--title "$TITLE")
+  [ -n "$BODY_STDIN" ] && args+=(--body "$BODY")
+  gh project item-edit "${args[@]}" >/dev/null
+fi
+
+if [ -n "$STATUS" ] || [ -n "$DESTINATION" ]; then
+  FIELDS="$(gh project field-list "$NUMBER" --owner "@me" --format json --limit 50)"
+  field_id() {
+    jq -er --arg n "$1" '.fields[] | select(.name == $n) | .id' <<<"$FIELDS"
+  }
+  option_id() {
+    jq -er --arg n "$1" --arg o "$2" \
+      '.fields[] | select(.name == $n) | .options[] | select(.name == $o) | .id' <<<"$FIELDS"
+  }
+  edit() {
+    gh project item-edit --id "$ITEM_ID" --project-id "$PROJECT_ID" "$@" >/dev/null
+  }
+
+  if [ -n "$STATUS" ]; then
+    edit --field-id "$(field_id Status)" --single-select-option-id "$(option_id Status "$STATUS")"
+  fi
+  if [ "$DESTINATION" = "none" ]; then
+    edit --field-id "$(field_id Destination)" --clear
+  elif [ -n "$DESTINATION" ]; then
+    edit --field-id "$(field_id Destination)" --single-select-option-id "$(option_id Destination "$DESTINATION")"
+  fi
+fi
+
+if [ -n "$ARCHIVE" ]; then
+  gh project item-archive "$NUMBER" --owner "@me" --id "$ITEM_ID" >/dev/null
+fi
+
+if [ -n "$STATUS$ARCHIVE" ]; then
+  rm -f "${XDG_STATE_HOME:-$HOME/.local/state}/feedback-inbox/cache"
+fi
+
+echo "updated: $ITEM_ID"
