@@ -18,7 +18,7 @@
 
 - Claude が実行するシェルコマンドは **現在の作業ディレクトリ（= このリポジトリ）内** に限定すること。
 - 例外として、auto memory ディレクトリ `~/.claude/projects/<slug>/memory/` への書き込みのみ許可する。`~/.claude/plans/` 等それ以外の `~/.claude/` 配下への書き込みは禁止（plan は作業ディレクトリの `.claude/plans/` に保存すること）。
-- 例外として、dotfiles リポジトリの `~/ghq/github.com/malleroid/dotfiles/dot_claude/CLAUDE.md` へのフィードバック追記を許可する（リポジトリ横断のフィードバック収集用）。
+- 例外として、dotfiles リポジトリの `~/ghq/github.com/malleroid/dotfiles/dot_claude/CLAUDE.md` の編集を、`/feedback-review` でユーザーが承認した反映に限り許可する。
 - リポジトリ外（上記例外を除く）のファイル・ディレクトリを作成／変更／削除／移動する操作は禁止。
 - `curl` / `wget` など外部リクエストを発行するコマンドは事前確認なしに実行しない。
 - Bash ツールでファイルパスを指定する際は **相対パス** を使うこと。
@@ -60,19 +60,22 @@
 
 ## AI Workflow 🤖
 
-### フィードバック自動収集
+### フィードバック収集
 
-会話中に以下のシグナルを検知したら、dotfiles の CLAUDE.md 末尾「Learned Feedback」セクションに 1 行追記すること:
+会話中に以下のシグナルを検知したら、事例を Agent Feedback Inbox（private GitHub Project）に記録する。ルール化や CLAUDE.md への追記はしない:
 
-- ユーザーが tool 実行を拒否した（rejected）
-- ユーザーが方針転換を指示した（「それじゃなくて」「やめて」「そうじゃない」等）
-- ユーザーが非自明なアプローチを承認した（「それでいい」「perfect」等、成功パターンも記録）
+- tool 実行を拒否された → `rejected`
+- 方針転換を指示された（「それじゃなくて」「やめて」等）→ `redirect`
+- 非自明なアプローチを承認された（「それでいい」等）→ `approved`
 
-書き込み先: `~/ghq/github.com/malleroid/dotfiles/dot_claude/CLAUDE.md`（絶対パス）
-Edit ツールで「Learned Feedback」セクション末尾に追記する。
+手順:
 
-記録フォーマット: `- 簡潔な 1 行ルール`（日付不要、行動指針として読める形）
-重複する学びは追加せず、既存エントリの補強に留める。
+1. タイトルと本文のドラフトを提示し、記録するかをユーザーに確認する
+2. 本文は「状況 / ユーザー発言（原文）/ 修正内容」の箇条書き。作業ディレクトリの `./tmp/` に書いてから渡し、記録後に削除する
+3. `feedback-record <signal> "<title>" < ./tmp/<file>` で記録する
+
+記録済みの事例の修正は `feedback-list` で ID を調べ、`feedback-update` で行う。
+ルールや仕組みへの昇格は `/feedback-review` で、ユーザーが承認したものだけ行う。
 
 ### worktree 運用（gwq / worktree-new）
 
@@ -174,7 +177,7 @@ worktree での作業を指示されたら、EnterWorktree の新規作成モー
 
 ## Learned Feedback
 
-<!-- リポジトリ横断で自動収集されるフィードバック。手動編集も可。 -->
+<!-- /feedback-review で承認されたフィードバック。手動編集も可。 -->
 - 略称より意味が伝わる名前を優先する
 - ユーザーの判断・意見を代弁する内容を書き込む前に、ドラフトを提示して確認を取る（Decision Log・議事録・メモリ等）
 - コードコメントは最小限に: コードだけで困る場合のみ。設計経緯・skip理由等のrationaleはPR本文とgit blameに寄せる
