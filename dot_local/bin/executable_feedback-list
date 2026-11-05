@@ -17,7 +17,7 @@ esac
 NUMBER="$(gh project list --owner "@me" --format json --limit 200 \
   --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number")"
 if [ -z "$NUMBER" ]; then
-  echo "error: project not found: $PROJECT_TITLE (run scripts/setup-feedback-project.sh)" >&2
+  echo "error: project not found: $PROJECT_TITLE (see docs/feedback-inbox.md in the dotfiles repo)" >&2
   exit 1
 fi
 

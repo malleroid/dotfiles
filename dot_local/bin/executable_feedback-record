@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Record one raw agent feedback case as a draft issue in the private
-# "Agent Feedback Inbox" project (created by scripts/setup-feedback-project.sh).
+# "Agent Feedback Inbox" project (see docs/feedback-inbox.md in the dotfiles repo).
 # Usage: feedback-record <rejected|redirect|approved> <title> < body.md
 #   The body is read from stdin. Source Repo is taken from the current git remote
 #   (falls back to the directory name) and Host from `hostname -s`.
@@ -38,7 +38,7 @@ HOST="$(hostname -s)"
 NUMBER="$(gh project list --owner "@me" --format json --limit 200 \
   --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number")"
 if [ -z "$NUMBER" ]; then
-  echo "error: project not found: $PROJECT_TITLE (run scripts/setup-feedback-project.sh)" >&2
+  echo "error: project not found: $PROJECT_TITLE (see docs/feedback-inbox.md in the dotfiles repo)" >&2
   exit 1
 fi
 
