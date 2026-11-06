@@ -1,0 +1,9 @@
+# Reviewed analysis-completeness exceptions that a SkillSpector baseline cannot suppress.
+# A CAUTION verdict is treated as SAFE only when every non-caveat exception is listed here
+# and the risk score itself is LOW.
+
+[[exception]]
+skill = "docker-destructive-guardrails"
+reason_code = "obfuscated_instruction_text"
+path = "SKILL.md"
+reason = "Declared-marker reconstruction exhausts its bounds on the long quoted list of destructive commands (lines 3-56); no obfuscated text present"

@@ -1,0 +1,23 @@
+# Reviewed false positives for .agents/skills/docker-project-foundations.
+# `message` must fully match the finding's matched text, so keep each pattern anchored.
+version: 2
+rules:
+  - id: "PE3"
+    message: "*.npmrc"
+    reason: "Shows mounting .npmrc as a BuildKit secret and excluding it from the build context"
+  - id: "PE3"
+    path: "assets/compose-dev.yaml"
+    message: ".env*"
+    reason: "Comment telling readers to set the local password in .env"
+  - id: "PE3"
+    path: "assets/dockerignore-example"
+    message: ".env*"
+    reason: ".env is listed in the example .dockerignore to keep it out of the build context"
+  - id: "PE3"
+    path: "references/project-structure.md"
+    message: "credentials.json"
+    reason: "Project structure reference listing files to keep out of the build context"
+  - id: "TM3"
+    path: "assets/compose-dev.yaml"
+    message: "NODE_ENV=development"
+    reason: "Development-only compose example"

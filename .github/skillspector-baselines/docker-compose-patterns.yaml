@@ -1,0 +1,16 @@
+# Reviewed false positives for .agents/skills/docker-compose-patterns.
+# `message` must fully match the finding's matched text, so keep each pattern anchored.
+version: 2
+rules:
+  - id: "AR2"
+    path: "assets/bad-vs-good.md"
+    message: "without warning"
+    reason: "Explains that the latest tag can break builds without warning"
+  - id: "PE3"
+    path: "assets/bad-vs-good.md"
+    message: ".env*"
+    reason: "Recommends env_file with a gitignored .env over hardcoded secrets"
+  - id: "PE4"
+    path: "checks/verification.md"
+    message: "/var/run/docker.sock"
+    reason: "Verification checklist item asserting services do not mount the Docker socket"
