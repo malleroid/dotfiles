@@ -347,7 +347,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$HOME/.local/share/mise/installs/npm-newrelic-preflight/latest/bin/preflight-collector\" pre-tool"
+            "command": "\"$HOME/.local/share/mise/installs/npm-newrelic-preflight/latest/node_modules/.bin/preflight-collector\" pre-tool"
           }
         ]
       }
@@ -358,7 +358,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$HOME/.local/share/mise/installs/npm-newrelic-preflight/latest/bin/preflight-collector\" post-tool"
+            "command": "\"$HOME/.local/share/mise/installs/npm-newrelic-preflight/latest/node_modules/.bin/preflight-collector\" post-tool"
           }
         ]
       }
