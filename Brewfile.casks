@@ -43,6 +43,7 @@ cask "tableplus"                  # Native GUI tool for relational databases
 cask "tabularis"                  # Open-source SQL workspace with a built-in MCP server
 cask "ghostty"                    # Fast, native terminal emulator
 cask "kitty"                      # GPU-based terminal emulator (sub terminal for terminal-browser / fallback)
+cask "herdr-app"                  # Desktop app for running and supervising coding agents
 cask "tailscale-app"              # Mesh VPN based on WireGuard
 
 ## Media
