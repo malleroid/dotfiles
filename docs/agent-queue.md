@@ -48,8 +48,10 @@ Status is chosen by who acts next: the agent (`To Do`, `In Progress`), the
 user (`Needs Decision`, `Needs Go-ahead`), someone else (`Waiting`), or nobody
 (`Inbox`, `Done`).
 
-The project's "Item added to project" workflow sets Status to `Inbox`, so
-items added from the GitHub UI land there too.
+The project's "Item added to project" workflow sets Status to `Inbox`, but it
+only fires for issues and pull requests. A draft added from the GitHub UI takes
+the Status of the board column it is added to, or none from the table view;
+`agent-queue list` treats an item without Status as not `Done`.
 
 ## Commands
 
