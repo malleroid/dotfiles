@@ -2,7 +2,10 @@
   {
     "id": "claude-code",
     "name": "Claude Code",
-    "fetcher": "bin/fetch-claude-code",
+    "fetch": {
+      "gh": "repos/anthropics/claude-code/releases?per_page=100"
+    },
+    "parser": "bin/parse-claude-code.py",
     "unit": "version",
     "spec": "sources/claude-code.md",
     "enabled": true
@@ -10,7 +13,10 @@
   {
     "id": "dev-platform",
     "name": "Claude Platform (API)",
-    "fetcher": "bin/fetch-dev-platform",
+    "fetch": {
+      "url": "https://platform.claude.com/docs/en/release-notes/overview.md"
+    },
+    "parser": "bin/parse-relnotes.py",
     "unit": "date",
     "spec": "sources/dev-platform.md",
     "enabled": true
@@ -18,7 +24,10 @@
   {
     "id": "claude-apps",
     "name": "Claude Apps",
-    "fetcher": "bin/fetch-claude-apps",
+    "fetch": {
+      "url": "https://support.claude.com/en/articles/12138966-release-notes.md"
+    },
+    "parser": "bin/parse-apps.py",
     "unit": "date",
     "spec": "sources/claude-apps.md",
     "enabled": true
@@ -26,7 +35,10 @@
   {
     "id": "openai-api",
     "name": "OpenAI API",
-    "fetcher": "bin/fetch-openai-api",
+    "fetch": {
+      "url": "https://developers.openai.com/api/docs/changelog"
+    },
+    "parser": "bin/parse-oai-api.py",
     "unit": "date",
     "spec": "sources/openai-api.md",
     "enabled": true
@@ -34,7 +46,10 @@
   {
     "id": "openai-codex",
     "name": "OpenAI Codex",
-    "fetcher": "bin/fetch-openai-codex",
+    "fetch": {
+      "url": "https://developers.openai.com/codex/changelog"
+    },
+    "parser": "bin/parse-oai-codex.py",
     "unit": "date",
     "spec": "sources/openai-codex.md",
     "enabled": true
@@ -42,7 +57,10 @@
   {
     "id": "gemini-api",
     "name": "Gemini API",
-    "fetcher": "bin/fetch-gemini-api",
+    "fetch": {
+      "url": "https://ai.google.dev/gemini-api/docs/changelog"
+    },
+    "parser": "bin/parse-gemini-api.py",
     "unit": "date",
     "spec": "sources/gemini-api.md",
     "enabled": true
@@ -50,7 +68,10 @@
   {
     "id": "vertex",
     "name": "Vertex AI",
-    "fetcher": "bin/fetch-vertex",
+    "fetch": {
+      "url": "https://docs.cloud.google.com/feeds/generative-ai-on-vertex-ai-release-notes.xml"
+    },
+    "parser": "bin/parse-vertex.py",
     "unit": "date",
     "spec": "sources/vertex.md",
     "enabled": true
@@ -58,7 +79,10 @@
   {
     "id": "gemini-app",
     "name": "Gemini App",
-    "fetcher": "bin/fetch-gemini-app",
+    "fetch": {
+      "url": "https://gemini.google/release-notes/?hl=en"
+    },
+    "parser": "bin/parse-gemini-app.py",
     "unit": "date",
     "spec": "sources/gemini-app.md",
     "enabled": true
@@ -66,7 +90,10 @@
   {
     "id": "xai",
     "name": "xAI / Grok",
-    "fetcher": "bin/fetch-xai",
+    "fetch": {
+      "url": "https://docs.x.ai/docs/release-notes"
+    },
+    "parser": "bin/parse-xai.py",
     "unit": "date",
     "spec": "sources/xai.md",
     "enabled": true,
@@ -75,16 +102,22 @@
   {
     "id": "antigravity",
     "name": "Antigravity",
-    "fetcher": "bin/fetch-antigravity",
+    "fetch": {
+      "custom": "antigravity"
+    },
+    "parser": "bin/parse-antigravity.py",
     "unit": "version",
     "spec": "sources/antigravity.md",
-    "enabled": true,
-    "notes": "changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
+    "enabled": false,
+    "notes": "2026-11 時点で /changelog は /docs/changelog（Astro の静的ページ）へリダイレクトするようになり、従来の main-*.js 解決が失敗するため無効化中。新ページ向けの取得・parser を作り直したら有効化する。以下は旧形式の説明: changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
   },
   {
     "id": "github-changelog",
     "name": "GitHub Changelog",
-    "fetcher": "bin/fetch-github-changelog",
+    "fetch": {
+      "url": "https://github.blog/changelog/feed/"
+    },
+    "parser": "bin/parse-github-changelog.py",
     "unit": "item",
     "spec": "sources/github-changelog.md",
     "enabled": true,
@@ -93,7 +126,10 @@
   {
     "id": "copilot-cli",
     "name": "GitHub Copilot CLI",
-    "fetcher": "bin/fetch-copilot-cli",
+    "fetch": {
+      "gh": "repos/github/copilot-cli/releases?per_page=100"
+    },
+    "parser": "bin/parse-copilot-cli.py",
     "unit": "version",
     "spec": "sources/copilot-cli.md",
     "enabled": true
@@ -101,7 +137,10 @@
   {
     "id": "opencode",
     "name": "opencode",
-    "fetcher": "bin/fetch-opencode",
+    "fetch": {
+      "gh": "repos/sst/opencode/releases?per_page=100"
+    },
+    "parser": "bin/parse-opencode.py",
     "unit": "version",
     "spec": "sources/opencode.md",
     "enabled": true
@@ -109,7 +148,10 @@
   {
     "id": "kiro",
     "name": "Kiro",
-    "fetcher": "bin/fetch-kiro",
+    "fetch": {
+      "url": "https://kiro.dev/changelog/feed.atom"
+    },
+    "parser": "bin/parse-kiro.py",
     "unit": "entry",
     "spec": "sources/kiro.md",
     "enabled": true
@@ -117,7 +159,8 @@
   {
     "id": "chatgpt",
     "name": "ChatGPT",
-    "fetcher": null,
+    "fetch": null,
+    "parser": null,
     "unit": "date",
     "spec": null,
     "enabled": false,

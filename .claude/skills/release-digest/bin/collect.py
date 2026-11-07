@@ -60,12 +60,12 @@ def unit_item_texts(unit):
     return [fallback] if fallback else []
 
 
-def run_fetcher(fetcher_rel, days, attempts=2):
+def run_fetcher(source_id, days, attempts=2):
     """Run a fetcher, retrying on clear failures (non-zero exit / non-JSON) to ride out
     transient network hiccups. A successful-but-empty `[]` is taken at face value."""
-    path = SKILL / fetcher_rel
+    fetch = Path(__file__).resolve().parent / "fetch.py"
     for attempt in range(1, attempts + 1):
-        r = subprocess.run(["fish", str(path), str(days)], capture_output=True, text=True)
+        r = subprocess.run([sys.executable, str(fetch), source_id, str(days)], capture_output=True, text=True)
         if r.returncode != 0:
             last = f"exit {r.returncode}: {r.stderr.strip()}"
         else:
@@ -75,15 +75,15 @@ def run_fetcher(fetcher_rel, days, attempts=2):
                 last = "non-JSON output"
         if attempt < attempts:
             continue
-        sys.stderr.write(f"[collect] {fetcher_rel} failed after {attempts} attempts ({last})\n")
+        sys.stderr.write(f"[collect] {source_id} failed after {attempts} attempts ({last})\n")
         return None
 
 
 def fetch_all(days):
     for s in json.loads((SKILL / "sources.json").read_text()):
-        if not s.get("enabled") or not s.get("fetcher"):
+        if not s.get("enabled") or not s.get("fetch"):
             continue
-        units = run_fetcher(s["fetcher"], days)
+        units = run_fetcher(s["id"], days)
         if units is None:
             continue
         yield {"id": s["id"], "name": s["name"], "spec": s.get("spec"), "units": units}

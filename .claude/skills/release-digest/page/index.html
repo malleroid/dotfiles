@@ -1,0 +1,411 @@
+<title>Release Digest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  /* Layout: one reading column, a sticky filter bar, one card per release unit grouped by JST date (newest first). */
+  :root {
+    --ground: #f4f5f7;
+    --surface: #ffffff;
+    --ink: #1d2129;
+    --ink-soft: #5f6676;
+    --rule: #dfe2e8;
+    --accent: #3d5bd9;
+    --accent-wash: #e8ecfc;
+    --breaking: #b42318;
+    --breaking-wash: #fdeceb;
+    --caution: #9a6100;
+    --caution-wash: #fdf3e1;
+    --font-display: "Bricolage Grotesque", "Hiragino Sans", system-ui, sans-serif;
+    --font-body: "IBM Plex Sans JP", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --step--1: 0.8125rem;
+    --step-0: 0.9375rem;
+    --step-1: 1.125rem;
+    --step-3: 1.75rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #121419;
+      --surface: #1b1e25;
+      --ink: #e6e8ee;
+      --ink-soft: #9aa1b1;
+      --rule: #2c303a;
+      --accent: #8ea2ff;
+      --accent-wash: #232a4a;
+      --breaking: #ff8a80;
+      --breaking-wash: #3a1d1b;
+      --caution: #f2b84b;
+      --caution-wash: #352914;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #121419;
+    --surface: #1b1e25;
+    --ink: #e6e8ee;
+    --ink-soft: #9aa1b1;
+    --rule: #2c303a;
+    --accent: #8ea2ff;
+    --accent-wash: #232a4a;
+    --breaking: #ff8a80;
+    --breaking-wash: #3a1d1b;
+    --caution: #f2b84b;
+    --caution-wash: #352914;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.65;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--ground);
+  }
+  .wrap {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding-block: 2rem 4rem;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 1.5rem;
+  }
+  header { display: grid; gap: 0.35rem; }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .status { margin: 0; color: var(--ink-soft); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+  .status strong { color: var(--ink); }
+
+  .bar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--ground);
+    padding-block: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; background: var(--surface); }
+  .seg button {
+    font: inherit;
+    font-size: var(--step--1);
+    padding: 0.3rem 0.9rem;
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); font-weight: 500; }
+  select {
+    font: inherit;
+    font-size: var(--step--1);
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .notice {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+  .error { margin: 0; color: var(--breaking); font-size: var(--step--1); }
+
+  .day { display: grid; gap: 0.6rem; }
+  .day h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 0.75rem;
+  }
+  .card.done { opacity: 0.72; }
+  .card input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-top: 0.3rem; accent-color: var(--accent); cursor: pointer; }
+  .card-body { display: grid; gap: 0.5rem; min-width: 0; }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.6rem; }
+  .head label { font-weight: 700; cursor: pointer; }
+  .unit { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ink-soft); overflow-wrap: anywhere; }
+  .head a { font-size: var(--step--1); color: var(--accent); text-underline-offset: 3px; }
+  .chip { font-size: 0.6875rem; line-height: 1; padding: 0.3rem 0.5rem; border-radius: 4px; letter-spacing: 0.04em; white-space: nowrap; }
+  .chip.breaking { background: var(--breaking-wash); color: var(--breaking); font-weight: 700; }
+  .chip.caution { background: var(--caution-wash); color: var(--caution); font-weight: 700; }
+  .chip.updated { background: var(--accent-wash); color: var(--accent); }
+  .bugfix-only { margin: 0; color: var(--ink-soft); font-size: var(--step--1); }
+
+  .topic { display: grid; gap: 0.25rem; }
+  .topic h3 { margin: 0; font-size: var(--step--1); font-weight: 700; color: var(--ink-soft); letter-spacing: 0.04em; }
+  .topic ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; max-width: 65ch; }
+  .topic li { overflow-wrap: anywhere; }
+  .topic li.breaking::marker { color: var(--breaking); }
+  .topic li.caution::marker { color: var(--caution); }
+  .flag { font-weight: 700; margin-right: 0.25rem; }
+  .flag.breaking { color: var(--breaking); }
+  .flag.caution { color: var(--caution); }
+  .summary { display: block; color: var(--ink-soft); font-size: var(--step--1); }
+  details summary { cursor: pointer; color: var(--accent); font-size: var(--step--1); font-weight: 500; }
+  details ul { margin-top: 0.4rem; }
+
+  .impacts {
+    border-left: 3px solid var(--caution);
+    background: var(--caution-wash);
+    border-radius: 0 6px 6px 0;
+    padding: 0.5rem 0.75rem;
+    display: grid;
+    gap: 0.25rem;
+    font-size: var(--step--1);
+  }
+  .impacts strong { color: var(--caution); }
+  .impacts code { font-family: var(--font-mono); font-size: 0.75rem; overflow-wrap: anywhere; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Release Digest</h1>
+    <p class="status" id="status">読み込み中…</p>
+  </header>
+
+  <div class="bar" role="toolbar" aria-label="表示の絞り込み">
+    <div class="seg" id="filter">
+      <button type="button" id="f-unreviewed" data-filter="unreviewed" aria-pressed="true">未確認</button>
+      <button type="button" id="f-flagged" data-filter="flagged" aria-pressed="false">🚨/⚠️ あり</button>
+      <button type="button" id="f-all" data-filter="all" aria-pressed="false">すべて</button>
+    </div>
+    <label for="source-filter" class="status">ソース</label>
+    <select id="source-filter"><option value="">すべて</option></select>
+  </div>
+
+  <main id="days" aria-live="polite">
+    <p class="notice">Claude Code や Codex など AI 製品のリリースノートが、毎朝 5:30 に日本語でここへ届きます。読んだ単位にはチェックを付けて確認済みにできます。</p>
+  </main>
+</div>
+
+<script>
+(() => {
+  const WEEKDAY = ["日", "月", "火", "水", "木", "金", "土"];
+  const FLAG_LABEL = { breaking: "🚨", caution: "⚠️" };
+  const state = { units: [], lastRun: null, filter: "unreviewed", source: "", writable: true, loaded: false, pending: new Set() };
+  const $days = document.getElementById("days");
+  const $status = document.getElementById("status");
+  const $source = document.getElementById("source-filter");
+  let db = null;
+
+  document.getElementById("filter").addEventListener("click", (ev) => {
+    const btn = ev.target.closest("button[data-filter]");
+    if (!btn) return;
+    state.filter = btn.dataset.filter;
+    for (const b of ev.currentTarget.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b === btn));
+    render();
+  });
+  $source.addEventListener("change", () => { state.source = $source.value; render(); });
+
+  function el(tag, attrs, ...children) {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === "class") node.className = v;
+      else if (k === "text") node.textContent = v;
+      else node.setAttribute(k, v === true ? "" : v);
+    }
+    for (const c of children) if (c != null) node.append(c);
+    return node;
+  }
+
+  function formatDate(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    const wd = WEEKDAY[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+    return `${y}年${m}月${d}日（${wd}）`;
+  }
+
+  function flagCounts(u) {
+    const c = { breaking: 0, caution: 0 };
+    for (const t of u.topics || []) for (const i of t.items || []) if (c[i.flag] != null) c[i.flag] += 1;
+    return c;
+  }
+
+  function visible(u) {
+    if (state.source && u.source !== state.source) return false;
+    if (state.filter === "unreviewed") return !u.reviewed;
+    if (state.filter === "flagged") { const c = flagCounts(u); return c.breaking + c.caution > 0; }
+    return true;
+  }
+
+  function showError(msg) {
+    document.getElementById("write-error")?.remove();
+    $days.prepend(el("p", { class: "error", id: "write-error", role: "alert", text: msg }));
+  }
+
+  async function setReviewed(id, reviewed) {
+    if (!db || state.pending.has(id)) return;
+    state.pending.add(id);
+    try {
+      await db.collection("units").doc(id).update({ reviewed, reviewed_at: reviewed ? new Date().toISOString() : null });
+    } catch (err) {
+      if (err && err.code === "invalid_argument") state.writable = false;
+      showError("確認状態を保存できませんでした。ページを開き直してからもう一度チェックしてください。");
+    } finally {
+      state.pending.delete(id);
+      render();
+    }
+  }
+
+  function itemNode(item) {
+    const li = el("li", { class: item.flag || null });
+    if (item.flag) li.append(el("span", { class: `flag ${item.flag}`, text: FLAG_LABEL[item.flag] || "" }));
+    li.append(item.text || "");
+    if (item.summary) li.append(el("span", { class: "summary", text: item.summary }));
+    return li;
+  }
+
+  function topicNode(t) {
+    const list = el("ul", {}, ...(t.items || []).map(itemNode));
+    if (t.collapsed) {
+      return el("details", { class: "topic" }, el("summary", { text: `${t.title}（${(t.items || []).length} 件）` }), list);
+    }
+    return el("section", { class: "topic" }, el("h3", { text: t.title }), list);
+  }
+
+  function cardNode(u) {
+    const box = el("input", {
+      type: "checkbox",
+      id: `rv-${u.id}`,
+      "aria-label": `${u.source_name} ${u.unit} を確認済みにする`,
+      checked: !!u.reviewed,
+      disabled: !state.writable || state.pending.has(u.id),
+    });
+    box.addEventListener("change", () => setReviewed(u.id, box.checked));
+    const c = flagCounts(u);
+    const head = el("div", { class: "head" },
+      el("label", { for: `rv-${u.id}`, text: u.source_name || u.source }),
+      el("span", { class: "unit", text: u.unit }),
+      c.breaking ? el("span", { class: "chip breaking", text: `🚨 ${c.breaking}` }) : null,
+      c.caution ? el("span", { class: "chip caution", text: `⚠️ ${c.caution}` }) : null,
+      u.updated_after_review ? el("span", { class: "chip updated", text: "追記あり" }) : null,
+      u.url ? el("a", { href: u.url, target: "_blank", rel: "noopener noreferrer", text: "原文" }) : null,
+    );
+    const body = el("div", { class: "card-body" }, head);
+    if (u.bugfix_only) {
+      body.append(el("p", { class: "bugfix-only", text: "bugfix のみのリリースです。" }));
+    } else {
+      for (const t of u.topics || []) body.append(topicNode(t));
+    }
+    if ((u.impacts || []).length) {
+      body.append(el("div", { class: "impacts" },
+        el("strong", { text: "dotfiles への影響" }),
+        ...u.impacts.map((i) => el("div", {}, el("code", { text: i.path }), ` ${i.note || ""}`)),
+      ));
+    }
+    return el("article", { class: `card${u.reviewed ? " done" : ""}` }, box, body);
+  }
+
+  function syncSources() {
+    const names = new Map(state.units.map((u) => [u.source, u.source_name || u.source]));
+    const current = $source.value;
+    const opts = [...names.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+    $source.replaceChildren(el("option", { value: "", text: "すべて" }),
+      ...opts.map(([id, name]) => el("option", { value: id, text: name })));
+    $source.value = names.has(current) ? current : "";
+    state.source = $source.value;
+  }
+
+  function render() {
+    const unreviewed = state.units.filter((u) => !u.reviewed).length;
+    const last = state.lastRun ? `最終取り込み: ${formatDate(state.lastRun)}` : "まだ取り込みはありません";
+    $status.replaceChildren(el("strong", { text: `未確認 ${unreviewed} 件` }), ` ・ 全 ${state.units.length} 件 ・ ${last}`);
+    if (!state.loaded) return;
+
+    const openKeys = new Set([...$days.querySelectorAll("details[open]")].map((d) => d.dataset.key));
+    const groups = new Map();
+    for (const u of state.units) {
+      if (!visible(u)) continue;
+      if (!groups.has(u.date)) groups.set(u.date, []);
+      groups.get(u.date).push(u);
+    }
+    if (groups.size === 0) {
+      const msg = state.units.length === 0
+        ? "まだ何も届いていません。毎朝 5:30 に、AI 製品のリリースノートが日本語でまとめて届きます。"
+        : state.filter === "unreviewed" ? "未確認の単位はありません。" : "該当する単位はありません。";
+      $days.replaceChildren(el("p", { class: "notice", text: msg }));
+      return;
+    }
+    const sections = [...groups.keys()].sort().reverse().map((date) => {
+      const units = groups.get(date).sort((a, b) => {
+        const fa = flagCounts(a), fb = flagCounts(b);
+        return (fb.breaking - fa.breaking) || (fb.caution - fa.caution) || (a.source_name || "").localeCompare(b.source_name || "");
+      });
+      return el("section", { class: "day", "aria-label": formatDate(date) },
+        el("h2", { text: formatDate(date) }),
+        ...units.map(cardNode));
+    });
+    $days.replaceChildren(...sections);
+    $days.querySelectorAll("article").forEach((card, i) => {
+      card.querySelectorAll("details").forEach((d, j) => {
+        d.dataset.key = `${card.querySelector("input").id}-${j}`;
+        if (openKeys.has(d.dataset.key)) d.open = true;
+      });
+    });
+  }
+
+  async function start() {
+    db = await window.claude?.use?.("db");
+    if (!db) {
+      $status.textContent = "データに接続できません。claude.ai にサインインした状態で開いてください。";
+      return;
+    }
+    const timer = setTimeout(() => {
+      if (!state.loaded) $status.textContent = "データの読み込みに時間がかかっています。接続が戻ると自動で表示されます。";
+    }, 10000);
+    db.collection("units").onSnapshot((snap) => {
+      state.units = snap.docs.filter((d) => d.exists).map((d) => ({ id: d.id, ...d.data() }));
+      if (!snap.metadata.fromCache || state.units.length) { state.loaded = true; clearTimeout(timer); }
+      syncSources();
+      render();
+    }, (err) => {
+      clearTimeout(timer);
+      $status.textContent = `データを読み込めませんでした（${err.code}）。ページを開き直してください。`;
+    });
+    db.doc("meta/state").onSnapshot((snap) => {
+      state.lastRun = snap.exists ? (snap.data().last_run_jst || null) : null;
+      render();
+    }, () => {});
+  }
+
+  start();
+})();
+</script>
