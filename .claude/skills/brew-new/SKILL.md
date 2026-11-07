@@ -50,13 +50,19 @@ JSON 配列が得られる。続けて `read_db` の `query`（`entries`、`wher
 
 ### 3. スタックを把握して一次選別する
 
-`Brewfile.formulae`、`Brewfile.casks`、`dot_config/mise/config.toml` を読み、利用者のスタックを把握する。
+次のファイルを **Read ツールで全文読み**（`head` などで切らない）、利用者のスタックを把握する。
+
+- `flake.nix`: CLI ツールの主な導入元（Nix）。コメントの `(brew: <name>)` は brew 側の名前
+- `Brewfile.formulae` / `Brewfile.casks`: Homebrew で入れているもの
+- `dot_config/mise/config.toml`: mise で入れているもの（`npm:` 等のバックエンド含む）
+
+新着がこのどれかに既にある物の brew 版なら `related` とする。
 各件を name / desc / homepage から次のどれかに分類し、理由を 1 行書く。
 
 - `candidate`: このスタックに入る可能性があり、本評価する価値があるもの
   - 例: 開発用 CLI / TUI、ターミナル・シェル・エディタ周辺、AI エージェントや LLM 開発ツール、
     Git / GitHub ワークフロー、コンテナ・インフラ運用、macOS の生産性ツールで既存の物と役割が重なる or 補うもの
-- `related`: 既にスタックにある物と同じ物の brew 版（mise / npm 等で導入済み）や、`@1` `@beta` のような派生版
+- `related`: 既にスタックにある物と同じ物の brew 版（Nix / mise 等で導入済み）や、`@1` `@beta` のような派生版
 - `skip`: 上記以外
   - 例: ゲーム、特定ハードウェアのユーティリティ、業務特化の商用アプリ、他パッケージのビルド用ライブラリ（`lib*` 等）
 
