@@ -31,7 +31,9 @@ and a minimal note.
 - Title: `Agent Queue` (the scripts look the project up by this title)
 - Items: draft issues only. Issues would have to live in a repository, and
   public repositories would expose them even inside a private project.
-- Created by `scripts/setup-agent-queue-project.sh`, which is safe to re-run
+- Created by `scripts/setup-agent-queue-project.sh`, removed after setup.
+  Restore it from commit `9c19e06` to recreate the project or reconcile its
+  fields; it is safe to re-run.
 
 ### Fields
 
