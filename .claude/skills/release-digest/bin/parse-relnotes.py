@@ -54,7 +54,7 @@ def main():
             if cur is not None:
                 sections.append(cur)
             continue
-        if cur is not None and line.startswith("- "):
+        if cur is not None and line.startswith(("- ", "* ")):
             cur["changes"].append(absolutize(line[2:].strip()))
 
     out = [
