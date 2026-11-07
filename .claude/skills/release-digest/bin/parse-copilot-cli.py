@@ -51,11 +51,17 @@ def main():
     args = ap.parse_args()
     cutoff = cutoff_date(args.days)
 
-    releases = json.load(sys.stdin)
+    stable = sorted(
+        (r for r in json.load(sys.stdin) if not r.get("draft") and not r.get("prerelease")),
+        key=lambda r: r.get("published_at", ""),
+    )
     out = []
-    for r in releases:
-        if r.get("draft") or r.get("prerelease"):
-            continue
+    previous = set()
+    for r in stable:
+        # Stable release bodies can repeat the whole changelog; keep only lines no earlier stable body had.
+        all_changes = parse_body(r.get("body", "") or "")
+        changes = [c for c in all_changes if c not in previous]
+        previous.update(all_changes)
         published = r.get("published_at", "")
         try:
             date = jst_date(datetime.fromisoformat(published.replace("Z", "+00:00")))
@@ -63,7 +69,6 @@ def main():
             continue
         if date < cutoff:
             continue
-        changes = parse_body(r.get("body", "") or "")
         if not changes:
             continue
         out.append({
