@@ -1,0 +1,331 @@
+#!/usr/bin/env bash
+# Queue work for coding agents in the private "Agent Queue" project
+# (see docs/agent-queue.md in the dotfiles repo). Items are draft issues.
+#
+# Usage: agent-queue <command> [args]
+#   add <title> [--here | --repo owner/repo | --none] [--status S] [--jira KEY] [< body]
+#   list [--here | --repo owner/repo | --unscoped | --all] [--open | --status S]
+#   show <item-id>
+#   claim <item-id> [--force]
+#   note <item-id> < text
+#   move <item-id> <status>
+#   edit <item-id> [--title T] [--body-stdin] [--here | --repo owner/repo | --none] [--jira KEY | --no-jira]
+#   done <item-id> [--archive]
+#
+#   Statuses: Inbox, To Do, In Progress, Needs Decision, Needs Go-ahead, Waiting, Done
+#   Defaults: add targets the current repo with Status Inbox; list shows the
+#   current repo's items that are not Done. <item-id> is the PVTI_... id.
+set -euo pipefail
+
+# shellcheck source=../lib/gh-project.sh
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/gh-project.sh"
+
+PROJECT_TITLE="Agent Queue"
+STATUSES=("Inbox" "To Do" "In Progress" "Needs Decision" "Needs Go-ahead" "Waiting" "Done")
+
+usage() {
+  sed -n '5,17p' "$0" | sed 's/^# \{0,1\}//' >&2
+  exit 1
+}
+
+die() {
+  echo "error: $*" >&2
+  exit 1
+}
+
+valid_status() {
+  local s
+  for s in "${STATUSES[@]}"; do
+    [ "$s" = "$1" ] && return 0
+  done
+  die "unknown status: $1 (one of: ${STATUSES[*]})"
+}
+
+read_stdin_body() {
+  if [ -t 0 ]; then
+    echo ""
+  else
+    cat
+  fi
+}
+
+project() {
+  NUMBER="$(ghp_project_number "$PROJECT_TITLE")"
+  PROJECT_ID="$(ghp_project_id "$NUMBER")"
+  ghp_load_fields "$NUMBER"
+}
+
+set_status() {
+  gh project item-edit --id "$1" --project-id "$PROJECT_ID" \
+    --field-id "$(ghp_field_id Status)" --single-select-option-id "$(ghp_option_id Status "$2")" >/dev/null
+}
+
+set_text() {
+  local field_id
+  field_id="$(ghp_field_id "$2")"
+  if [ -n "$3" ]; then
+    gh project item-edit --id "$1" --project-id "$PROJECT_ID" --field-id "$field_id" --text "$3" >/dev/null
+  else
+    gh project item-edit --id "$1" --project-id "$PROJECT_ID" --field-id "$field_id" --clear >/dev/null
+  fi
+}
+
+ITEM_FIELDS='
+  id
+  updatedAt
+  isArchived
+  project { title }
+  content { ... on DraftIssue { id title body } }
+  status: fieldValueByName(name: "Status") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
+  targetRepo: fieldValueByName(name: "Target Repo") { ... on ProjectV2ItemFieldTextValue { text } }
+  jira: fieldValueByName(name: "Jira") { ... on ProjectV2ItemFieldTextValue { text } }
+  claimedBy: fieldValueByName(name: "Claimed By") { ... on ProjectV2ItemFieldTextValue { text } }
+'
+
+SHAPE='{
+  id,
+  title: .content.title,
+  status: .status.name,
+  targetRepo: .targetRepo.text,
+  jira: .jira.text,
+  claimedBy: .claimedBy.text,
+  updatedAt
+}'
+
+# Fetch one item of this project as JSON (with the draft id and body).
+fetch_item() {
+  local item
+  item="$(gh api graphql -f id="$1" -f query="
+    query(\$id: ID!) { node(id: \$id) { ... on ProjectV2Item { $ITEM_FIELDS } } }" --jq '.data.node')"
+  [ -n "$item" ] && [ "$item" != "null" ] || die "item not found: $1"
+  [ "$(jq -r .project.title <<<"$item")" = "$PROJECT_TITLE" ] || die "item is not in $PROJECT_TITLE: $1"
+  jq -e '.content.id' <<<"$item" >/dev/null || die "item is not a draft issue: $1"
+  echo "$item"
+}
+
+check_item_id() {
+  case "${1:-}" in
+    PVTI_*) ;;
+    *) usage ;;
+  esac
+}
+
+# Parse --here / --repo / --none into SCOPE_REPO and SCOPE_SET.
+SCOPE_SET="" SCOPE_REPO=""
+parse_scope() {
+  case "$1" in
+    --here) SCOPE_SET=1; SCOPE_REPO="$(ghp_current_repo)"; return 0 ;;
+    --repo) SCOPE_SET=1; SCOPE_REPO="${2:?--repo needs owner/repo}"; return 0 ;;
+    --none) SCOPE_SET=1; SCOPE_REPO=""; return 0 ;;
+  esac
+  return 1
+}
+
+cmd_add() {
+  local title="${1:-}"
+  [ -n "$title" ] || usage
+  shift
+  local status="Inbox" jira=""
+  SCOPE_SET=1
+  SCOPE_REPO="$(ghp_current_repo)"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --here | --none) parse_scope "$1"; shift ;;
+      --repo) parse_scope "$1" "${2:-}"; shift 2 ;;
+      --status) status="${2:?}"; shift 2 ;;
+      --jira) jira="${2:?}"; shift 2 ;;
+      *) usage ;;
+    esac
+  done
+  valid_status "$status"
+  local body
+  body="$(read_stdin_body)"
+
+  project
+  local item_id create=(--owner "@me" --title "$title" --format json --jq .id)
+  [ -n "$body" ] && create+=(--body "$body")
+  item_id="$(gh project item-create "$NUMBER" "${create[@]}")"
+  set_status "$item_id" "$status"
+  [ -n "$SCOPE_REPO" ] && set_text "$item_id" "Target Repo" "$SCOPE_REPO"
+  [ -n "$jira" ] && set_text "$item_id" "Jira" "$jira"
+  echo "added: $item_id ($status, ${SCOPE_REPO:-unscoped}): $title"
+}
+
+cmd_list() {
+  local scope="here" repo="" status="" open=1
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --here) scope="here"; shift ;;
+      --repo) scope="repo"; repo="${2:?}"; shift 2 ;;
+      --unscoped) scope="unscoped"; shift ;;
+      --all) scope="all"; shift ;;
+      --open) open=1; status=""; shift ;;
+      --status) status="${2:?}"; open=""; valid_status "$status"; shift 2 ;;
+      *) usage ;;
+    esac
+  done
+  [ "$scope" = "here" ] && repo="$(ghp_current_repo)"
+
+  local number cursor="" page pages=()
+  number="$(ghp_project_number "$PROJECT_TITLE")"
+  while :; do
+    local args=(-F number="$number")
+    [ -n "$cursor" ] && args+=(-f cursor="$cursor")
+    page="$(gh api graphql "${args[@]}" -f query="
+      query(\$number: Int!, \$cursor: String) {
+        viewer {
+          projectV2(number: \$number) {
+            items(first: 100, after: \$cursor) {
+              pageInfo { hasNextPage endCursor }
+              nodes { $ITEM_FIELDS }
+            }
+          }
+        }
+      }" --jq '.data.viewer.projectV2.items')"
+    pages+=("$(jq -c .nodes <<<"$page")")
+    [ "$(jq -r .pageInfo.hasNextPage <<<"$page")" = "true" ] || break
+    cursor="$(jq -r .pageInfo.endCursor <<<"$page")"
+  done
+
+  printf '%s\n' "${pages[@]}" | jq -s \
+    --arg scope "$scope" --arg repo "$repo" --arg status "$status" --arg open "$open" "
+    [add | .[]
+      | select(.isArchived | not)
+      | select(.content.id != null)
+      | $SHAPE
+      | select(
+          (\$scope == \"all\")
+          or (\$scope == \"unscoped\" and (.targetRepo // \"\") == \"\")
+          or ((\$scope == \"here\" or \$scope == \"repo\") and .targetRepo == \$repo))
+      | select(
+          (\$open == \"1\" and .status != \"Done\")
+          or (\$open != \"1\" and .status == \$status))]
+    | sort_by(.updatedAt)"
+}
+
+cmd_show() {
+  check_item_id "${1:-}"
+  fetch_item "$1" | jq "$SHAPE + {body: .content.body}"
+}
+
+cmd_claim() {
+  check_item_id "${1:-}"
+  local item_id="$1" force=""
+  [ "${2:-}" = "--force" ] && force=1
+  local item host claimed status
+  item="$(fetch_item "$item_id")"
+  host="$(hostname -s)"
+  claimed="$(jq -r '.claimedBy.text // ""' <<<"$item")"
+  status="$(jq -r '.status.name // ""' <<<"$item")"
+  if [ "$status" = "In Progress" ] && [ -n "$claimed" ] && [ "$claimed" != "$host" ] && [ -z "$force" ]; then
+    die "already claimed by $claimed (use --force to take it over)"
+  fi
+  project
+  set_status "$item_id" "In Progress"
+  set_text "$item_id" "Claimed By" "$host"
+  echo "claimed: $item_id by $host"
+}
+
+cmd_note() {
+  check_item_id "${1:-}"
+  local item_id="$1" text
+  text="$(read_stdin_body)"
+  [ -n "$text" ] || die "empty note on stdin"
+  local item draft_id body entry
+  item="$(fetch_item "$item_id")"
+  draft_id="$(jq -r .content.id <<<"$item")"
+  body="$(jq -r '.content.body // ""' <<<"$item")"
+  entry="- $(date +%F) $(hostname -s): $(sed '2,$s/^/  /' <<<"$text")"
+  if grep -q '^## 作業ログ' <<<"$body"; then
+    body="$body"$'\n'"$entry"
+  elif [ -z "$body" ]; then
+    body="## 作業ログ"$'\n'"$entry"
+  else
+    body="$body"$'\n\n'"## 作業ログ"$'\n'"$entry"
+  fi
+  gh project item-edit --id "$draft_id" --body "$body" >/dev/null
+  echo "noted: $item_id"
+}
+
+cmd_move() {
+  check_item_id "${1:-}"
+  local item_id="$1" status="${2:-}"
+  [ -n "$status" ] || usage
+  valid_status "$status"
+  fetch_item "$item_id" >/dev/null
+  project
+  set_status "$item_id" "$status"
+  case "$status" in
+    Inbox | "To Do") set_text "$item_id" "Claimed By" "" ;;
+  esac
+  echo "moved: $item_id -> $status"
+}
+
+cmd_edit() {
+  check_item_id "${1:-}"
+  local item_id="$1"
+  shift
+  local title="" body_stdin="" jira="" jira_set=""
+  SCOPE_SET=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --title) title="${2:?}"; shift 2 ;;
+      --body-stdin) body_stdin=1; shift ;;
+      --here | --none) parse_scope "$1"; shift ;;
+      --repo) parse_scope "$1" "${2:-}"; shift 2 ;;
+      --jira) jira="${2:?}"; jira_set=1; shift 2 ;;
+      --no-jira) jira=""; jira_set=1; shift ;;
+      *) usage ;;
+    esac
+  done
+  [ -n "$title$body_stdin$SCOPE_SET$jira_set" ] || usage
+
+  local item draft_id
+  item="$(fetch_item "$item_id")"
+  draft_id="$(jq -r .content.id <<<"$item")"
+  if [ -n "$title" ] || [ -n "$body_stdin" ]; then
+    local args=(--id "$draft_id")
+    [ -n "$title" ] && args+=(--title "$title")
+    if [ -n "$body_stdin" ]; then
+      local body
+      body="$(cat)"
+      [ -n "$body" ] || die "empty body on stdin"
+      args+=(--body "$body")
+    fi
+    gh project item-edit "${args[@]}" >/dev/null
+  fi
+  if [ -n "$SCOPE_SET$jira_set" ]; then
+    project
+    [ -n "$SCOPE_SET" ] && set_text "$item_id" "Target Repo" "$SCOPE_REPO"
+    [ -n "$jira_set" ] && set_text "$item_id" "Jira" "$jira"
+  fi
+  echo "edited: $item_id"
+}
+
+cmd_done() {
+  check_item_id "${1:-}"
+  local item_id="$1"
+  fetch_item "$item_id" >/dev/null
+  project
+  set_status "$item_id" "Done"
+  if [ "${2:-}" = "--archive" ]; then
+    gh project item-archive "$NUMBER" --owner "@me" --id "$item_id" >/dev/null
+  fi
+  echo "done: $item_id"
+}
+
+command="${1:-}"
+[ -n "$command" ] || usage
+shift
+case "$command" in
+  add) cmd_add "$@" ;;
+  list) cmd_list "$@" ;;
+  show) cmd_show "$@" ;;
+  claim) cmd_claim "$@" ;;
+  note) cmd_note "$@" ;;
+  move) cmd_move "$@" ;;
+  edit) cmd_edit "$@" ;;
+  done) cmd_done "$@" ;;
+  -h | --help | help) usage ;;
+  *) usage ;;
+esac
