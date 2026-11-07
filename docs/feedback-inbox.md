@@ -59,7 +59,8 @@ recreated.
 
 ## Commands
 
-Deployed to `~/.local/bin` from `dot_local/bin/`. All of them use `gh` (token
+Deployed to `~/.local/bin` from `dot_local/bin/`, sharing helpers in
+`dot_local/lib/gh-project.sh` with `agent-queue`. All of them use `gh` (token
 with the `project` scope) and `jq`.
 
 | Command | Purpose |

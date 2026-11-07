@@ -4,6 +4,9 @@
 #   Archived items are never listed.
 set -euo pipefail
 
+# shellcheck source=../lib/gh-project.sh
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/gh-project.sh"
+
 PROJECT_TITLE="Agent Feedback Inbox"
 STATUS="${1:-Inbox}"
 case "$STATUS" in
@@ -14,12 +17,7 @@ case "$STATUS" in
     ;;
 esac
 
-NUMBER="$(gh project list --owner "@me" --format json --limit 200 \
-  --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number")"
-if [ -z "$NUMBER" ]; then
-  echo "error: project not found: $PROJECT_TITLE (see docs/feedback-inbox.md in the dotfiles repo)" >&2
-  exit 1
-fi
+NUMBER="$(ghp_project_number "$PROJECT_TITLE")"
 
 gh api graphql -F number="$NUMBER" -f query='
   query($number: Int!) {

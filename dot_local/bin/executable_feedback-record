@@ -6,6 +6,9 @@
 #   (falls back to the directory name) and Host from `hostname -s`.
 set -euo pipefail
 
+# shellcheck source=../lib/gh-project.sh
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/gh-project.sh"
+
 PROJECT_TITLE="Agent Feedback Inbox"
 
 usage() {
@@ -27,32 +30,12 @@ if [ -z "$BODY" ]; then
   exit 1
 fi
 
-remote="$(git remote get-url origin 2>/dev/null || true)"
-if [ -n "$remote" ]; then
-  SOURCE_REPO="$(sed -E 's#^(git@[^:]+:|[a-z]+://[^/]+/)##; s#\.git$##' <<<"$remote")"
-else
-  SOURCE_REPO="$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")"
-fi
+SOURCE_REPO="$(ghp_current_repo)"
 HOST="$(hostname -s)"
 
-NUMBER="$(gh project list --owner "@me" --format json --limit 200 \
-  --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number")"
-if [ -z "$NUMBER" ]; then
-  echo "error: project not found: $PROJECT_TITLE (see docs/feedback-inbox.md in the dotfiles repo)" >&2
-  exit 1
-fi
-
-PROJECT_ID="$(gh project view "$NUMBER" --owner "@me" --format json --jq .id)"
-FIELDS="$(gh project field-list "$NUMBER" --owner "@me" --format json --limit 50)"
-
-field_id() {
-  jq -er --arg n "$1" '.fields[] | select(.name == $n) | .id' <<<"$FIELDS"
-}
-
-option_id() {
-  jq -er --arg n "$1" --arg o "$2" \
-    '.fields[] | select(.name == $n) | .options[] | select(.name == $o) | .id' <<<"$FIELDS"
-}
+NUMBER="$(ghp_project_number "$PROJECT_TITLE")"
+PROJECT_ID="$(ghp_project_id "$NUMBER")"
+ghp_load_fields "$NUMBER"
 
 ITEM_ID="$(gh project item-create "$NUMBER" --owner "@me" \
   --title "$TITLE" --body "$BODY" --format json --jq .id)"
@@ -61,9 +44,9 @@ edit() {
   gh project item-edit --id "$ITEM_ID" --project-id "$PROJECT_ID" "$@" >/dev/null
 }
 
-edit --field-id "$(field_id Status)" --single-select-option-id "$(option_id Status Inbox)"
-edit --field-id "$(field_id Signal)" --single-select-option-id "$(option_id Signal "$SIGNAL")"
-edit --field-id "$(field_id "Source Repo")" --text "$SOURCE_REPO"
-edit --field-id "$(field_id Host)" --text "$HOST"
+edit --field-id "$(ghp_field_id Status)" --single-select-option-id "$(ghp_option_id Status Inbox)"
+edit --field-id "$(ghp_field_id Signal)" --single-select-option-id "$(ghp_option_id Signal "$SIGNAL")"
+edit --field-id "$(ghp_field_id "Source Repo")" --text "$SOURCE_REPO"
+edit --field-id "$(ghp_field_id Host)" --text "$HOST"
 
 echo "recorded: $TITLE ($SIGNAL, $SOURCE_REPO, $HOST)"

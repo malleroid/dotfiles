@@ -5,6 +5,11 @@
 # The result is cached for the day in a single file that is overwritten on each
 # refresh, so nothing accumulates. feedback-update deletes it when a case is reviewed.
 
+LIB="$HOME/.local/lib/gh-project.sh"
+[ -f "$LIB" ] || exit 0
+# shellcheck source=/dev/null
+source "$LIB"
+
 PROJECT_TITLE="Agent Feedback Inbox"
 MIN_COUNT="${FEEDBACK_INBOX_MIN_COUNT:-15}"
 MAX_AGE_DAYS="${FEEDBACK_INBOX_MAX_AGE_DAYS:-30}"
@@ -23,9 +28,7 @@ if [ -f "$CACHE" ] && IFS=$'\t' read -r day msg <"$CACHE" && [ "$day" = "$TODAY"
   emit "$msg"
 fi
 
-number="$(gh project list --owner "@me" --format json --limit 200 \
-  --jq ".projects[] | select(.title == \"$PROJECT_TITLE\") | .number" 2>/dev/null)" || exit 0
-[ -n "$number" ] || exit 0
+number="$(ghp_project_number "$PROJECT_TITLE" 2>/dev/null)" || exit 0
 
 summary="$(gh api graphql -F number="$number" -f query='
   query($number: Int!) {
