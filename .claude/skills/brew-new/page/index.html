@@ -1,0 +1,425 @@
+<title>brew 新着</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  /* Layout: one reading column, a sticky filter bar, entries grouped by JST merge date (newest first). */
+  :root {
+    --ground: #f7f5f1;
+    --surface: #ffffff;
+    --ink: #24201b;
+    --ink-soft: #6b6359;
+    --rule: #e4ded5;
+    --amber: #b8670f;
+    --amber-wash: #fbefdf;
+    --cand: #1f6f5c;
+    --cand-wash: #e2f2ec;
+    --rel: #5a55a8;
+    --rel-wash: #ecebf8;
+    --skip: #8a8178;
+    --skip-wash: #efebe6;
+    --font-display: "Bricolage Grotesque", "Hiragino Sans", system-ui, sans-serif;
+    --font-body: "IBM Plex Sans JP", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --step--1: 0.8125rem;
+    --step-0: 0.9375rem;
+    --step-1: 1.125rem;
+    --step-3: 1.75rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #17140f;
+      --surface: #201c16;
+      --ink: #eee7dc;
+      --ink-soft: #a89e90;
+      --rule: #342e26;
+      --amber: #e59a42;
+      --amber-wash: #3a2a16;
+      --cand: #6cc7ac;
+      --cand-wash: #173229;
+      --rel: #a9a4ec;
+      --rel-wash: #262443;
+      --skip: #998f84;
+      --skip-wash: #2a2620;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #17140f;
+    --surface: #201c16;
+    --ink: #eee7dc;
+    --ink-soft: #a89e90;
+    --rule: #342e26;
+    --amber: #e59a42;
+    --amber-wash: #3a2a16;
+    --cand: #6cc7ac;
+    --cand-wash: #173229;
+    --rel: #a9a4ec;
+    --rel-wash: #262443;
+    --skip: #998f84;
+    --skip-wash: #2a2620;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.65;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--ground);
+  }
+  .wrap {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding-block: 2rem 4rem;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  header { display: grid; gap: 0.35rem; }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  h1 .tap { color: var(--amber); }
+  .status { margin: 0; color: var(--ink-soft); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+  .status strong { color: var(--ink); font-weight: 700; }
+
+  .bar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--ground);
+    padding-block: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; background: var(--surface); }
+  .seg button {
+    font: inherit;
+    font-size: var(--step--1);
+    padding: 0.3rem 0.9rem;
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--amber); color: var(--surface); font-weight: 500; }
+  .seg button:focus-visible, .linkish:focus-visible, input[type="checkbox"]:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  .notice {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .day { display: grid; gap: 0.5rem; }
+  .day-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }
+  .day-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .day-head .count { color: var(--ink-soft); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+  .linkish {
+    margin-left: auto;
+    font: inherit;
+    font-size: var(--step--1);
+    color: var(--amber);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .linkish[disabled] { color: var(--ink-soft); cursor: default; text-decoration: none; }
+
+  .list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
+  .item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+  .item + .item { border-top: 1px solid var(--rule); }
+  .item.done .name, .item.done .desc { color: var(--ink-soft); }
+  .item input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-top: 0.2rem; accent-color: var(--amber); cursor: pointer; }
+  .body { display: grid; gap: 0.3rem; min-width: 0; }
+  .line1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.6rem; }
+  .name { font-family: var(--font-mono); font-weight: 500; overflow-wrap: anywhere; }
+  .ver { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ink-soft); overflow-wrap: anywhere; }
+  .chips { display: inline-flex; flex-wrap: wrap; gap: 0.3rem; }
+  .chip {
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .chip.kind { font-family: var(--font-mono); color: var(--ink-soft); border: 1px solid var(--rule); }
+  .chip.candidate { background: var(--cand-wash); color: var(--cand); }
+  .chip.related { background: var(--rel-wash); color: var(--rel); }
+  .chip.skip { background: var(--skip-wash); color: var(--skip); }
+  .chip.verdict { background: var(--amber-wash); color: var(--amber); font-weight: 700; }
+  .desc { margin: 0; overflow-wrap: anywhere; }
+  .reason { margin: 0; color: var(--ink-soft); font-size: var(--step--1); }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: var(--step--1); color: var(--ink-soft); }
+  .meta a { color: var(--ink-soft); text-underline-offset: 3px; }
+  .meta code { font-family: var(--font-mono); font-size: 0.75rem; user-select: all; }
+  details { margin-top: 0.25rem; }
+  summary { cursor: pointer; color: var(--amber); font-size: var(--step--1); font-weight: 500; }
+  .eval {
+    margin: 0.5rem 0 0;
+    padding: 0.75rem 0.9rem;
+    background: var(--ground);
+    border-radius: 6px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: var(--step--1);
+    line-height: 1.75;
+    max-width: 65ch;
+  }
+  .error { color: var(--amber); font-size: var(--step--1); margin: 0; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1><span class="tap">brew</span> 新着</h1>
+    <p class="status" id="status">読み込み中…</p>
+  </header>
+
+  <div class="bar" role="toolbar" aria-label="表示の絞り込み">
+    <div class="seg" id="filter">
+      <button type="button" id="f-unreviewed" data-filter="unreviewed" aria-pressed="true">未確認</button>
+      <button type="button" id="f-candidate" data-filter="candidate" aria-pressed="false">評価対象</button>
+      <button type="button" id="f-all" data-filter="all" aria-pressed="false">すべて</button>
+    </div>
+  </div>
+
+  <main id="days" aria-live="polite">
+    <p class="notice">Homebrew に前日追加された formula と cask が、毎朝 5:00 にここへ届きます。届いた件にはチェックを付けて確認済みにできます。</p>
+  </main>
+</div>
+
+<script>
+(() => {
+  const TRIAGE_LABEL = { candidate: "評価対象", related: "関連あり", skip: "対象外" };
+  const WEEKDAY = ["日", "月", "火", "水", "木", "金", "土"];
+  const state = { entries: [], lastDate: null, filter: "unreviewed", writable: true, loaded: false, pending: new Set() };
+  const $days = document.getElementById("days");
+  const $status = document.getElementById("status");
+  let db = null;
+
+  document.getElementById("filter").addEventListener("click", (ev) => {
+    const btn = ev.target.closest("button[data-filter]");
+    if (!btn) return;
+    state.filter = btn.dataset.filter;
+    for (const b of ev.currentTarget.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b === btn));
+    render();
+  });
+
+  function el(tag, attrs, ...children) {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === "class") node.className = v;
+      else if (k === "text") node.textContent = v;
+      else node.setAttribute(k, v === true ? "" : v);
+    }
+    for (const c of children) if (c != null) node.append(c);
+    return node;
+  }
+
+  function formatDate(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    const wd = WEEKDAY[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+    return `${y}年${m}月${d}日（${wd}）`;
+  }
+
+  function visible(e) {
+    if (state.filter === "unreviewed") return !e.reviewed;
+    if (state.filter === "candidate") return e.triage === "candidate";
+    return true;
+  }
+
+  async function setReviewed(ids, reviewed) {
+    if (!db) return;
+    const at = reviewed ? new Date().toISOString() : null;
+    for (const id of ids) {
+      if (state.pending.has(id)) continue;
+      state.pending.add(id);
+      try {
+        await db.collection("entries").doc(id).update({ reviewed, reviewed_at: at });
+      } catch (err) {
+        if (err && err.code === "invalid_argument") state.writable = false;
+        showError("確認状態を保存できませんでした。ページを開き直してからもう一度チェックしてください。");
+      } finally {
+        state.pending.delete(id);
+      }
+    }
+    render();
+  }
+
+  function showError(msg) {
+    const old = document.getElementById("write-error");
+    if (old) old.remove();
+    $days.prepend(el("p", { class: "error", id: "write-error", role: "alert", text: msg }));
+  }
+
+  function itemNode(e) {
+    const box = el("input", {
+      type: "checkbox",
+      id: `rv-${e.id}`,
+      "aria-label": `${e.name} を確認済みにする`,
+      checked: !!e.reviewed,
+      disabled: !state.writable || state.pending.has(e.id),
+    });
+    box.addEventListener("change", () => setReviewed([e.id], box.checked));
+
+    const chips = el("span", { class: "chips" },
+      el("span", { class: "chip kind", text: e.kind }),
+      e.triage ? el("span", { class: `chip ${e.triage}`, text: TRIAGE_LABEL[e.triage] || e.triage }) : null,
+      e.verdict ? el("span", { class: "chip verdict", text: e.verdict }) : null,
+    );
+
+    const meta = el("div", { class: "meta" },
+      e.homepage ? el("a", { href: e.homepage, target: "_blank", rel: "noopener noreferrer", text: "homepage" }) : null,
+      e.pr_url ? el("a", { href: e.pr_url, target: "_blank", rel: "noopener noreferrer", text: "追加 PR" }) : null,
+      el("code", { text: `brew install ${e.kind === "cask" ? "--cask " : ""}${e.name}` }),
+    );
+
+    let evaluation = null;
+    if (e.evaluation) {
+      evaluation = el("details", { id: `ev-${e.id}` },
+        el("summary", { text: "評価を読む" }),
+        el("div", { class: "eval", text: e.evaluation }),
+      );
+    }
+
+    return el("li", { class: `item${e.reviewed ? " done" : ""}` },
+      box,
+      el("div", { class: "body" },
+        el("div", { class: "line1" },
+          el("label", { for: `rv-${e.id}`, class: "name", text: e.name }),
+          e.version ? el("span", { class: "ver", text: e.version }) : null,
+          chips,
+        ),
+        e.desc ? el("p", { class: "desc", text: e.desc }) : null,
+        e.triage_reason ? el("p", { class: "reason", text: e.triage_reason }) : null,
+        meta,
+        evaluation,
+      ),
+    );
+  }
+
+  function render() {
+    const unreviewed = state.entries.filter((e) => !e.reviewed).length;
+    const last = state.lastDate ? `取り込み済み: ${formatDate(state.lastDate)}まで` : "まだ取り込みはありません";
+    $status.replaceChildren(
+      el("strong", { text: `未確認 ${unreviewed} 件` }),
+      ` ・ 全 ${state.entries.length} 件 ・ ${last}`,
+    );
+    if (!state.loaded) return;
+
+    const openIds = new Set([...$days.querySelectorAll("details[open]")].map((d) => d.id));
+    const groups = new Map();
+    for (const e of state.entries) {
+      if (!visible(e)) continue;
+      if (!groups.has(e.date)) groups.set(e.date, []);
+      groups.get(e.date).push(e);
+    }
+
+    if (groups.size === 0) {
+      const msg = state.entries.length === 0
+        ? "まだ何も届いていません。毎朝 5:00 に、前日 Homebrew に追加された formula と cask が届きます。"
+        : state.filter === "unreviewed" ? "未確認の件はありません。" : "該当する件はありません。";
+      $days.replaceChildren(el("p", { class: "notice", text: msg }));
+      return;
+    }
+
+    const order = { candidate: 0, related: 1, skip: 2 };
+    const sections = [...groups.keys()].sort().reverse().map((date) => {
+      const items = groups.get(date).sort((a, b) =>
+        (order[a.triage] ?? 3) - (order[b.triage] ?? 3) || a.name.localeCompare(b.name));
+      const skipIds = state.entries.filter((e) => e.date === date && e.triage === "skip" && !e.reviewed).map((e) => e.id);
+      const bulk = el("button", {
+        type: "button",
+        class: "linkish",
+        disabled: skipIds.length === 0 || !state.writable,
+        text: skipIds.length ? `対象外 ${skipIds.length} 件をまとめて確認済みに` : "対象外は確認済み",
+      });
+      bulk.addEventListener("click", () => setReviewed(skipIds, true));
+      const cand = groups.get(date).filter((e) => e.triage === "candidate").length;
+      return el("section", { class: "day", "aria-label": formatDate(date) },
+        el("div", { class: "day-head" },
+          el("h2", { text: formatDate(date) }),
+          el("span", { class: "count", text: `${items.length} 件（評価対象 ${cand}）` }),
+          bulk,
+        ),
+        el("ul", { class: "list" }, ...items.map(itemNode)),
+      );
+    });
+    $days.replaceChildren(...sections);
+    for (const id of openIds) {
+      const d = document.getElementById(id);
+      if (d) d.open = true;
+    }
+  }
+
+  async function start() {
+    db = await window.claude?.use?.("db");
+    if (!db) {
+      $status.textContent = "データに接続できません。claude.ai にサインインした状態で開いてください。";
+      return;
+    }
+    const timer = setTimeout(() => {
+      if (!state.loaded) $status.textContent = "データの読み込みに時間がかかっています。接続が戻ると自動で表示されます。";
+    }, 10000);
+
+    db.collection("entries").onSnapshot((snap) => {
+      state.entries = snap.docs.filter((d) => d.exists).map((d) => ({ id: d.id, ...d.data() }));
+      if (!snap.metadata.fromCache) { state.loaded = true; clearTimeout(timer); }
+      if (snap.metadata.fromCache && state.entries.length) state.loaded = true;
+      render();
+    }, (err) => {
+      clearTimeout(timer);
+      $status.textContent = `データを読み込めませんでした（${err.code}）。ページを開き直してください。`;
+    });
+
+    db.doc("meta/state").onSnapshot((snap) => {
+      state.lastDate = snap.exists ? (snap.data().last_date || null) : null;
+      render();
+    }, () => {});
+  }
+
+  start();
+})();
+</script>
