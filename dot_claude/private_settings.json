@@ -280,6 +280,11 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/feedback_inbox_reminder.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/agent_queue_reminder.sh",
+            "timeout": 15
           }
         ]
       }

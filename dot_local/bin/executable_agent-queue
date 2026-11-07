@@ -11,10 +11,12 @@
 #   move <item-id> <status>
 #   edit <item-id> [--title T] [--body-stdin] [--here | --repo owner/repo | --none] [--jira KEY | --no-jira]
 #   done <item-id> [--archive]
+#   prune [--older-than DAYS]
 #
 #   Statuses: Inbox, To Do, In Progress, Needs Decision, Needs Go-ahead, Waiting, Done
 #   Defaults: add targets the current repo with Status Inbox; list shows the
-#   current repo's items that are not Done. <item-id> is the PVTI_... id.
+#   current repo's items that are not Done; prune archives items that have been
+#   Done for 14 days or more. <item-id> is the PVTI_... id.
 set -euo pipefail
 
 # shellcheck source=../lib/gh-project.sh
@@ -24,7 +26,7 @@ PROJECT_TITLE="Agent Queue"
 STATUSES=("Inbox" "To Do" "In Progress" "Needs Decision" "Needs Go-ahead" "Waiting" "Done")
 
 usage() {
-  sed -n '5,17p' "$0" | sed 's/^# \{0,1\}//' >&2
+  sed -n '5,19p' "$0" | sed 's/^# \{0,1\}//' >&2
   exit 1
 }
 
@@ -103,6 +105,36 @@ fetch_item() {
   echo "$item"
 }
 
+# Print every non-archived draft item of the project as one JSON array.
+fetch_all_items() {
+  local number cursor="" page pages=()
+  number="$(ghp_project_number "$PROJECT_TITLE")"
+  while :; do
+    local args=(-F number="$number")
+    [ -n "$cursor" ] && args+=(-f cursor="$cursor")
+    page="$(gh api graphql "${args[@]}" -f query="
+      query(\$number: Int!, \$cursor: String) {
+        viewer {
+          projectV2(number: \$number) {
+            items(first: 100, after: \$cursor) {
+              pageInfo { hasNextPage endCursor }
+              nodes { $ITEM_FIELDS }
+            }
+          }
+        }
+      }" --jq '.data.viewer.projectV2.items')"
+    pages+=("$(jq -c .nodes <<<"$page")")
+    [ "$(jq -r .pageInfo.hasNextPage <<<"$page")" = "true" ] || break
+    cursor="$(jq -r .pageInfo.endCursor <<<"$page")"
+  done
+  printf '%s\n' "${pages[@]}" | jq -s '[add | .[] | select(.isArchived | not) | select(.content.id != null)]'
+}
+
+# The SessionStart reminder caches counts for the day; drop it after any change.
+drop_reminder_cache() {
+  rm -f "${XDG_STATE_HOME:-$HOME/.local/state}/agent-queue/cache"
+}
+
 check_item_id() {
   case "${1:-}" in
     PVTI_*) ;;
@@ -148,6 +180,7 @@ cmd_add() {
   set_status "$item_id" "$status"
   [ -n "$SCOPE_REPO" ] && set_text "$item_id" "Target Repo" "$SCOPE_REPO"
   [ -n "$jira" ] && set_text "$item_id" "Jira" "$jira"
+  drop_reminder_cache
   echo "added: $item_id ($status, ${SCOPE_REPO:-unscoped}): $title"
 }
 
@@ -166,32 +199,9 @@ cmd_list() {
   done
   [ "$scope" = "here" ] && repo="$(ghp_current_repo)"
 
-  local number cursor="" page pages=()
-  number="$(ghp_project_number "$PROJECT_TITLE")"
-  while :; do
-    local args=(-F number="$number")
-    [ -n "$cursor" ] && args+=(-f cursor="$cursor")
-    page="$(gh api graphql "${args[@]}" -f query="
-      query(\$number: Int!, \$cursor: String) {
-        viewer {
-          projectV2(number: \$number) {
-            items(first: 100, after: \$cursor) {
-              pageInfo { hasNextPage endCursor }
-              nodes { $ITEM_FIELDS }
-            }
-          }
-        }
-      }" --jq '.data.viewer.projectV2.items')"
-    pages+=("$(jq -c .nodes <<<"$page")")
-    [ "$(jq -r .pageInfo.hasNextPage <<<"$page")" = "true" ] || break
-    cursor="$(jq -r .pageInfo.endCursor <<<"$page")"
-  done
-
-  printf '%s\n' "${pages[@]}" | jq -s \
+  fetch_all_items | jq \
     --arg scope "$scope" --arg repo "$repo" --arg status "$status" --arg open "$open" "
-    [add | .[]
-      | select(.isArchived | not)
-      | select(.content.id != null)
+    [.[]
       | $SHAPE
       | select(
           (\$scope == \"all\")
@@ -223,6 +233,7 @@ cmd_claim() {
   project
   set_status "$item_id" "In Progress"
   set_text "$item_id" "Claimed By" "$host"
+  drop_reminder_cache
   echo "claimed: $item_id by $host"
 }
 
@@ -258,6 +269,7 @@ cmd_move() {
   case "$status" in
     Inbox | "To Do") set_text "$item_id" "Claimed By" "" ;;
   esac
+  drop_reminder_cache
   echo "moved: $item_id -> $status"
 }
 
@@ -298,6 +310,7 @@ cmd_edit() {
     project
     [ -n "$SCOPE_SET" ] && set_text "$item_id" "Target Repo" "$SCOPE_REPO"
     [ -n "$jira_set" ] && set_text "$item_id" "Jira" "$jira"
+    drop_reminder_cache
   fi
   echo "edited: $item_id"
 }
@@ -311,7 +324,35 @@ cmd_done() {
   if [ "${2:-}" = "--archive" ]; then
     gh project item-archive "$NUMBER" --owner "@me" --id "$item_id" >/dev/null
   fi
+  drop_reminder_cache
   echo "done: $item_id"
+}
+
+cmd_prune() {
+  local days=14
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --older-than) days="${2:?}"; shift 2 ;;
+      *) usage ;;
+    esac
+  done
+  case "$days" in
+    '' | *[!0-9]*) die "--older-than takes a number of days" ;;
+  esac
+
+  local ids id count=0
+  ids="$(fetch_all_items | jq -r --argjson days "$days" '
+    .[]
+    | select(.status.name == "Done")
+    | select((now - (.updatedAt | fromdateiso8601)) / 86400 >= $days)
+    | .id')"
+  NUMBER="$(ghp_project_number "$PROJECT_TITLE")"
+  while IFS= read -r id; do
+    [ -n "$id" ] || continue
+    gh project item-archive "$NUMBER" --owner "@me" --id "$id" >/dev/null
+    count=$((count + 1))
+  done <<<"$ids"
+  echo "pruned: $count item(s) Done for ${days}d or more"
 }
 
 command="${1:-}"
@@ -326,6 +367,7 @@ case "$command" in
   move) cmd_move "$@" ;;
   edit) cmd_edit "$@" ;;
   done) cmd_done "$@" ;;
+  prune) cmd_prune "$@" ;;
   -h | --help | help) usage ;;
   *) usage ;;
 esac
