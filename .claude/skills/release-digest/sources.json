@@ -138,7 +138,7 @@
     "id": "opencode",
     "name": "opencode",
     "fetch": {
-      "gh": "repos/sst/opencode/releases?per_page=100"
+      "gh": "repos/anomalyco/opencode/releases?per_page=100"
     },
     "parser": "bin/parse-opencode.py",
     "unit": "version",

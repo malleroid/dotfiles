@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Normalize the opencode (sst/opencode) GitHub Releases JSON into the shared schema.
+"""Normalize the opencode (anomalyco/opencode) GitHub Releases JSON into the shared schema.
 
 Reads the GitHub Releases API JSON array from stdin and prints
 `[ { version, date, published_at, url, change_count, changes[] } ]` to stdout — one element per
@@ -19,7 +19,7 @@ import argparse
 from datetime import datetime, timedelta, timezone
 from _window import cutoff_date, jst_date
 
-REPO_URL = "https://github.com/sst/opencode"
+REPO_URL = "https://github.com/anomalyco/opencode"
 
 
 def parse_body(body):

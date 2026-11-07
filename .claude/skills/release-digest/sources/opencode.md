@@ -1,6 +1,6 @@
 # Source spec: opencode
 
-- **対象**: opencode（sst/opencode、OSS の agentic コーディングツール）。Core / TUI / Desktop / Web 等のコンポーネント横断。
+- **対象**: opencode（anomalyco/opencode、OSS の agentic コーディングツール）。Core / TUI / Desktop / Web 等のコンポーネント横断。
 - **単位**: version（1 リリース = 1 メッセージ）
 - **ヘッダー**: `*opencode <version>* — <date> · <<url>|原文>`
 - **正規化スキーマの追加フィールド**: `version` / `published_at`。`changes[]` の各要素は `[Component/Category] <本文>`（Component=Core/Desktop 等、Category=Improvements/Bugfixes）。素プロースのリリースは本文全体が 1 要素。
