@@ -80,7 +80,7 @@ spec にある Slack mrkdwn のヘッダー形式やリンク記法は使わな�
 ### 4. dotfiles への影響を調べる（可能な範囲で）
 
 `flag` が `breaking` / `caution` の item について、その item に出てくる設定キー・環境変数・コマンド名・フラグ名などの識別子で
-リポジトリを Grep する（`.claude/skills/release-digest/` は除外）。使用箇所が見つかれば `impacts` に `{ path: "<file>:<line>", note: "<何が影響しうるか 1 行>" }` を加える。
+リポジトリを Grep する（`.claude/skills/release-digest/` は除外）。使用箇所が見つかれば `impacts` に `{ path: "<リポジトリルートからの相対パス>:<line>", note: "<何が影響しうるか 1 行>" }` を加える。
 見つからなければ `impacts` は空。推測で埋めない。
 
 ### 5. 記録する
