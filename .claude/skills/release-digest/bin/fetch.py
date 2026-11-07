@@ -6,12 +6,10 @@ Usage: fetch.py <source-id> <days>
 The source's `fetch` declaration in sources.json says how to get the raw document:
   {"url": "..."}           HTTP GET (gzip-encoded bodies are decoded)
   {"gh": "repos/..."}      `gh api <path>` (GitHub REST via the session's credentials)
-  {"custom": "antigravity"} the two-step Antigravity bundle lookup
 The raw bytes are piped to the declared `parser` with `--days <days>`; its stdout is passed through.
 """
 import gzip
 import json
-import re
 import subprocess
 import sys
 import urllib.request
@@ -37,24 +35,11 @@ def gh_api(path: str) -> bytes:
     return subprocess.run(["gh", "api", path], check=True, capture_output=True).stdout
 
 
-def fetch_antigravity() -> bytes:
-    shell = http_get("https://antigravity.google/changelog").decode("utf-8", "replace")
-    match = re.search(r"main-[A-Za-z0-9]+\.js", shell)
-    if not match:
-        raise RuntimeError("could not locate main-*.js bundle in /changelog")
-    return http_get(f"https://antigravity.google/{match.group(0)}")
-
-
-CUSTOM = {"antigravity": fetch_antigravity}
-
-
 def raw_document(spec: dict) -> bytes:
     if "url" in spec:
         return http_get(spec["url"])
     if "gh" in spec:
         return gh_api(spec["gh"])
-    if "custom" in spec:
-        return CUSTOM[spec["custom"]]()
     raise ValueError(f"unknown fetch declaration: {spec}")
 
 

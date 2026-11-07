@@ -1,191 +1,151 @@
 #!/usr/bin/env python3
-"""Parse the Antigravity changelog out of the site's JS bundle into normalized JSON.
+"""Parse the Antigravity changelog page (antigravity.google/docs/changelog) into normalized JSON.
 
-Antigravity (antigravity.google) is a client-rendered SPA whose changelog data is embedded
-in the main JS bundle as object literals: `engineSections:[...]` and `ideSections:[...]`.
-This reads the (optionally gzipped) bundle from stdin and prints
-`[ { unit, date, version, section, url, change_count, changes[] } ]` — one element per
-release, newest first, filtered to the last N days.
+Reads the server-rendered HTML on stdin and prints
+`[ { unit, date, version, section, url, title, change_count, changes[] } ]` — one element per
+release entry, newest first, filtered to the last N days.
 
-Fragility note: this is the least stable source (depends on the minified bundle's shape).
-It therefore FAILS LOUD — if neither section marker is found, or zero entries parse, it
-exits non-zero so a broken source is visible in the digest run instead of silently empty.
-The registry can disable this source (enabled:false) if it breaks and isn't worth fixing now.
+Page shape (Astro, one panel per product):
+  <article class="rn-row release-entry" id="rel-<product>-<version>">
+    <time class="rn-date-text">November 3, 2026</time>
+    <h3 class="rn-headline">Headline</h3>
+    <div class="rn-summary"><p>Summary</p></div>
+    <details data-item-title="Improvements"> <li class="rn-item">...</li> ... </details>
+  </article>
+
+changes[] starts with the summary, followed by each item prefixed with its `[Category]`.
+Fails loud (non-zero exit) when no release entry parses, so a layout change is visible.
 
 Invariant: keep every entry verbatim. Classification/translation is the skill's (LLM) job.
 """
-import sys
-import re
-import json
-import gzip
-import html
 import argparse
-from datetime import datetime, timedelta, timezone
+import json
+import re
+import sys
+from datetime import datetime
+from html.parser import HTMLParser
+
 from _window import cutoff_date
 
-PAGE_URL = "https://antigravity.google/changelog"
-BASE = "https://antigravity.google"
-IDENT_KEY = re.compile(r"[A-Za-z_][A-Za-z0-9_]*(?=\s*:)")
+PAGE_URL = "https://antigravity.google/docs/changelog"
+ENTRY_ID = re.compile(r"^rel-([a-z0-9-]+?)-(\d[\w.]*)$")
+SECTIONS = {
+    "hub": "App",
+    "cli": "CLI",
+    "ide": "IDE",
+    "sdk": "SDK",
+    "vscode": "VS Code extension",
+    "visual-studio": "Visual Studio extension",
+    "jetbrains": "JetBrains extension",
+    "zed": "Zed extension",
+    "xcode": "Xcode extension",
+    "eclipse": "Eclipse extension",
+}
 
 
-def read_stdin():
-    raw = sys.stdin.buffer.read()
-    if raw[:2] == b"\x1f\x8b":          # gzip magic — bundle is served pre-compressed
-        raw = gzip.decompress(raw)
-    return raw.decode("utf-8", "replace")
+class Parser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.entries = []
+        self.entry = None
+        self.depth = 0
+        self.capture = None
+        self.buf = []
+        self.category = None
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        cls = a.get("class", "") or ""
+        if tag == "article" and "release-entry" in cls:
+            m = ENTRY_ID.match(a.get("id", ""))
+            self.entry = {"id": a.get("id", ""), "product": m.group(1) if m else "", "version": m.group(2) if m else "",
+                          "date": None, "title": "", "summary": "", "items": []} if m else None
+            self.depth = 0
+        if self.entry is None:
+            return
+        if tag == "article":
+            self.depth += 1
+        if tag == "details":
+            self.category = a.get("data-item-title")
+        if tag == "code" and self.capture:
+            self.buf.append("`")
+        kind = None
+        if tag == "time" and "rn-date-text" in cls:
+            kind = "date"
+        elif tag == "h3" and "rn-headline" in cls:
+            kind = "title"
+        elif tag == "div" and "rn-summary" in cls:
+            kind = "summary"
+        elif tag == "li" and "rn-item" in cls:
+            kind = "item"
+        elif tag == "summary":
+            kind = "skip"
+        if kind and self.capture is None:
+            self.capture = (kind, tag)
+            self.buf = []
+
+    def handle_endtag(self, tag):
+        if self.entry is None:
+            return
+        if tag == "code" and self.capture:
+            self.buf.append("`")
+        if self.capture and tag == self.capture[1]:
+            kind = self.capture[0]
+            text = " ".join("".join(self.buf).split())
+            if kind == "date":
+                self.entry["date"] = datetime.strptime(text, "%B %d, %Y").date()
+            elif kind == "title":
+                self.entry["title"] = text
+            elif kind == "summary":
+                self.entry["summary"] = text
+            elif kind == "item" and text:
+                self.entry["items"].append(f"[{self.category}] {text}" if self.category else text)
+            self.capture = None
+            self.buf = []
+        if tag == "article":
+            self.depth -= 1
+            if self.depth <= 0:
+                self.entries.append(self.entry)
+                self.entry = None
+
+    def handle_data(self, data):
+        if self.capture and self.capture[0] != "skip":
+            self.buf.append(data)
 
 
-def extract_array(text, marker):
-    """Return the JS array literal (including brackets) following `marker`, or None.
-
-    Bracket-matches while respecting double-quoted strings so brackets inside HTML/prose
-    don't throw off the count."""
-    i = text.find(marker)
-    if i < 0:
-        return None
-    i = text.index("[", i + len(marker) - 1)
-    depth, j, in_str, esc = 0, i, False, False
-    while j < len(text):
-        c = text[j]
-        if in_str:
-            if esc:
-                esc = False
-            elif c == "\\":
-                esc = True
-            elif c == '"':
-                in_str = False
-        else:
-            if c == '"':
-                in_str = True
-            elif c == "[":
-                depth += 1
-            elif c == "]":
-                depth -= 1
-                if depth == 0:
-                    return text[i:j + 1]
-        j += 1
-    return None
-
-
-def js_to_json(s):
-    """Quote bare identifier keys in a JS object/array literal (string-aware) → JSON text."""
-    out, i, in_str, esc = [], 0, False, False
-    while i < len(s):
-        c = s[i]
-        if in_str:
-            out.append(c)
-            if esc:
-                esc = False
-            elif c == "\\":
-                esc = True
-            elif c == '"':
-                in_str = False
-            i += 1
-            continue
-        if c == '"':
-            in_str = True
-            out.append(c)
-            i += 1
-            continue
-        m = IDENT_KEY.match(s, i)
-        if m:
-            out.append('"' + m.group(0) + '"')
-            i = m.end()
-            continue
-        out.append(c)
-        i += 1
-    return "".join(out)
-
-
-def parse_array(text, marker):
-    arr = extract_array(text, marker)
-    if arr is None:
-        return None
-    return json.loads(js_to_json(arr))
-
-
-def html_to_text(s):
-    if not s:
-        return ""
-    s = re.sub(r"<a\s[^>]*href=['\"]([^'\"]+)['\"][^>]*>(.*?)</a>",
-               lambda m: f"[{m.group(2)}]({m.group(1) if not m.group(1).startswith('/') else BASE + m.group(1)})",
-               s, flags=re.I | re.S)
-    s = re.sub(r"</p>\s*<p>", " / ", s, flags=re.I)
-    s = re.sub(r"<br\s*/?>", " ", s, flags=re.I)
-    s = re.sub(r"<[^>]+>", "", s)
-    return html.unescape(s).strip()
-
-
-def parse_date(date_str):
-    date_str = date_str.strip()
-    for fmt in ("%B %d, %Y", "%b %d, %Y"):
-        try:
-            return datetime.strptime(date_str, fmt).date()
-        except ValueError:
-            continue
-    return None
-
-
-def normalize(entry, section, cutoff):
-    ver_field = entry.get("version", "")
-    parts = ver_field.split("<br>")
-    if len(parts) < 2:
-        return None
-    version = html_to_text(parts[0])
-    date = parse_date(html_to_text(parts[1]))
-    if date is None or date < cutoff:
-        return None
-
-    changes = []
-    lead = html_to_text(entry.get("description", ""))
-    if lead:
-        changes.append(lead)
-    summary = html_to_text((entry.get("accordion") or {}).get("changes", ""))
-    if summary and summary != lead:
-        changes.append(summary)
-    for item in (entry.get("accordion") or {}).get("items", []):
-        title = (item.get("title") or "").strip()
-        for ai in item.get("accordion_items", []):
-            t = html_to_text(ai.get("text", ""))
-            if t:
-                changes.append(f"[{title}] {t}")
-
-    return {
-        "unit": f"{section} {version}",
-        "date": date.isoformat(),
-        "version": version,
-        "section": section,
-        "url": PAGE_URL,
-        "change_count": len(changes),
-        "changes": changes,
-    }
-
-
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1)
     args = ap.parse_args()
     cutoff = cutoff_date(args.days)
 
-    text = read_stdin()
-    engine = parse_array(text, "engineSections:[")
-    ide = parse_array(text, "ideSections:[")
-    if engine is None and ide is None:
-        sys.exit("parse-antigravity: changelog section markers not found — bundle shape changed")
-
-    total = len(engine or []) + len(ide or [])
-    if total == 0:
-        sys.exit("parse-antigravity: zero changelog entries extracted — bundle shape changed")
+    p = Parser()
+    p.feed(sys.stdin.read())
+    if not p.entries:
+        print("parse-antigravity: no release entries found (page layout changed?)", file=sys.stderr)
+        return 1
 
     out = []
-    for section, arr in (("engine", engine or []), ("ide", ide or [])):
-        for entry in arr:
-            n = normalize(entry, section, cutoff)
-            if n is not None:
-                out.append(n)
-    out.sort(key=lambda e: (e["date"], e["version"]), reverse=True)
-    print(json.dumps(out, ensure_ascii=False, indent=2))
+    for e in p.entries:
+        if e["date"] is None or e["date"] < cutoff:
+            continue
+        section = SECTIONS.get(e["product"], e["product"])
+        changes = ([e["summary"]] if e["summary"] else []) + e["items"]
+        out.append({
+            "unit": f"{section} {e['version']}",
+            "date": e["date"].isoformat(),
+            "version": e["version"],
+            "section": section,
+            "url": f"{PAGE_URL}#{e['id']}",
+            "title": e["title"],
+            "change_count": len(changes),
+            "changes": changes,
+        })
+    out.sort(key=lambda u: u["date"], reverse=True)
+    json.dump(out, sys.stdout, ensure_ascii=False, indent=2)
+    print()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

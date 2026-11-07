@@ -1,9 +1,9 @@
 # Source spec: Antigravity
 
-- **対象**: Google Antigravity（agentic IDE）。**Engine**（エージェント/バックエンド）と **IDE**（エディタ）の 2 系統がある。
-- **単位**: version（section 付き。`unit` は `engine 2.0.11` / `ide 2.0.4` の形）
-- **ヘッダー**: `*Antigravity (Engine) <version>* — <date> · <<url>|原文>`（section を Engine / IDE と表記）
-- **正規化スキーマの追加フィールド**: `version` / `section`（engine|ide）。`changes[]` 先頭は description（と差分があれば概要）、続いて `[Improvements]` / `[Fixes]` / `[Patches]` ラベル付きの各項目。ラベルは分類ヒント。
+- **対象**: Google Antigravity。製品ごとに系統が分かれる: **App** / **CLI** / **IDE** / **SDK** / IDE 拡張（**VS Code** / **Visual Studio** / **JetBrains** / **Zed** / **Xcode** / **Eclipse**）。
+- **単位**: version（section 付き。`unit` は `CLI 1.5.1` / `VS Code extension 1.11.0` の形）
+- **ヘッダー**: `*Antigravity <section> <version>* — <date> · <<url>|原文>`
+- **正規化スキーマの追加フィールド**: `version` / `section` / `title`（リリースの見出し）。`changes[]` 先頭はリリースの概要、続いて `[Improvements]` / `[Fixes]` などのラベル付きの各項目。ラベルは分類ヒント。
 
 ## レンダリング規則
 
@@ -20,4 +20,4 @@
 
 - トピック 1〜5 は日本語タイトル（太字）＋必要なら 1〜2 行要約。製品名・バージョン番号は英語のまま。
 - ソースラベル（Improvements/Fixes/Patches）と配置トピックが食い違う場合はトピック規則を優先（例: `[Fixes]` でも内容が権限なら 🛡）。
-- Engine と IDE は別 version＝別メッセージとして出す（dedup しない）。
+- section ごとに別 version＝別メッセージとして出す（dedup しない）。

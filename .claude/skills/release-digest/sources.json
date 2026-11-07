@@ -58,23 +58,13 @@
     "id": "gemini-api",
     "name": "Gemini API",
     "fetch": {
-      "url": "https://ai.google.dev/gemini-api/docs/changelog"
+      "url": "https://aistudio.google.com/docs/changelog.md"
     },
     "parser": "bin/parse-gemini-api.py",
     "unit": "date",
     "spec": "sources/gemini-api.md",
-    "enabled": true
-  },
-  {
-    "id": "vertex",
-    "name": "Vertex AI",
-    "fetch": {
-      "url": "https://docs.cloud.google.com/feeds/generative-ai-on-vertex-ai-release-notes.xml"
-    },
-    "parser": "bin/parse-vertex.py",
-    "unit": "date",
-    "spec": "sources/vertex.md",
-    "enabled": true
+    "enabled": true,
+    "notes": "2026-11 に ai.google.dev から aistudio.google.com/docs/changelog へ移転。.md 版を parse する"
   },
   {
     "id": "gemini-app",
@@ -103,13 +93,13 @@
     "id": "antigravity",
     "name": "Antigravity",
     "fetch": {
-      "custom": "antigravity"
+      "url": "https://antigravity.google/docs/changelog"
     },
     "parser": "bin/parse-antigravity.py",
     "unit": "version",
     "spec": "sources/antigravity.md",
-    "enabled": false,
-    "notes": "2026-11 時点で /changelog は /docs/changelog（Astro の静的ページ）へリダイレクトするようになり、従来の main-*.js 解決が失敗するため無効化中。新ページ向けの取得・parser を作り直したら有効化する。以下は旧形式の説明: changelog は SPA の JS バンドルに埋め込まれており、fetcher が /changelog からハッシュ名のバンドルを解決して parse する。最も脆いソース: バンドル形状が変わると parser が fail-loud で落ちる。壊れて直す余力が無ければここを enabled:false にする"
+    "enabled": true,
+    "notes": "docs/changelog（Astro の静的ページ）を parse する。App / CLI / IDE / SDK / IDE 拡張（VS Code・JetBrains 等）の各パネルの release-entry を version 単位で出す。release-entry が 1 件も取れなければ parser が fail-loud で落ちる"
   },
   {
     "id": "github-changelog",
