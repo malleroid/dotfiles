@@ -17,6 +17,35 @@ Each function resolves `-m <name>` (or the table's `default`) through
 shows the same list. A name that is not declared but contains `/` or `~` is
 passed through as a repository id or path, unpinned.
 
+## Speaker turns
+
+`haas-transcribe -d` adds `--diarize` (the `speech-cpp.diarize` model) to the
+recognition and runs the output through `dot_config/asr/diarize-turns.jq`.
+Each region gets `dominant_speaker` and `turns` ({speaker, start, end, text}),
+and the top level gets all turns with consecutive same-speaker turns joined, so
+later steps can read the turns without the token timings.
+
+Within a region:
+
+1. A token goes to the speaker interval containing its midpoint (largest
+   overlap first, else the nearest interval; ties go to the lower speaker id).
+2. A turn shorter than 0.5 s (`min_sec`) is absorbed into a neighbour: the one
+   of the region's `dominant_speaker` if only one neighbour is, else the longer.
+3. A region left with one turn takes the `dominant_speaker`.
+
+To tune the threshold without recognizing again, keep speech.cpp's own output
+and rerun the filter on it:
+
+```sh
+speech asr haas-ja-v1.0 --format json --timestamps --vad silero-vad \
+  --diarize nemotron-3-diarization meeting.wav >meeting.raw.json
+jq --argjson min_sec 0.3 -f ~/.config/asr/diarize-turns.jq meeting.raw.json
+```
+
+Character-count absorption, A / B / A absorption and moving boundaries to
+punctuation were tried and dropped: they were tuned on one recording, absorbed
+genuine short replies, and changed little at the region level.
+
 ## Sources and pinning
 
 | Source | Stored in | Pinned by |

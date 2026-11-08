@@ -3,6 +3,7 @@ function haas-transcribe --description "Transcribe audio files using speech.cpp 
     set --local output_dir .
     set --local keywords
     set --local use_vad 1
+    set --local use_diarize 0
     set --local audio_files
 
     # Parse arguments
@@ -20,6 +21,8 @@ function haas-transcribe --description "Transcribe audio files using speech.cpp 
                 set --append keywords $argv[$i]
             case --no-vad
                 set use_vad 0
+            case -d --diarize
+                set use_diarize 1
             case -h --help
                 echo "Usage: haas-transcribe [options] <audio files...>"
                 echo ""
@@ -30,9 +33,11 @@ function haas-transcribe --description "Transcribe audio files using speech.cpp 
                 echo "  -k, --keyword <word>     Boost a keyword, as WORD or WORD=reading (repeatable)."
                 echo "                           Output has no timestamps when keywords are given"
                 echo "      --no-vad             Recognize each file whole instead of by speech regions"
+                echo "  -d, --diarize            Label each speech region with its speakers (needs VAD)"
+                echo "                           and split it into speaker turns (top-level turns[])"
                 echo "  -h, --help               Show this help"
                 echo ""
-                echo "Models (vad is used for speech regions):"
+                echo "Models (vad finds speech regions, diarize finds speakers):"
                 asr-model --list speech-cpp
                 return 0
             case '*'
@@ -47,12 +52,21 @@ function haas-transcribe --description "Transcribe audio files using speech.cpp 
         return 1
     end
 
+    if test $use_diarize -eq 1 -a $use_vad -eq 0
+        echo "Error: --diarize needs VAD; drop --no-vad"
+        return 1
+    end
+
     set --local model (asr-model speech-cpp $model_name)
     or return 1
 
     set --local args asr $model --format json
     if test $use_vad -eq 1
         set --append args --vad (asr-model speech-cpp vad)
+        or return 1
+    end
+    if test $use_diarize -eq 1
+        set --append args --diarize (asr-model speech-cpp diarize)
         or return 1
     end
     if test (count $keywords) -gt 0
@@ -72,7 +86,13 @@ function haas-transcribe --description "Transcribe audio files using speech.cpp 
             set failed 1
             continue
         end
-        if not speech $args $wav >$output_dir/$base.json
+        if test $use_diarize -eq 0
+            speech $args $wav >$output_dir/$base.json
+            or set failed 1
+        else if speech $args $wav >$tmp/$base.json
+            jq -f ~/.config/asr/diarize-turns.jq $tmp/$base.json >$output_dir/$base.json
+            or set failed 1
+        else
             set failed 1
         end
     end
