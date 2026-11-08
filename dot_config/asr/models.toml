@@ -61,3 +61,6 @@ source = "speech:reazonspeech-v2:q8_0"
 
 [speech-cpp.vad]
 source = "speech:silero-vad"
+
+[speech-cpp.diarize]
+source = "speech:nemotron-3-diarization:q8_0"
