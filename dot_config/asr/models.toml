@@ -10,10 +10,6 @@
 [mlx-whisper]
 default = "turbo"
 
-[mlx-whisper.kotoba]
-source = "hf:kaiinui/kotoba-whisper-v2.0-mlx"
-revision = "1a5ac6e52394898ef8996212e849d964e0dfb9ae"
-
 [mlx-whisper.turbo]
 source = "hf:mlx-community/whisper-large-v3-turbo"
 revision = "a4aaeec0636e6fef84abdcbe3544cb2bf7e9f6fb"
