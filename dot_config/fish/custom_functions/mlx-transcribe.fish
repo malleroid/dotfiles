@@ -1,11 +1,5 @@
 function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
-    # Model shortcuts
-    set --local model_kotoba kaiinui/kotoba-whisper-v2.0-mlx
-    set --local model_turbo mlx-community/whisper-large-v3-turbo
-    set --local model_large mlx-community/whisper-large-v3-mlx
-
-    # Defaults
-    set --local model $model_turbo
+    set --local model_name
     set --local output_dir .
     set --local audio_files
 
@@ -15,16 +9,7 @@ function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
         switch $argv[$i]
             case -m --model
                 set i (math $i + 1)
-                switch $argv[$i]
-                    case kotoba
-                        set model $model_kotoba
-                    case turbo
-                        set model $model_turbo
-                    case large
-                        set model $model_large
-                    case '*'
-                        set model $argv[$i]
-                end
+                set model_name $argv[$i]
             case -o --output-dir
                 set i (math $i + 1)
                 set output_dir $argv[$i]
@@ -32,16 +17,13 @@ function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
                 echo "Usage: mlx-transcribe [options] <audio files...>"
                 echo ""
                 echo "Options:"
-                echo "  -m, --model <name>       Model to use (default: turbo)"
-                echo "                           Shortcuts: kotoba, turbo, large"
-                echo "                           Or full HuggingFace repo name"
+                echo "  -m, --model <name>       Model declared in ~/.config/asr/models.toml,"
+                echo "                           or a HuggingFace repo name / local path"
                 echo "  -o, --output-dir <path>  Output directory (default: .)"
                 echo "  -h, --help               Show this help"
                 echo ""
                 echo "Models:"
-                echo "  kotoba  $model_kotoba"
-                echo "  turbo   $model_turbo"
-                echo "  large   $model_large"
+                asr-model --list mlx-whisper
                 return 0
             case '*'
                 set --append audio_files $argv[$i]
@@ -54,6 +36,9 @@ function mlx-transcribe --description "Transcribe audio files using mlx-whisper"
         echo "Usage: mlx-transcribe [options] <audio files...>"
         return 1
     end
+
+    set --local model (asr-model mlx-whisper $model_name)
+    or return 1
 
     mlx_whisper $audio_files \
         --model $model \

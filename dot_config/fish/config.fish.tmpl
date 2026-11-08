@@ -28,6 +28,9 @@ set -g theme_display_cmd_duration yes
 set -x VISUAL nvim
 set -x EDITOR nvim
 
+# models (keep speech.cpp next to the Hugging Face cache; see docs/asr-models.md)
+set -gx SPEECH_MODEL_DIR $HOME/.cache/speech.cpp/models
+
 # git
 set -g theme_display_git_master_branch yes
 if type -q gh

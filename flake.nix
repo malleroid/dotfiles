@@ -12,6 +12,7 @@
       cliPaths = with pkgs; [
           # ## AI
           aichat # All-in-one AI-Powered CLI Chat & Copilot
+          python3Packages.huggingface-hub # Hugging Face Hub CLI (hf), fetches pinned ASR models (brew: hf)
           tgpt # AI Chatbots in terminal without needing API keys
 
           # ## API

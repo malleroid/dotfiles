@@ -1,15 +1,5 @@
 function qwen-transcribe --description "Transcribe audio files using mlx-qwen3-asr"
-    # Model shortcuts
-    # Note: mlx-community pre-quantized variants ship audio_tower un-quantized
-    # while config.json declares full quantization, so the loader fails on missing
-    # .scales/.biases. Use locally re-converted artifacts via scripts/convert.py
-    # (see .claude/plans/qwen3-asr-self-quantize.md) until the publisher republishes.
-    set --local model_small       Qwen/Qwen3-ASR-0.6B
-    set --local model_large       Qwen/Qwen3-ASR-1.7B
-    set --local model_large_8bit  ~/.local/share/mlx-models/qwen3-asr-1.7b-8bit
-
-    # Defaults
-    set --local model $model_large_8bit
+    set --local model_name
     set --local output_dir .
     set --local audio_files
 
@@ -19,16 +9,7 @@ function qwen-transcribe --description "Transcribe audio files using mlx-qwen3-a
         switch $argv[$i]
             case -m --model
                 set i (math $i + 1)
-                switch $argv[$i]
-                    case small 0.6b
-                        set model $model_small
-                    case large 1.7b
-                        set model $model_large
-                    case large-8bit 1.7b-8bit
-                        set model $model_large_8bit
-                    case '*'
-                        set model $argv[$i]
-                end
+                set model_name $argv[$i]
             case -o --output-dir
                 set i (math $i + 1)
                 set output_dir $argv[$i]
@@ -36,19 +17,13 @@ function qwen-transcribe --description "Transcribe audio files using mlx-qwen3-a
                 echo "Usage: qwen-transcribe [options] <audio files...>"
                 echo ""
                 echo "Options:"
-                echo "  -m, --model <name>       Model to use (default: large-8bit)"
-                echo "                           Shortcuts:"
-                echo "                             small      / 0.6b       (HF Qwen fp16)"
-                echo "                             large      / 1.7b       (HF Qwen fp16)"
-                echo "                             large-8bit / 1.7b-8bit  (locally quantized)"
-                echo "                           Or full HuggingFace repo name / local path"
+                echo "  -m, --model <name>       Model declared in ~/.config/asr/models.toml,"
+                echo "                           or a HuggingFace repo name / local path"
                 echo "  -o, --output-dir <path>  Output directory (default: .)"
                 echo "  -h, --help               Show this help"
                 echo ""
-                echo "Models:"
-                echo "  small       $model_small"
-                echo "  large       $model_large"
-                echo "  large-8bit  $model_large_8bit"
+                echo "Models (aligner is used for timestamps):"
+                asr-model --list mlx-qwen3-asr
                 return 0
             case '*'
                 set --append audio_files $argv[$i]
@@ -62,8 +37,14 @@ function qwen-transcribe --description "Transcribe audio files using mlx-qwen3-a
         return 1
     end
 
+    set --local model (asr-model mlx-qwen3-asr $model_name)
+    or return 1
+    set --local aligner (asr-model mlx-qwen3-asr aligner)
+    or return 1
+
     mlx-qwen3-asr $audio_files \
         --model $model \
+        --forced-aligner $aligner \
         --language Japanese \
         --timestamps \
         -f json \

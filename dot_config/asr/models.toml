@@ -1,0 +1,63 @@
+# ASR models used by mlx-transcribe, qwen-transcribe and haas-transcribe.
+# Resolved by the asr-model fish function; see docs/asr-models.md.
+#
+# Each engine table holds `default` and one sub-table per model:
+#   source   hf:<repo>              Hugging Face repo, pinned by `revision` (commit sha)
+#            local:<path>           artifact built locally, described by `from` and `build`
+#            speech:<name>[:<type>] speech.cpp catalog entry, pinned by the speech.cpp version in mise
+#   aliases  other names accepted by -m
+
+[mlx-whisper]
+default = "turbo"
+
+[mlx-whisper.kotoba]
+source = "hf:kaiinui/kotoba-whisper-v2.0-mlx"
+revision = "1a5ac6e52394898ef8996212e849d964e0dfb9ae"
+
+[mlx-whisper.turbo]
+source = "hf:mlx-community/whisper-large-v3-turbo"
+revision = "a4aaeec0636e6fef84abdcbe3544cb2bf7e9f6fb"
+
+[mlx-whisper.large]
+source = "hf:mlx-community/whisper-large-v3-mlx"
+revision = "49e6aa286ad60c14352c404340ded53710378a11"
+
+[mlx-qwen3-asr]
+default = "large-8bit"
+
+[mlx-qwen3-asr.small]
+source = "hf:Qwen/Qwen3-ASR-0.6B"
+revision = "5eb144179a02acc5e5ba31e748d22b0cf3e303b0"
+aliases = ["0.6b"]
+
+[mlx-qwen3-asr.large]
+source = "hf:Qwen/Qwen3-ASR-1.7B"
+revision = "7278e1e70fe206f11671096ffdd38061171dd6e5"
+aliases = ["1.7b"]
+
+[mlx-qwen3-asr.large-8bit]
+source = "hf:moona3k/mlx-qwen3-asr-1.7b-8bit"
+revision = "22c8abe6a6772122dda5905967d7496d1d3e8dd2"
+aliases = ["1.7b-8bit"]
+
+[mlx-qwen3-asr.aligner]
+source = "hf:Qwen/Qwen3-ForcedAligner-0.6B"
+revision = "c7cbfc2048c462b0d63a45797104fc9db3ad62b7"
+
+[speech-cpp]
+default = "haas"
+
+[speech-cpp.haas]
+source = "speech:haas-ja-v1.0:q8_0"
+
+[speech-cpp.haas-q4]
+source = "speech:haas-ja-v1.0:q4_k"
+
+[speech-cpp.parakeet]
+source = "speech:parakeet-tdt_ctc-0.6b-ja:q8_0"
+
+[speech-cpp.reazonspeech]
+source = "speech:reazonspeech-v2:q8_0"
+
+[speech-cpp.vad]
+source = "speech:silero-vad"
