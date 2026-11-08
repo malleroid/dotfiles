@@ -70,6 +70,9 @@ SLACK_SKIP_UPDATE = "1"
 "pipx:mlx-qwen3-asr" = { version = "latest", extras = "aligner", python = "3.14" }
 "pipx:toot-tooi" = "latest"
 
+# Speech recognition (Haas-ja and other GGUF ASR models on Metal)
+"github:nyosegawa/speech.cpp" = "0.10.1"
+
 # Rust
 "github:rust-lang/rust-analyzer" = "latest"
 
