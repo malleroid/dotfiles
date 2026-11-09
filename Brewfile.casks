@@ -7,10 +7,7 @@ cask "chatgpt"                    # OpenAI's unified Chat, Work, and Codex deskt
 cask "claude"                     # Anthropic's Claude AI desktop app
 cask "codeburn-app"               # Token usage and cost tracker for AI coding agents
 cask "github-copilot-app"         # GitHub's agent-driven development desktop app
-cask "whispering"                 # Audio transcription that works with local and cloud models
 cask "handy"                      # Speech to text application
-cask "biscotti"                   # On-device meeting transcription and summaries
-cask "muesli"                     # Local-first dictation and meeting transcription
 cask "lm-studio"                  # Run local LLMs on your computer
 cask "nao"                        # Data analytics agent builder for BigQuery/Snowflake/Postgres
 cask "ui-tars"                    # Vision-language model GUI agent by ByteDance
