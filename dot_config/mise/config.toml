@@ -5,6 +5,9 @@
 # Enable support for legacy version files (.node-version, .ruby-version, etc.)
 legacy_version_file = true
 
+# Read rust-toolchain.toml; otherwise RUSTUP_TOOLCHAIN set by mise overrides it
+idiomatic_version_file_enable_tools = ["rust"]
+
 # Disable experimental features for stability
 experimental = false
 
