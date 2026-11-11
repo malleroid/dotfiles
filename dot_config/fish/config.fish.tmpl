@@ -79,6 +79,9 @@ fish_add_path $HOME/.local/share/mise/shims
 # opencode
 fish_add_path $HOME/.opencode/bin
 
+# grok build
+fish_add_path $HOME/.grok/bin
+
 # carapace completions. Set CARAPACE_DISABLE to skip during the trial.
 if status is-interactive; and not set -q CARAPACE_DISABLE; and type -q carapace
     if not set -q CARAPACE_BRIDGES
