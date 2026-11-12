@@ -18,7 +18,7 @@
 # release tag noted after the URL, kept in lockstep with npm:hunkdiff in mise.
 [".agents/skills/hunk-review"]
     type = "archive"
-    url = "https://github.com/modem-dev/hunk/archive/39c03a86d355b0e7b308ea8fa0f211274fb55468.tar.gz" # v0.25.0
+    url = "https://github.com/modem-dev/hunk/archive/03f7ea41946da29e6e814165af70247fdca03912.tar.gz" # v0.25.0
     stripComponents = 5
     include = ["*/packages/hunk/skills/hunk-review/**"]
 
