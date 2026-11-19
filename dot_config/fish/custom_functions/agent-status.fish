@@ -218,6 +218,9 @@ function agent-status -d "Show AI agent status from state files (no zellij polli
     for line in (ps -Ao pid=,command=)
         set -l m (string match -r '^\s*\d+\s+(?:\S*/)?(codex|copilot|opencode|aider)(\s|$)' -- $line)
         test -n "$m"; or continue
+        # Codex app-server daemons and the ChatGPT desktop app's bundled codex
+        # are background services, not user sessions
+        string match -qr '/ChatGPT\.app/|\s(app-server|exec-server|mcp-server)(\s|$)' -- $line; and continue
         set -l agent $m[2]
         # Each state row covers one process. Remove only one matching entry so a
         # second Codex session still gets an anonymous fallback row.
