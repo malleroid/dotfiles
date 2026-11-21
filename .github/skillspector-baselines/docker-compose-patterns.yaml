@@ -14,3 +14,7 @@ rules:
     path: "checks/verification.md"
     message: "/var/run/docker.sock"
     reason: "Verification checklist item asserting services do not mount the Docker socket"
+  - id: "AE1"
+    path: "SKILL.md"
+    message: "assets/compose-web-app.yaml (partial)"
+    reason: "Partial only because the static parser cannot bound the healthcheck `timeout:` key in assets/compose-web-app.yaml (allowed in allowed-exceptions.toml)"

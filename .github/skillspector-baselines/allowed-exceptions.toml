@@ -7,3 +7,15 @@ skill = "docker-destructive-guardrails"
 reason_code = "obfuscated_instruction_text"
 path = "SKILL.md"
 reason = "Declared-marker reconstruction exhausts its bounds on the long quoted list of destructive commands (lines 3-56); no obfuscated text present"
+
+[[exception]]
+skill = "docker-project-foundations"
+reason_code = "static_parse_limit"
+path = "assets/compose-dev.yaml"
+reason = "The tool-misuse parser reads the healthcheck `timeout: 5s` key (line 40) as a `timeout` command and cannot bound it; it is a YAML key, not a command"
+
+[[exception]]
+skill = "docker-compose-patterns"
+reason_code = "static_parse_limit"
+path = "assets/compose-web-app.yaml"
+reason = "The tool-misuse parser reads the healthcheck `timeout: 3s` key (line 33) as a `timeout` command and cannot bound it; it is a YAML key, not a command"
