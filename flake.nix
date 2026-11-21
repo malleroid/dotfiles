@@ -84,6 +84,7 @@
           terraform-mcp-server # MCP server for Terraform
 
           # ## Monitor
+          abtop # Like htop, but for AI coding agents
           bandwhich # Terminal bandwidth utilization tool
           duf # Disk Usage/Free Utility - a better 'df' alternative
           dust # More intuitive version of du in rust
