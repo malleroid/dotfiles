@@ -21,3 +21,7 @@ rules:
     path: "assets/compose-dev.yaml"
     message: "NODE_ENV=development"
     reason: "Development-only compose example"
+  - id: "AE1"
+    path: "SKILL.md"
+    message: "assets/compose-dev.yaml (partial)"
+    reason: "Partial only because the static parser cannot bound the healthcheck `timeout:` key in assets/compose-dev.yaml (allowed in allowed-exceptions.toml)"
