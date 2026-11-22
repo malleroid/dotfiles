@@ -93,6 +93,7 @@
           htop # Improved top (interactive process viewer)
           hwatch # Modern alternative to the watch command
           nvtopPackages.apple # Interactive GPU process monitor (brew: nvtop, Apple GPU variant)
+          otel-tui # Terminal OpenTelemetry viewer
           procs # Modern replacement for ps written in Rust
           tailspin # Log file highlighter
 
