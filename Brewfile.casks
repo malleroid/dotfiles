@@ -8,6 +8,7 @@ cask "claude"                     # Anthropic's Claude AI desktop app
 cask "codeburn-app"               # Token usage and cost tracker for AI coding agents
 cask "github-copilot-app"         # GitHub's agent-driven development desktop app
 cask "handy"                      # Speech to text application
+cask "anomaly-hex"                # On-device voice dictation (trial against handy)
 cask "lm-studio"                  # Run local LLMs on your computer
 cask "nao"                        # Data analytics agent builder for BigQuery/Snowflake/Postgres
 cask "ui-tars"                    # Vision-language model GUI agent by ByteDance
