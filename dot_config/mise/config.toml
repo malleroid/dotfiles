@@ -59,6 +59,7 @@ SLACK_SKIP_UPDATE = "1"
 "npm:@openai/codex-security" = "latest"
 "npm:@alibaba-group/open-code-review" = "latest"
 "github:iamrohithrnair/emeraldian" = "latest"
+"github:yetidevworks/drydock" = "latest"
 
 # Language Servers for Neovim LSP
 # GitHub Copilot

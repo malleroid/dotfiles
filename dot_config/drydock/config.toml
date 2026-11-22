@@ -1,0 +1,5 @@
+roots = ["~/ghq/github.com", "~/worktrees/github.com"]
+
+[ui]
+editor_command = ["open", "-na", "Ghostty", "--args", "-e", "nvim", "{path}"]
+terminal_command = ["open", "-a", "Ghostty", "{path}"]
