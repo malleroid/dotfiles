@@ -74,7 +74,7 @@ SLACK_SKIP_UPDATE = "1"
 "pipx:toot-tooi" = "latest"
 
 # Speech recognition (Haas-ja and other GGUF ASR models on Metal)
-"github:nyosegawa/speech.cpp" = "0.11.1"
+"github:nyosegawa/speech.cpp" = "0.11.2"
 
 # Rust
 "github:rust-lang/rust-analyzer" = "latest"
