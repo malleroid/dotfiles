@@ -26,7 +26,7 @@ jobs:
 
       - name: Install SkillSpector
         run: |
-          uv tool install "git+https://github.com/NVIDIA/SkillSpector.git@e2674da339b0bddc6e565d059c0577c6d9cd25da" # v2.13.6
+          uv tool install "git+https://github.com/NVIDIA/SkillSpector.git@c323ad4c43e3c8f2de051572cc25b2711d11e648" # v2.13.7
           uv tool dir --bin >> "$GITHUB_PATH"
 
       - name: Scan
